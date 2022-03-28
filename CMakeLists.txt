@@ -5,7 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 
 
 set(PROJECT_NAME Project_Kathisto)
-project(${PROJECT_NAME} LANGUAGES C CXX)
+project(${PROJECT_NAME} LANGUAGES C)
 
 # find openGL
 find_package(OpenGL REQUIRED)
@@ -26,7 +26,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=extern\ \"C\")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} freeglut_static imgui_impl)
+target_link_libraries(${PROJECT_NAME} freeglut_static)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
 
