@@ -501,5 +501,6 @@ FodyWeavers.xsd
 
 
 out/
+build/
 .vs/
 CodeBlocks/

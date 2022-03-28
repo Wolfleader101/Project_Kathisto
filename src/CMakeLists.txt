@@ -1,7 +1,13 @@
+add_subdirectory(math)
+add_subdirectory(game)
+add_subdirectory(window)
+add_subdirectory(gui)
+
+
 set(SOURCES
     src/main.c
-    src/math/Vector.h
-    src/math/Vector.c
-
-
+    ${MATH}
+    ${GAME}
+    ${WINDOW}
+    ${GUI}
     PARENT_SCOPE)

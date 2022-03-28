@@ -1,5 +1,14 @@
 #include "Vector.h"
 
+Vector2 EmptyVec2()
+{
+	return (Vector2){0.0f, 0.0f};
+}
+
+Vector3 EmptyVec3(){
+
+	return (Vector3){0.0f, 0.0f, 0.0f};
+}
 
 Vector2 ArrayToVec2(const float arr[2])
 {
@@ -9,6 +18,11 @@ Vector2 ArrayToVec2(const float arr[2])
 Vector3 ArrayToVec3(const float arr[3])
 {
 	return (Vector3) { arr[0], arr[1], arr[2] };
+}
+
+RGBA ArrayToRGBA(const float arr[4])
+{
+	return (RGBA) { arr[0], arr[1], arr[2], arr[3] };
 }
 
 float* Vec2ToArray(const Vector2 vec)
@@ -51,6 +65,23 @@ float* RGBAToArray(const RGBA vec)
 	return arr;
 }
 
+float* RGBAArrayToArray(const RGBA* vecArr, size_t length)
+{
+	if (length <= 0) length = 1;
+	float* arr = malloc(4 * length * sizeof(float));
+	if (arr != NULL)
+	{
+		for (size_t i = 0; i < length; i++)
+		{
+			arr[0 + (i * 4)] = vecArr[i].r;
+			arr[1 + (i * 4)] = vecArr[i].g;
+			arr[2 + (i * 4)] = vecArr[i].b;
+			arr[3 + (i * 4)] = vecArr[i].a;
+		}
+	}
+	return arr;
+}
+
 float Vec2Length(Vector2 vec)
 {
 	return sqrt(((double)vec.x * vec.x) + ((double)vec.y * vec.y));
@@ -81,6 +112,16 @@ Vector2 Vec2ScalarMultiply(Vector2 vec, float scalar)
 Vector3 Vec3ScalarMultiply(Vector3 vec, float scalar)
 {
 	return (Vector3) { vec.x * scalar, vec.y * scalar, vec.z * scalar };
+}
+
+Vector2 Vec2ScalarAdd(Vector2 vec, float scalar)
+{
+	return (Vector2) { vec.x + scalar, vec.y + scalar };
+}
+
+Vector3 Vec3ScalarAdd(Vector3 vec, float scalar)
+{
+	return (Vector3) { vec.x + scalar, vec.y + scalar, vec.z + scalar };
 }
 
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2)

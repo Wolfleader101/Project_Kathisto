@@ -21,6 +21,11 @@
           "name": "FREEGLUT_BUILD_DEMOS",
           "value": "False",
           "type": "BOOL"
+        },
+        {
+          "name": "IMGUI_STATIC",
+          "value": "yes",
+          "type": "STRING"
         }
       ]
     }
