@@ -7,8 +7,8 @@ add_compile_options(
     $<$<C_COMPILER_ID:MSVC>:/W0>
 )
 
-add_subdirectory(freeglut)
-#add_subdirectory(cimgui)
+#add_subdirectory(freeglut)
+add_subdirectory(cimgui)
 
 # set cimgui variables
 set(cimgui cimgui)

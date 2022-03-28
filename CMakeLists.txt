@@ -20,17 +20,20 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 add_subdirectory(lib)
 
 
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLUT)
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=extern\ \"C\")
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} freeglut_static)
+
+IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglutd.lib)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglut_staticd.lib)
+ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+
+IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglut_static.lib)
+ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+
 target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib)
 target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib)
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
