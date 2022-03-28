@@ -9,6 +9,14 @@ void GuiInit()
 	ctx = igCreateContext(NULL); // create context with default font (NULL)
 	io = igGetIO(); // get IO
 
+	  //set docking
+	//io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	//ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	#ifdef IMGUI_HAS_DOCK
+		io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	#endif
+
 	igStyleColorsDark(NULL); // set style to dark with no custom colors
 
 	ImGui_ImplGLUT_Init(); // initialise imgui glut
@@ -26,14 +34,14 @@ void GuiFree()
 void DebugMenu(GameObjectManager* gameObjectManager)
 {
 	igBegin("Debug Menu", NULL, 0);
-	
+
 	for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
 	{
 		if (gameObjectManager->gameObjects[i].name != NULL)
 		{
 			igText(gameObjectManager->gameObjects[i].name);
 			igDragFloat("Position Y", &gameObjectManager->gameObjects[i].transform.position.y, 0.1f, -100.0f, 100.0f, "%.02f", 0);
-		}			
+		}
 	}
 	igEnd();
 }
