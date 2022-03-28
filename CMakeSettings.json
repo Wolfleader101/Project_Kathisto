@@ -45,7 +45,7 @@
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "variables": [
-	          {
+        {
           "name": "INSTALL_PDB",
           "value": "False",
           "type": "BOOL"
@@ -64,7 +64,8 @@
           "name": "FREEGLUT_BUILD_SHARED_LIBS",
           "value": "False",
           "type": "BOOL"
-        }]
+        }
+      ]
     }
   ]
 }

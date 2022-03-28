@@ -5,7 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 
 
 set(PROJECT_NAME Project_Kathisto)
-project(${PROJECT_NAME} LANGUAGES C)
+project(${PROJECT_NAME} LANGUAGES C CXX)
 
 # find openGL
 find_package(OpenGL REQUIRED)
@@ -32,8 +32,7 @@ IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglut_static.lib)
 ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
 
-target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib)
-target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib)
+target_link_libraries(${PROJECT_NAME} freeglut_static imgui_impl)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
