@@ -12,10 +12,8 @@ void GuiInit()
 	  //set docking
 	//io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	#ifdef IMGUI_HAS_DOCK
-		io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-	#endif
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
 	igStyleColorsDark(NULL); // set style to dark with no custom colors
 
@@ -43,6 +41,10 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 			igDragFloat("Position Y", &gameObjectManager->gameObjects[i].transform.position.y, 0.1f, -100.0f, 100.0f, "%.02f", 0);
 		}
 	}
+	igEnd();
+
+	igBegin("Test Menu", NULL, 0);
+	igText("TEST MENU");
 	igEnd();
 }
 
