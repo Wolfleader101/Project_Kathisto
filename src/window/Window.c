@@ -3,8 +3,8 @@
 #include "game/GameObjects/Cube.h"
 #include "game/GameObjects/Floor.h"
 
-int WINDOW_WIDTH = 1280;
-int WINDOW_HEIGHT = 750;
+int WINDOW_WIDTH = 1750;
+int WINDOW_HEIGHT = 980;
 
 int frame = 0;
 int timebase = 0;
@@ -60,6 +60,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	glutMouseFunc(OnMouseButton); // on mouse click
 	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
+
+
+	//glutFullScreen();
 
 	// hide the cursor
 	glutSetCursor(GLUT_CURSOR_NONE);
@@ -118,6 +121,7 @@ void WindowRender(void)
 
 	// swap the buffers
 	glutSwapBuffers();
+	//glutPostRedisplay();
 }
 
 void CalculateDeltaTime()
@@ -130,7 +134,7 @@ void CalculateDeltaTime()
 
 void ReshapeWindow(int width, int height)
 {
-	ImGui_ImplGLUT_ReshapeFunc();
+	ImGui_ImplGLUT_ReshapeFunc(width, height);
 	// if height is 0 then set it 1
 	if (height == 0) height = 1;
 

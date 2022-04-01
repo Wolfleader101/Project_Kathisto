@@ -33,6 +33,9 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 {
 	igBegin("Debug Menu", NULL, 0);
 
+	igText("F3 - Toggle between ingame/settings cursor");
+	igText("F4 - Toggle debug menu");
+
 	for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
 	{
 		if (gameObjectManager->gameObjects[i].name != NULL)
@@ -53,7 +56,7 @@ void GuiUpdate(GameObjectManager* gameObjectManager)
 	ImGui_ImplOpenGL2_NewFrame(); // call imgui opengl 2 new frame
 	ImGui_ImplGLUT_NewFrame(); // call imgui GLUT new frame
 
-	DebugMenu(gameObjectManager); // draw debug menu
+	if(TOGGLE_MENU) DebugMenu(gameObjectManager); // draw debug menu
 }
 
 void GuiRender()

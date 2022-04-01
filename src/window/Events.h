@@ -2,11 +2,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <GL/freeglut.h>
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
 
+extern bool USE_MENU_CURSOR_CURSOR;
+extern bool TOGGLE_MENU;
 
 void OnKeyDown(unsigned char key, int x, int y); // on key down
 void OnKeyUp(unsigned char key, int x, int y); // on key up
