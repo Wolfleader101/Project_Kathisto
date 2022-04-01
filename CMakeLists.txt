@@ -22,17 +22,20 @@ add_subdirectory(lib)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-
-IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
-   #target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglutd.lib)
-   #target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglut_staticd.lib)
-ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
-
-IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+#IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
    #target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/lib/freeglut/lib/freeglut_static.lib)
-ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+#ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
 
-target_link_libraries(${PROJECT_NAME} freeglut_static)
+#target_link_libraries(${PROJECT_NAME} freeglut_static)
+
+
+target_link_libraries(${PROJECT_NAME}  
+freeglut_static
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/freeglut.lib
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib
+)
+
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory

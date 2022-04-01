@@ -8,7 +8,7 @@ add_compile_options(
 )
 
  add_subdirectory(freeglut)
-# add_subdirectory(cimgui)
+ #add_subdirectory(cimgui)
 
 # set cimgui variables
 # set(cimgui cimgui)
@@ -18,12 +18,15 @@ add_compile_options(
 
 # target_include_directories(imgui_impl SYSTEM PUBLIC freeglut/include)
 
-# target_link_libraries(imgui_impl PUBLIC freeglut_static cimgui)
+#link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib
+ #PUBLIC freeglut_static {CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib) 
 
+#{CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib
 # include those folders
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     freeglut/include
-    ${cimgui}
-    ${cimgui}/imgui
+    imgui/include
+    #${cimgui}
+    #${cimgui}/imgui
     #${imgui_impl}
     )
