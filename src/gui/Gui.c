@@ -64,7 +64,14 @@ void GameObjectPanel(GameObject* gameObject)
 {
 	if (igCollapsingHeader_TreeNodeFlags(gameObject->name, ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-
+		igPushStyleColor_Vec4(ImGuiCol_Button, (ImVec4) { 0.45f, 0.0f, 0.0f, 1.0f });
+		igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, (ImVec4) { 0.6f, 0.0f, 0.0f, 1.0f });
+		igPushStyleColor_Vec4(ImGuiCol_ButtonActive, (ImVec4) { 1.0f, 0.0f, 0.0f, 1.0f });
+		if (igButton("Delete", (ImVec2) { 60.0f, 20.0f }))
+		{
+			GameObjectManagerRemove(&gameObjectManager, gameObject->id);
+		}
+		igPopStyleColor(3);
 		igCheckbox("Debug", &gameObject->debug);
 		TransformWidget(&gameObject->transform);
 		RigidBodyWidget(&gameObject->rigidBody);
