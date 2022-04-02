@@ -5,9 +5,13 @@ set(GAME
    src/game/GameConstants.c
    src/game/GameObjects/Camera.h
    src/game/GameObjects/Camera.c
+   src/game/GameObjects/CameraThirdPerson.h
+   src/game/GameObjects/CameraThirdPerson.c
    src/game/GameObjects/Cube.h
    src/game/GameObjects/Cube.c
    src/game/GameObjects/Floor.h
    src/game/GameObjects/Floor.c
+   src/game/GameObjects/Player.h
+   src/game/GameObjects/Player.c
 
     PARENT_SCOPE)
