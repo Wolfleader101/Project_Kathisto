@@ -1,6 +1,5 @@
 #include "Cube.h"
 
-GameObject cube = {0};
 
 const Vector3 cubeVertexBuffer[] = {
 	{ -1.0f, -1.0f, -1.0f },
@@ -89,6 +88,8 @@ OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 	rot->x += (time.deltaTime * 20);
 	rot->y += (time.deltaTime * 20);
 	rot->z += (time.deltaTime * 20);
+
+	//printf("Test %.02f\n", time.currTime);
 
 }
 

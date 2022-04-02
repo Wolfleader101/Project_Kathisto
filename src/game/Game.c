@@ -11,7 +11,9 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	if (gameObjectManager->gameObjects == NULL) return;
 	for (size_t i = 0; i < count; i++)
 	{
-		InitGameObject(&gameObjectManager->gameObjects[i]);
+		gameObjectManager->gameObjects[i] = malloc(sizeof(GameObject));
+		if (gameObjectManager->gameObjects[i] == NULL) return;
+		InitGameObject(gameObjectManager->gameObjects[i]);
 	}
 }
 
@@ -25,7 +27,9 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 
 		for (size_t i = gameObjectManager->count; i < newCount; i++)
 		{
-			InitGameObject(&gameObjectManager->gameObjects[i]);
+			gameObjectManager->gameObjects[i] = malloc(sizeof(GameObject));
+			if (gameObjectManager->gameObjects[i] == NULL) return;
+			InitGameObject(gameObjectManager->gameObjects[i]);
 		}
 
 		gameObjectManager->count += newCount;
@@ -41,13 +45,13 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
  * @param gameObjectManager
  * @param gameObject
  */
-void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameObject)
+void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	if (gameObjectManager->freeSpace == 0)
 		GameObjectManagerIncrease(gameObjectManager);
 
 	// set its id to the last index
-	gameObject.id = gameObjectManager->lastIndex;
+	gameObject->id = gameObjectManager->lastIndex;
 
 	// set the last index to the game object to be added
 	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; 
@@ -55,7 +59,7 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameO
 	// then call the on start method
 	// NOTE THE ONSTART SHOULD NEVER BE NULL, IF ITS NULL THEN YOU HAVE DONE SOMETHING WRONG, THATS WHY THE IF STATEMENT IS COMMENTED OUT
 	//if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
-	gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart(&gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
+	gameObjectManager->gameObjects[gameObjectManager->lastIndex]->OnStart(gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
 
 	gameObjectManager->freeSpace--;
 	gameObjectManager->lastIndex++;
@@ -75,13 +79,15 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameO
  */
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
-	FreeGameObject(&gameObjectManager->gameObjects[id]);
+	FreeGameObject(gameObjectManager->gameObjects[id]);
+	//gameObjectManager->gameObjects[id] = malloc(sizeof(GameObject));
+	if (gameObjectManager->gameObjects[id] == NULL) return;
 	for (size_t i = id + 1; i < gameObjectManager->count; i++)
 	{
 		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
-		gameObjectManager->gameObjects[i - 1].id = i - 1;
+		gameObjectManager->gameObjects[i - 1]->id = i - 1;
 		if (i == gameObjectManager->count - 1)
-			FreeGameObject(&gameObjectManager->gameObjects[i]);
+			FreeGameObject(gameObjectManager->gameObjects[i]);
 	}
 
 	gameObjectManager->count--;
@@ -98,7 +104,7 @@ void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		UpdateGameObject(time, &gameObjectManager->gameObjects[i]);
+		UpdateGameObject(time, gameObjectManager->gameObjects[i]);
 	}
 }
 
@@ -207,13 +213,9 @@ void FixedUpdateGameObject(Time time, GameObject* gameObject)
 
 void FreeGameObject(GameObject* gameObject)
 {
-	free(gameObject->name);
-	gameObject->name = NULL;
-
-	FreeMesh(&gameObject->mesh);
+	//free(gameObject->name);
 	free(gameObject);
 	gameObject = NULL;
-
 }
 
 void InitTransform(Transform* transform)
@@ -262,16 +264,6 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->useGravity = false;
 	rigidBody->mass = 0.0f;
 	rigidBody->velocity = 0.0f;
-}
-
-void FreeMesh(Mesh* mesh)
-{
-	free(mesh->points);
-	free(mesh->indices);
-	free(mesh->colors);
-
-	free(mesh);
-	mesh = NULL;
 }
 
 void SimulateRigidBody(RigidBody* RigidBody)

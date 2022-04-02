@@ -1,10 +1,14 @@
 #include "Events.h"
+
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 
+bool USE_MENU_CURSOR = false;
+bool TOGGLE_MENU = true;
+
 void OnKeyDown(unsigned char key, int x, int y)
 {
-	ImGui_ImplGLUT_KeyboardFunc();
+	ImGui_ImplGLUT_KeyboardFunc(key, x, y);
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 1.0f;
@@ -32,7 +36,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 
 void OnKeyUp(unsigned char key, int x, int y)
 {
-	ImGui_ImplGLUT_KeyboardUpFunc();
+	ImGui_ImplGLUT_KeyboardUpFunc(key, x, y);
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 0.0f;
@@ -58,23 +62,41 @@ void OnKeyUp(unsigned char key, int x, int y)
 
 void OnSpecialKeyDown(int key, int x, int y)
 {
-	ImGui_ImplGLUT_SpecialFunc();
+	switch (key)
+	{
+	case GLUT_KEY_F3:
+		USE_MENU_CURSOR = !USE_MENU_CURSOR;
+		break;
+	case GLUT_KEY_F4:
+		TOGGLE_MENU = !TOGGLE_MENU;
+		break;
+	}
 }
 
 void OnSpecialKeyUp(int key, int x, int y)
 {
-	ImGui_ImplGLUT_SpecialUpFunc();
+	ImGui_ImplGLUT_SpecialUpFunc(key, x ,y);
 }
 
 
 void OnMouseButton(int button, int state, int x, int y)
 {
-	ImGui_ImplGLUT_MouseFunc();
+	ImGui_ImplGLUT_MouseFunc(button, state, x, y);
 }
 
 void OnMouseMove(int x, int y)
 {
-	ImGui_ImplGLUT_MotionFunc();
+	ImGui_ImplGLUT_MotionFunc(x, y);
+
+	// if they are using the debug menu show cursor and dont move camera
+	if (USE_MENU_CURSOR) {
+		// show the cursor
+		glutSetCursor(GLUT_CURSOR_INHERIT);
+		return;
+	}
+
+	//otherwise set the cursor to none
+	glutSetCursor(GLUT_CURSOR_NONE);
 
 	glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_WIDTH / 2);
 

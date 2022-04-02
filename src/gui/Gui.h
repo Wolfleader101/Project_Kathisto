@@ -5,6 +5,9 @@
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 
+
+#include <window/Events.h>
+#include <math/Vector.h>
 #include <game/Game.h>
 
 
@@ -20,4 +23,9 @@ void GuiUpdate(GameObjectManager* gameObjectManager); // called on Update
 void GuiRender(); // called to render the GUI
 
 void DebugMenu(GameObjectManager* gameObjectManager); // the Debug Menu
+
+void GameObjectPanel(GameObject* gameObject);
+void TransformWidget(Transform* transform);
+void RigidBodyWidget(RigidBody* rigidBody);
+void MeshWidget(Mesh* mesh);
 
