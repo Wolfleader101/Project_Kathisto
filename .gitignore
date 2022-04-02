@@ -17,7 +17,6 @@
 *.pch
 
 # Libraries
-#*.lib
 *.a
 *.la
 *.lo
@@ -91,7 +90,6 @@ _deps
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
