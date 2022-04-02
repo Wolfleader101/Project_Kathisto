@@ -1,5 +1,19 @@
 #include "Player.h"
 
+///////////////////////////////////////////
+/////////	SETTING VARIABLES
+///////////////////////////////////////////
+
+//Setting the variables to default values
+
+float maxSpeed = 4.0f; //The maximum speed that the player can move at
+float maxAcceleration = 10.0f; //The maximum acceleration that the player can achieve
+
+float maxAirAcceleration = 1.0f; //The maximum amount of control that the player has in the air
+float jumpHeight = 0.5f; //The maximum height that the player can jump
+
+float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
+
 //Stores the verticies for the player object
 const Vector3 playerVertexBuffer[] = {
 	{ -0.5f, -0.9f, -0.5f },
@@ -60,14 +74,17 @@ Mesh playerMesh = {
 	.debug = false
 };
 
-//Sets the starting variables of the player object
-OnStart OnPlayerStart(GameObject* gameObject)
+///////////////////////////////////////////
+/////////	FUNCTIONS
+///////////////////////////////////////////
+
+OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of the player object
 {
 	gameObject->name = "player"; //Sets object name
 
 	gameObject->mesh = playerMesh; //Sets object mesh
 	CalculateMeshBoundBox(&gameObject->mesh); //Calculates the boudning box (AABB) around the mesh
 
-	gameObject->transform.position = (Vector3){ 0.0f, 1.0f, 0.0f }; //Sets initial position (Transform) of mesh
-	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f }; //Sets initial scale of mesh
+	gameObject->transform.position = (Vector3){0.0f, 1.0f, 0.0f}; //Sets initial position (Transform) of mesh
+	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
 }

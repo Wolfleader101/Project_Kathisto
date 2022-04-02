@@ -78,17 +78,21 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* floorGameObject = malloc(sizeof(GameObject));
+	GameObject* playerObject = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(floorGameObject);
+	InitGameObject(playerObject);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
 	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL);
+	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
+	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
 	// enter loop
 	glutMainLoop();

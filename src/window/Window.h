@@ -10,6 +10,7 @@
 
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/Player.h"
 #include "math/Vector.h"
 
 
