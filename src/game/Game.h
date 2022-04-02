@@ -67,7 +67,7 @@ struct GameObject
 
 typedef struct GameObjectManager
 {
-	GameObject* gameObjects;
+	GameObject** gameObjects;
 	size_t count;
 	size_t lastIndex;
 	size_t freeSpace;
@@ -80,7 +80,7 @@ typedef struct GameObjectManager
 
 void InitGameObjectManager(GameObjectManager* gameObjectManager);
 void GameObjectManagerIncrease(GameObjectManager* gameObjectManager);
-void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject GameObject);
+void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* GameObject);
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
 GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager);
@@ -101,6 +101,5 @@ void UpdateMesh(Time time, Mesh* mesh);
 void DrawGizmos(Time time, Vector3 maxSize);
 
 void CalculateMeshBoundBox(Mesh* mesh);
-void FreeMesh(Mesh* mesh);
 
 void SimulateRigidBody(RigidBody* RigidBody); // simulate rigid body

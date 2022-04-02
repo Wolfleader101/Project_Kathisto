@@ -38,9 +38,9 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
 	{
-		if (gameObjectManager->gameObjects[i].name != NULL)
+		if (gameObjectManager->gameObjects[i]->name != NULL)
 		{
-			GameObjectPanel(&gameObjectManager->gameObjects[i]);
+			GameObjectPanel(gameObjectManager->gameObjects[i]);
 		}
 	}
 	igEnd();

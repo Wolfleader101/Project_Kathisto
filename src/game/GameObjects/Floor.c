@@ -1,7 +1,5 @@
 #include "Floor.h"
 
-GameObject floorGameObject = {0};
-
 // position of each of the ground points
 const Vector3 floorVertexBuffer[] = {
 	{ -1.0f, 0.0f, -1.0f },

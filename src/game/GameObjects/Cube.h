@@ -8,8 +8,6 @@
 #include "math/mathUtils.h"
 
 
-extern GameObject cube;
-
 OnStart OnCubeStart(GameObject* gameObject);
 
 OnUpdate OnCubeUpdate(Time time, GameObject* gameObject);
