@@ -7,11 +7,14 @@
 #include "math/Vector.h" //Includes definitions for Vectors
 #include "game/GameConstants.h" //Includes constant variables that are used across the game
 
-#include "Player.h" //Includes the player object
+#include "game/Game.h" //Includes the Game Objects so I can access the player object
 
 ///////////////////////////////////////////
 /////////	VARIABLES
 ///////////////////////////////////////////
+
+extern GameObjectManager gameManager; //Handles getting information from the Game Object Manager
+extern GameObject * playerObject; //The object for the player
 
 extern Vector3 cameraFocusPoint; //The point which the camera will focus on
 extern float camFocusRadius; //Relaxes the view of the focus point by a set amount
@@ -31,4 +34,6 @@ extern Vector3 camUp; //The camera's Up-Vector
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
-OnUpdate OnCameraUpdate(Time time, GameObject* gameObject);
+OnStart OnCamStart(GameObject* gameObject); //Sets the starting variables of the third person camera object
+
+OnUpdate OnCamUpdate(Time time, GameObject* gameObject); //Calculates the position aof the camera each frame

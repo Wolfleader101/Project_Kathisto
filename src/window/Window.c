@@ -79,20 +79,24 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* floorGameObject = malloc(sizeof(GameObject));
 	GameObject* playerObject = malloc(sizeof(GameObject));
+	GameObject* thirdPersonCamera = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(floorGameObject);
 	InitGameObject(playerObject);
+	InitGameObject(thirdPersonCamera);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
 	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL);
 	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL);
+	SetupCallbacks(thirdPersonCamera, OnCamStart, OnCamUpdate, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
+	GameObjectManagerAdd(&gameObjectManager, thirdPersonCamera);
 
 	// enter loop
 	glutMainLoop();
@@ -116,7 +120,7 @@ void WindowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	CameraRender(time.deltaTime);
+	//CameraRender(time.deltaTime);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	

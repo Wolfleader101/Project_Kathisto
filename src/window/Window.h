@@ -10,6 +10,7 @@
 
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/CameraThirdPerson.h" //Includes the Third Person Camera Object
 #include "game/GameObjects/Player.h"
 #include "math/Vector.h"
 
