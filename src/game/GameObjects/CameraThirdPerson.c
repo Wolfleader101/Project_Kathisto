@@ -13,7 +13,7 @@ GameObject * playerObject = NULL; //The object for the player
 Vector3 camFocusPoint = {0.0f, 0.0f, 0.0f}; //The point which the camera will focus on
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
 
-float camDistance = 6.0f; //The distance of the camera from the focal point
+float camDistance = 5.0f; //The distance of the camera from the focal point
 float camRotationSpeed = 90.0f; //The speed at which the camera rotates around the player object (In degrees per-second)
 float camMinVertAngle = -10.0f; //The minimum value that the camera can rotate vertically
 float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate vertically
@@ -21,7 +21,7 @@ float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate ve
 Vector2 camOrbitAngles = {25.0f, 180.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle
 
 Vector3 camForwardDir = {0.0f, 0.0f, -1.0f}; //The camera's default forward direction (Vector)
-Vector3 camPos = {0.0f, 1.0f, 5.0f}; //The default camera position
+Vector3 camPos = {0.0f, 4.0f, -3.5f}; //The default camera position
 Vector3 camUp = {0.0f, 1.0f, 0.0f}; //The camera's Up-Vector
 
 ///////////////////////////////////////////
@@ -57,6 +57,8 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 	camPos.x = tmpPosData.x; //Sets the variable camera position variable (used in gluLookAt), to the x position of camera object
 	camPos.y = tmpPosData.y; //Sets the variable camera position variable (used in gluLookAt), to the y position of camera object
 	camPos.z = tmpPosData.z; //Sets the variable camera position variable (used in gluLookAt), to the z position of camera object
+
+	camUp = CrossProduct(camForwardDir, );
 }
 
 void ThirdPersonCamRender(Time time) //Computes the camera position, rotation and such - LOOPED
@@ -68,7 +70,7 @@ void ThirdPersonCamRender(Time time) //Computes the camera position, rotation an
 
 	//Changes the position/rotation of the camera
 	gluLookAt(camPos.x, camPos.y, camPos.z,					//Camera X, Y, Z Position
-		camFocusPoint.x, camFocusPoint.y, camFocusPoint.z,	//Camera X, Y, Z Focal Point
+		camForwardDir.x, camForwardDir.y, camForwardDir.z,	//Camera X, Y, Z Focal Point
 		camUp.x, camUp.y, camUp.z);							//Camera X, Y, Z Up-Vector
 }
 

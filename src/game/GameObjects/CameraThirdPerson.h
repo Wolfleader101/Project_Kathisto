@@ -6,6 +6,7 @@
 
 #include "math/Vector.h" //Includes definitions for Vectors
 #include "game/GameConstants.h" //Includes constant variables that are used across the game
+#include "math/mathUtils.h" //Includes custom maths utilities
 
 #include "game/Game.h" //Includes the Game Object struct so I can access the player object
 
