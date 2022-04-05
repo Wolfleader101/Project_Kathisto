@@ -6,11 +6,11 @@
 
 //Setting the variables to default values
 
-Vector3 tmpPosData;
+Vector3 tmpPosData = { 0.0f, 0.0f, 0.0f }; //Temporary vector used to store data for passing between variables
 
 GameObject * playerObject = NULL; //The object for the player
 
-Vector3 camFocusPoint; //The point which the camera will focus on
+Vector3 camFocusPoint = { 0.0f, 0.0f, 0.0f }; //The point which the camera will focus on
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
 
 float camDistance = 3.0f; //The distance of the camera from the focal point
@@ -22,25 +22,27 @@ Vector2 camOrbitAngles = {25.0f, 180.0f}; //Vertical (Pitch) angle, Horizontal (
 
 Vector3 camForwardDir = { 0.0f, 0.0f, -1.0f }; //The camera's default forward direction (Vector)
 Vector3 camPos = { 0.0f, 1.0f, 5.0f }; //The default camera position
-Vector3 camUp; //The camera's Up-Vector
+Vector3 camUp = { 0.0f, 1.0f, 0.0f }; //The camera's Up-Vector
 
 ///////////////////////////////////////////
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
-void SetCamObjects(GameObjectManager* gameObjectManager)
+void SetCamObjects(GameObjectManager* gameObjectManager) //Sets the objects used by the camera - CALLED ONCE
 {
-	playerObject = GameObjectManagerFind(&gameObjectManager, 2);
+	playerObject = GameObjectManagerFind(&gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
 
-	if(playerObject == NULL)
+	if(playerObject == NULL) //Checks to see if the object has been set
 	{
 		printf("ERROR: Player Object not found!");
 
 		return(1);
 	}
+
+	printf(&playerObject->name);
 }
 
-void ComputeCamPos(Time time)
+void ComputeCamPos(Time time) //Computes the camera position, rotation and such - LOOPED
 {
 	// UPDATE SECTION
 	
@@ -59,16 +61,16 @@ void ComputeCamPos(Time time)
 	camPos.z = tmpPosData.z; //Sets the variable camera position variable (used in gluLookAt), to the z position of camera object
 }
 
-void ThirdPersonCamRender(Time time)
+void ThirdPersonCamRender(Time time) //Computes the camera position, rotation and such - LOOPED
 {
-	// compute the cameras position you can move
+	//Computes the camera's new position, look at position and rotation around the player
 	ComputeCamPos(time);
 
 	//CAMERA POSITION CHANGE
 
 	//Changes the position/rotation of the camera
 	gluLookAt(camPos.x, camPos.y, camPos.z,					//Camera X, Y, Z Position
-		camFocusPoint.x, camFocusPoint.y, camFocusPoint.z,			//Camera X, Y, Z Focal Point
+		camFocusPoint.x, camFocusPoint.y, camFocusPoint.z,	//Camera X, Y, Z Focal Point
 		camUp.x, camUp.y, camUp.z);							//Camera X, Y, Z Up-Vector
 }
 

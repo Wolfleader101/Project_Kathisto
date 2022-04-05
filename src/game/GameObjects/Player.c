@@ -80,7 +80,7 @@ Mesh playerMesh = {
 
 OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of the player object
 {
-	gameObject->name = "player"; //Sets object name
+	gameObject->name = "Player"; //Sets object name
 
 	gameObject->mesh = playerMesh; //Sets object mesh
 	CalculateMeshBoundBox(&gameObject->mesh); //Calculates the boudning box (AABB) around the mesh
