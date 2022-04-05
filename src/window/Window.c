@@ -94,6 +94,8 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
+	SetCamObjects(&gameObjectManager);
+
 	// enter loop
 	glutMainLoop();
 
@@ -117,7 +119,7 @@ void WindowRender(void)
 
 	// CAMERA RENDER
 	//CameraRender(time.deltaTime);
-	ThirdPersonCamRender(time.deltaTime);
+	ThirdPersonCamRender(time);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	

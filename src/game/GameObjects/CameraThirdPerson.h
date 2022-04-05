@@ -9,14 +9,13 @@
 
 #include "game/Game.h" //Includes the Game Object struct so I can access the player object
 
-#include <window/Window.h> //Gives me access to the Game Manager used for the project
-
 ///////////////////////////////////////////
 /////////	VARIABLES
 ///////////////////////////////////////////
 
+Vector3 tmpPosData;
+
 extern GameObject * playerObject; //The object for the player
-extern GameObject * camObject; //The object for the third person camera
 
 extern Vector3 camFocusPoint; //The point which the camera will focus on
 extern float camFocusRadius; //Relaxes the view of the focus point by a set amount
@@ -36,6 +35,8 @@ extern Vector3 camUp; //The camera's Up-Vector
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
-void ComputeCamPos(float deltaTime);
+void SetCamObjects(GameObjectManager* gameObjectManager); //CALLED ONCE
 
-void ThirdPersonCamRender(float deltaTime);
+void ComputeCamPos(Time time); //LOOPED
+
+void ThirdPersonCamRender(Time time); //LOOPED

@@ -6,8 +6,9 @@
 
 //Setting the variables to default values
 
+Vector3 tmpPosData;
+
 GameObject * playerObject = NULL; //The object for the player
-GameObject * camObject = NULL; //The object for the third person camera
 
 Vector3 camFocusPoint; //The point which the camera will focus on
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
@@ -27,17 +28,25 @@ Vector3 camUp; //The camera's Up-Vector
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
-void ComputeCamPos(float deltaTime)
+void SetCamObjects(GameObjectManager* gameObjectManager)
 {
-	playerObject = GameObjectManagerFind(&gameObjectManager, 1);
+	playerObject = GameObjectManagerFind(&gameObjectManager, 2);
 
-	printf("%s\n", playerObject->name);
+	if(playerObject == NULL)
+	{
+		printf("ERROR: Player Object not found!");
+
+		return(1);
+	}
+}
+
+void ComputeCamPos(Time time)
+{
+	// UPDATE SECTION
 	
 	//
 
 	//LATE UPDATE SECTION
-
-	Vector3 tmpPosData;
 
 	camFocusPoint = playerObject->transform.position; //The point that the camera is focusing on
 
@@ -50,10 +59,10 @@ void ComputeCamPos(float deltaTime)
 	camPos.z = tmpPosData.z; //Sets the variable camera position variable (used in gluLookAt), to the z position of camera object
 }
 
-void ThirdPersonCamRender(float deltaTime)
+void ThirdPersonCamRender(Time time)
 {
 	// compute the cameras position you can move
-	ComputeCamPos(deltaTime);
+	ComputeCamPos(time);
 
 	//CAMERA POSITION CHANGE
 
