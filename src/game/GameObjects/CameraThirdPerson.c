@@ -30,13 +30,13 @@ Vector3 camUp = { 0.0f, 1.0f, 0.0f }; //The camera's Up-Vector
 
 void SetCamObjects(GameObjectManager* gameObjectManager) //Sets the objects used by the camera - CALLED ONCE
 {
-	playerObject = GameObjectManagerFind(&gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
+	playerObject = GameObjectManagerFind(&*gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
 
 	if(playerObject == NULL) //Checks to see if the object has been set
 	{
 		printf("ERROR: Player Object not found!");
 
-		return(1);
+		exit(1);
 	}
 
 	printf(&playerObject->name);
