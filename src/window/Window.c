@@ -94,6 +94,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
+	//Sets the objects needed for the camera
 	SetCamObjects(&gameObjectManager);
 
 	// enter loop

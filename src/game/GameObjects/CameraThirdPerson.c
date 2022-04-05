@@ -6,11 +6,11 @@
 
 //Setting the variables to default values
 
-Vector3 tmpPosData = { 0.0f, 0.0f, 0.0f }; //Temporary vector used to store data for passing between variables
+Vector3 tmpPosData = {0.0f, 0.0f, 0.0f}; //Temporary vector used to store data for passing between variables
 
 GameObject * playerObject = NULL; //The object for the player
 
-Vector3 camFocusPoint = { 0.0f, 0.0f, 0.0f }; //The point which the camera will focus on
+Vector3 camFocusPoint = {0.0f, 0.0f, 0.0f}; //The point which the camera will focus on
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
 
 float camDistance = 3.0f; //The distance of the camera from the focal point
@@ -20,9 +20,9 @@ float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate ve
 
 Vector2 camOrbitAngles = {25.0f, 180.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle
 
-Vector3 camForwardDir = { 0.0f, 0.0f, -1.0f }; //The camera's default forward direction (Vector)
-Vector3 camPos = { 0.0f, 1.0f, 5.0f }; //The default camera position
-Vector3 camUp = { 0.0f, 1.0f, 0.0f }; //The camera's Up-Vector
+Vector3 camForwardDir = {0.0f, 0.0f, -1.0f}; //The camera's default forward direction (Vector)
+Vector3 camPos = {0.0f, 1.0f, 5.0f}; //The default camera position
+Vector3 camUp = {0.0f, 1.0f, 0.0f}; //The camera's Up-Vector
 
 ///////////////////////////////////////////
 /////////	FUNCTIONS
@@ -30,7 +30,7 @@ Vector3 camUp = { 0.0f, 1.0f, 0.0f }; //The camera's Up-Vector
 
 void SetCamObjects(GameObjectManager* gameObjectManager) //Sets the objects used by the camera - CALLED ONCE
 {
-	playerObject = GameObjectManagerFind(&*gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
+	playerObject = GameObjectManagerFind(gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
 
 	if(playerObject == NULL) //Checks to see if the object has been set
 	{
@@ -38,8 +38,6 @@ void SetCamObjects(GameObjectManager* gameObjectManager) //Sets the objects used
 
 		exit(1);
 	}
-
-	printf(&playerObject->name);
 }
 
 void ComputeCamPos(Time time) //Computes the camera position, rotation and such - LOOPED
