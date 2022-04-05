@@ -97,7 +97,7 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 
 GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id)
 {
-	return &gameObjectManager->gameObjects[id];
+	return gameObjectManager->gameObjects[id];
 }
 
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)

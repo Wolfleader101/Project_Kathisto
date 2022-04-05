@@ -13,7 +13,7 @@ GameObject * playerObject = NULL; //The object for the player
 Vector3 camFocusPoint = {0.0f, 0.0f, 0.0f}; //The point which the camera will focus on
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
 
-float camDistance = 3.0f; //The distance of the camera from the focal point
+float camDistance = 6.0f; //The distance of the camera from the focal point
 float camRotationSpeed = 90.0f; //The speed at which the camera rotates around the player object (In degrees per-second)
 float camMinVertAngle = -10.0f; //The minimum value that the camera can rotate vertically
 float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate vertically
