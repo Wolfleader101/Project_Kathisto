@@ -14,7 +14,8 @@
 /////////	VARIABLES
 ///////////////////////////////////////////
 
-Vector3 tmpPosData;
+extern Vector3 tmpPosData; //Temporary vector used to store data for passing between variables
+extern Vector3 tmpRightData; //Temporary arbitrary vector used to calculate the right vector
 
 extern GameObject * playerObject; //The object for the player
 
@@ -30,6 +31,7 @@ extern Vector2 camOrbitAngles; //Vertical (Pitch) angle, Horizontal (Yaw) angle
 
 extern Vector3 camForwardDir; //The camera's forward direction (Vector)
 extern Vector3 camPos; //The camera's position
+extern Vector3 camRight; //The camera's Right-Vector
 extern Vector3 camUp; //The camera's Up-Vector
 
 ///////////////////////////////////////////
@@ -41,3 +43,12 @@ void SetCamObjects(GameObjectManager* gameObjectManager); //CALLED ONCE
 void ComputeCamPos(Time time); //LOOPED
 
 void ThirdPersonCamRender(Time time); //LOOPED
+
+//////////////////////////////
+////	REFERENCES
+//////////////////////////////
+
+// https://catlikecoding.com/unity/tutorials/movement/orbit-camera/
+//		- Used for coding the camera rotation 
+// https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
+//		- Used for calculating the forward vector and cross product
