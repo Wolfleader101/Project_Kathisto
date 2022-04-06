@@ -228,16 +228,17 @@ void FixedUpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		FixedUpdateGameObject(time, gameObjectManager->gameObjects[i]);
+		FixedUpdateGameObject(time, gameObjectManager, gameObjectManager->gameObjects[i]);
 	}
 }
 
-void FixedUpdateGameObject(Time time, GameObject* gameObject)
+void FixedUpdateGameObject(Time time, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	// push a matrix so u dont modify the root matrix
 	glPushMatrix();
 
 	CalculateBoundingBox(gameObject);
+	DetectCollision(gameObjectManager, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(time, gameObject);
 
@@ -271,12 +272,14 @@ void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObjec
 	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
+		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
+
 		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
 		if ((objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x) &&
 			(objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y) &&
 			(objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z))
 		{
-			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]);
+			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
 		}
 	}
 }
