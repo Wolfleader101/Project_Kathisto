@@ -266,7 +266,20 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-//bool IsInside
+void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+{
+	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+	{
+		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
+		if ((objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x) &&
+			(objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y) &&
+			(objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z))
+		{
+			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]);
+		}
+	}
+}
 
 void FreeGameObject(GameObject* gameObject)
 {
