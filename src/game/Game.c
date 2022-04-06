@@ -249,36 +249,20 @@ void CalculateBoundingBox(GameObject* gameObject)
 {
 	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
 
-	Vector3 min = Vec3Multiply(gameObject->mesh.points[0], gameObject->transform.scale);
-	Vector3 max = Vec3Multiply(gameObject->mesh.points[0], gameObject->transform.scale);
+	Vector3 min = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[0]));
+	Vector3 max = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[0]));
 
 	for (size_t i = 0; i < gameObject->mesh.pointSize; i++)
 	{
-		if ((gameObject->transform.scale.x * gameObject->mesh.points[i].x) < min.x) min.x = (gameObject->transform.scale.x * gameObject->mesh.points[i].x);
-		if ((gameObject->transform.scale.y * gameObject->mesh.points[i].y) < min.y) min.y = (gameObject->transform.scale.y * gameObject->mesh.points[i].y);
-		if ((gameObject->transform.scale.z * gameObject->mesh.points[i].z) < min.z) min.z = (gameObject->transform.scale.z * gameObject->mesh.points[i].z);
+		Vector3 pos = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[i]));
+		if (pos.x < min.x) min.x =  pos.x;
+		if (pos.y < min.y) min.y = pos.y;
+		if (pos.z < min.z) min.z = pos.z;
 
-		if ((gameObject->transform.scale.x * gameObject->mesh.points[i].x) > max.x) max.x = (gameObject->transform.scale.x * gameObject->mesh.points[i].x);
-		if ((gameObject->transform.scale.y * gameObject->mesh.points[i].y) > max.y) max.y = (gameObject->transform.scale.y * gameObject->mesh.points[i].y);
-		if ((gameObject->transform.scale.z * gameObject->mesh.points[i].z) > max.z) max.z = (gameObject->transform.scale.z * gameObject->mesh.points[i].z);
-		//if ((gameObject->transform.scale.x + gameObject->transform.position.x) < min.x) min.x = (gameObject->transform.scale.x+ gameObject->transform.position.x);
-		//if ((gameObject->transform.scale.y + gameObject->transform.position.y) < min.y) min.y = (gameObject->transform.scale.y + gameObject->transform.position.y);
-		//if ((gameObject->transform.scale.z + gameObject->transform.position.z) < min.z) min.z = (gameObject->transform.scale.z + gameObject->transform.position.z);
-
-	//	if ((gameObject->transform.scale.x+ gameObject->transform.position.x) > max.x) max.x = (gameObject->transform.scale.x+ gameObject->transform.position.x);
-	//	if ((gameObject->transform.scale.y + gameObject->transform.position.y) > max.y) max.y = (gameObject->transform.scale.y + gameObject->transform.position.y);
-		//if ((gameObject->transform.scale.z + gameObject->transform.position.z) > max.z) max.z = (gameObject->transform.scale.z + gameObject->transform.position.z);
-
+		if (pos.x > max.x) max.x = pos.x;
+		if (pos.y > max.y) max.y = pos.y;
+		if (pos.z > max.z) max.z = pos.z;
 	}
-
-	/*
-		glTranslatef(pos->x, pos->y, pos->z);
-
-	glRotatef(rot->x, 1.0f, 0.0f, 0.0f);
-	glRotatef(rot->y, 0.0f, 1.0f, 0.0f);
-	glRotatef(rot->z, 0.0f, 0.0f, 1.0f);
-
-	glScalef(scale->x, scale->y, scale->z);*/
 
 	gameObject->rigidBody.boundingBox.minPos = min;
 	gameObject->rigidBody.boundingBox.maxPos = max;
