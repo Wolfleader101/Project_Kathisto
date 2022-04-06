@@ -80,13 +80,13 @@ OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 
 	float hover = lerp(6.0f, 12.0f, distance);
 
-	pos->y = hover;
+	//pos->y = hover;
 
 
 	Vector3* rot = &gameObject->transform.rotation;
 	rot->x += (time.deltaTime * 20);
-	rot->y += (time.deltaTime * 20);
-	rot->z += (time.deltaTime * 20);
+	//rot->y += (time.deltaTime * 20);
+	//rot->z += (time.deltaTime * 20);
 
 	//printf("Test %.02f\n", time.currTime);
 

@@ -103,5 +103,10 @@ void RigidBodyWidget(RigidBody* rigidBody)
 }
 void MeshWidget(Mesh* mesh)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("Mesh", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igCheckbox("Debug Mesh", &mesh->debug);
+		igTreePop();
+		igSeparator();
+	}
 }

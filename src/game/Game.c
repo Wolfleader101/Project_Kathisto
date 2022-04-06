@@ -53,7 +53,7 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 
 	// set its id to the last index
 	gameObject->id = gameObjectManager->lastIndex;
-	
+
 	// set the bounding box
 	gameObject->rigidBody.boundingBox.gameObjectId = gameObjectManager->lastIndex;
 
@@ -62,7 +62,7 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 	gameObjectManager->boundingBoxes[gameObjectManager->lastIndex] = &gameObject->rigidBody.boundingBox;
 
 	// set the last index to the game object to be added
-	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; 
+	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject;
 
 	// then call the on start method
 	// NOTE THE ONSTART SHOULD NEVER BE NULL, IF ITS NULL THEN YOU HAVE DONE SOMETHING WRONG, THATS WHY THE IF STATEMENT IS COMMENTED OUT
@@ -249,13 +249,25 @@ void CalculateBoundingBox(GameObject* gameObject)
 {
 	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
 
-	Vector3 min = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[0]));
-	Vector3 max = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[0]));
+	Transform* transform = &gameObject->transform;
+	Mesh* mesh = &gameObject->mesh;
 
-	for (size_t i = 0; i < gameObject->mesh.pointSize; i++)
+	Vector3 min = Vec3Multiply(transform->scale, mesh->points[0]);
+	min = Vec3RotateX(min, transform->rotation.x);
+	min = Vec3RotateY(min, transform->rotation.y);
+	min = Vec3RotateZ(min, transform->rotation.z);
+	min = Vec3Add(transform->position, min);
+	Vector3 max = min;
+
+	for (size_t i = 0; i < mesh->pointSize; i++)
 	{
-		Vector3 pos = Vec3Multiply(gameObject->transform.scale, Vec3Add(gameObject->transform.position, gameObject->mesh.points[i]));
-		if (pos.x < min.x) min.x =  pos.x;
+		Vector3 pos = Vec3Multiply(transform->scale, mesh->points[i]);
+		pos = Vec3RotateX(pos, transform->rotation.x);
+		pos = Vec3RotateY(pos, transform->rotation.y);
+		pos = Vec3RotateZ(pos, transform->rotation.z);
+		pos = Vec3Add(transform->position, pos);
+
+		if (pos.x < min.x) min.x = pos.x;
 		if (pos.y < min.y) min.y = pos.y;
 		if (pos.z < min.z) min.z = pos.z;
 
