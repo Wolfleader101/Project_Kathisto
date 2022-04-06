@@ -117,6 +117,7 @@ void WindowRender(void)
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
 	UpdateGameObjects(time, &gameObjectManager);
+	FixedUpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 

@@ -5,6 +5,7 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	const size_t count = 20u;
 	gameObjectManager->count = count;
 	gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
+	gameObjectManager->boundingBoxes = malloc(count * sizeof(BoudingBox));
 	gameObjectManager->lastIndex = 0u;
 	gameObjectManager->freeSpace = count;
 
@@ -52,6 +53,13 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 
 	// set its id to the last index
 	gameObject->id = gameObjectManager->lastIndex;
+	
+	// set the bounding box
+	gameObject->rigidBody.boundingBox.gameObjectId = gameObjectManager->lastIndex;
+
+
+	// add the address of the bounding box to the array
+	gameObjectManager->boundingBoxes[gameObjectManager->lastIndex] = &gameObject->rigidBody.boundingBox;
 
 	// set the last index to the game object to be added
 	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; 
@@ -80,12 +88,18 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
 	FreeGameObject(gameObjectManager->gameObjects[id]);
-	//gameObjectManager->gameObjects[id] = malloc(sizeof(GameObject));
 	if (gameObjectManager->gameObjects[id] == NULL) return;
 	for (size_t i = id + 1; i < gameObjectManager->count; i++)
 	{
+		// move the game object pointers
 		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
 		gameObjectManager->gameObjects[i - 1]->id = i - 1;
+
+		// move the bounding box pointers
+		gameObjectManager->boundingBoxes[i - 1] = gameObjectManager->boundingBoxes[i];
+		gameObjectManager->boundingBoxes[i - 1]->gameObjectId = i - 1;
+
+		// free the last object
 		if (i == gameObjectManager->count - 1)
 			FreeGameObject(gameObjectManager->gameObjects[i]);
 	}
@@ -97,7 +111,7 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 
 GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id)
 {
-	return &gameObjectManager->gameObjects[id];
+	return gameObjectManager->gameObjects[id];
 }
 
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
@@ -121,10 +135,11 @@ void InitGameObject(GameObject* gameObject)
 	gameObject->OnFixedUpdate = NULL;
 }
 
-void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnFixedUpdate OnFixedUpdate)
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate)
 {
 	gameObject->OnStart = OnStart;
 	gameObject->OnUpdate = OnUpdate;
+	gameObject->OnLateUpdate = OnLateUpdate;
 	gameObject->OnFixedUpdate = OnFixedUpdate;
 }
 
@@ -141,7 +156,10 @@ void UpdateGameObject(Time time, GameObject* gameObject)
 	UpdateMesh(time, mesh);
 
 	if (gameObject->debug)
-		DrawGizmos(time, mesh->maxPosition);
+		DrawGizmos(time, gameObject->rigidBody.boundingBox.maxPos);
+
+
+	if (gameObject->OnLateUpdate != NULL) gameObject->OnLateUpdate(time, gameObject);
 
 	glPopMatrix();
 }
@@ -206,10 +224,49 @@ void DrawGizmos(Time time, Vector3 maxSize)
 	glEnd();
 }
 
+void FixedUpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
+{
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+	{
+		FixedUpdateGameObject(time, gameObjectManager->gameObjects[i]);
+	}
+}
+
 void FixedUpdateGameObject(Time time, GameObject* gameObject)
 {
+	// push a matrix so u dont modify the root matrix
+	glPushMatrix();
 
+	CalculateBoundingBox(gameObject);
+
+	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(time, gameObject);
+
+	glPopMatrix();
 }
+
+void CalculateBoundingBox(GameObject* gameObject)
+{
+	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
+
+	Vector3 min = gameObject->mesh.points[0];
+	Vector3 max = gameObject->mesh.points[0];
+
+	for (size_t i = 0; i < gameObject->mesh.pointSize; i++)
+	{
+		if (gameObject->mesh.points[i].x < min.x) min.x = gameObject->mesh.points[i].x;
+		if (gameObject->mesh.points[i].y < min.y) min.y = gameObject->mesh.points[i].y;
+		if (gameObject->mesh.points[i].z < min.z) min.z = gameObject->mesh.points[i].z;
+
+		if (gameObject->mesh.points[i].x > max.x) max.x = gameObject->mesh.points[i].x;
+		if (gameObject->mesh.points[i].y > max.y) max.y = gameObject->mesh.points[i].y;
+		if (gameObject->mesh.points[i].z > max.z) max.z = gameObject->mesh.points[i].z;
+	}
+
+	gameObject->rigidBody.boundingBox.minPos = min;
+	gameObject->rigidBody.boundingBox.maxPos = max;
+}
+
+//bool IsInside
 
 void FreeGameObject(GameObject* gameObject)
 {
@@ -232,30 +289,6 @@ void InitMesh(Mesh* mesh)
 	mesh->indexCount = 0;
 	mesh->colors = NULL;
 	mesh->isUniformColor = false;
-	mesh->minPosition = EmptyVec3();
-	mesh->maxPosition = EmptyVec3();
-}
-
-void CalculateMeshBoundBox(Mesh* mesh)
-{
-	if (mesh->points == NULL || mesh->pointSize == 0) return;
-
-	Vector3 min = mesh->points[0];
-	Vector3 max = mesh->points[0];
-
-	for (size_t i = 0; i < mesh->pointSize; i++)
-	{
-		if (mesh->points[i].x < min.x) min.x = mesh->points[i].x;
-		if (mesh->points[i].y < min.y) min.y = mesh->points[i].y;
-		if (mesh->points[i].z < min.z) min.z = mesh->points[i].z;
-
-		if (mesh->points[i].x > max.x) max.x = mesh->points[i].x;
-		if (mesh->points[i].y > max.y) max.y = mesh->points[i].y;
-		if (mesh->points[i].z > max.z) max.z = mesh->points[i].z;
-	}
-
-	mesh->minPosition = min;
-	mesh->maxPosition = max;
 }
 
 void InitRigidBody(RigidBody* rigidBody)
@@ -264,6 +297,7 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->useGravity = false;
 	rigidBody->mass = 0.0f;
 	rigidBody->velocity = 0.0f;
+	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
 }
 
 void SimulateRigidBody(RigidBody* RigidBody)
