@@ -95,7 +95,8 @@ void RigidBodyWidget(RigidBody* rigidBody)
 {
 	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-		igInputFloat3("Bounding Box", &rigidBody->boundingBox, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
 		igTreePop();
 		igSeparator();
 	}
