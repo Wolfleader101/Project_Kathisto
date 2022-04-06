@@ -52,9 +52,9 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 
 	camFocusPoint = playerObject->transform.position; //The point that the camera is focusing on
 
-	camForwardDir = ForwardVector(camFocusPoint, camPos); //Calculate Forward Vector (Cross product of the focus point and camera position)
-	camRight = CrossProduct(NormalizeVector(tmpPosData), camForwardDir); //Calculate Right Vector (Using arbitrary vector and forward vector)
-	camUp = CrossProduct(camForwardDir, camRight); //Calculate Up Vector (Cross product of the forward vector and right vector)
+	camForwardDir = ForwardVec3(camFocusPoint, camPos); //Calculate Forward Vector (Cross product of the focus point and camera position)
+	camRight = Vec3CrossProduct(Vec3Normalize(tmpPosData), camForwardDir); //Calculate Right Vector (Using arbitrary vector and forward vector)
+	camUp = Vec3CrossProduct(camForwardDir, camRight); //Calculate Up Vector (Cross product of the forward vector and right vector)
 
 	tmpPosData.x = camFocusPoint.x - camForwardDir.x * camDistance; //Calculates the camera's new x position
 	tmpPosData.y = camFocusPoint.y - camForwardDir.y * camDistance; //Calculates the camera's new y position

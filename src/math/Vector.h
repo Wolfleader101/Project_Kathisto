@@ -70,3 +70,11 @@ Vector3 Vec3CrossProduct(Vector3 vec1, Vector3 vec2);
 float Vec2DotProduct(Vector2 vec1, Vector2 vec2);
 float Vec3DotProduct(Vector3 vec1, Vector3 vec2);
 
+Vector3 ForwardVec3(Vector3 vec3FromPos, Vector3 vec3ToPos); //Returns a Forward Vector
+
+//////////////////////////////
+////	REFERENCES
+//////////////////////////////
+
+// https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
+//		- Used for calculating the forward vector
