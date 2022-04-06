@@ -93,7 +93,12 @@ void TransformWidget(Transform* transform)
 }
 void RigidBodyWidget(RigidBody* rigidBody)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igInputFloat3("Bounding Box", &rigidBody->boundingBox, "%.02f", ImGuiInputTextFlags_None);
+		igTreePop();
+		igSeparator();
+	}
 }
 void MeshWidget(Mesh* mesh)
 {

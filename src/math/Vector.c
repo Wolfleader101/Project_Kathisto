@@ -134,6 +134,15 @@ Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2)
 	return (Vector3) { vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z };
 }
 
+Vector2 Vec2Add(Vector2 vec1, Vector2 vec2)
+{
+	return (Vector2) { vec1.x + vec2.x, vec1.y + vec2.y };
+}
+Vector3 Vec3Add(Vector3 vec1, Vector3 vec2)
+{
+	return (Vector3) { vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z };
+}
+
 Vector3 Vec3CrossProduct(Vector3 vec1, Vector3 vec2)
 {
 	return (Vector3) { (vec1.y * vec2.z) - (vec1.z * vec2.y), (vec1.z * vec2.x) - (vec1.x * vec2.z), (vec1.x * vec2.y) - (vec1.y * vec2.x) };
