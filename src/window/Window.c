@@ -61,7 +61,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	glutMouseFunc(OnMouseButton); // on mouse click
 	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
 
-
 	//glutFullScreen();
 
 	// hide the cursor
@@ -87,7 +86,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
 	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL);
-	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL);
+	SetupCallbacks(playerObject, OnPlayerStart, OnPlayerUpdate, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
@@ -95,7 +94,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
 	//Sets the objects needed for the camera
-	SetCamObjects(&gameObjectManager);
+	SetCamAttributes(&gameObjectManager);
 
 	// enter loop
 	glutMainLoop();

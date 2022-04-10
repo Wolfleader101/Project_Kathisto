@@ -6,27 +6,41 @@
 bool USE_MENU_CURSOR = false;
 bool TOGGLE_MENU = true;
 
+Vector2 mouseInputs = {0.0f, 0.0f}; //Stores Mouse Inputs
+
 void OnKeyDown(unsigned char key, int x, int y)
 {
 	ImGui_ImplGLUT_KeyboardFunc(key, x, y);
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 1.0f;
+
+		playerMoveDir.z = 1.0f;
 		break;
 	case 'a':
 		cameraMoveDir.x = -1.0f;
+
+		playerMoveDir.x = -1.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = -1.0f;
+
+		playerMoveDir.z = -1.0f;
 		break;
 	case 'd':
 		cameraMoveDir.x = 1.0f;
+
+		playerMoveDir.x = 1.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 1.0f;
+
+		playerMoveDir.y = 1.0f;
 		break;
 	case 'z':
 		cameraMoveDir.y = -1.0f;
+
+		playerMoveDir.y = -1.0f;
 		break;
 	case 27:
 		exit(0);
@@ -40,25 +54,36 @@ void OnKeyUp(unsigned char key, int x, int y)
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 0.0f;
+
+		playerMoveDir.z = 0.0f;
 		break;
 	case 'a':
 		cameraMoveDir.x = 0.0f;
+
+		playerMoveDir.x = 0.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = 0.0f;
+
+		playerMoveDir.z = 0.0f;
 		break;
 	case 'd':
 		cameraMoveDir.x = 0.0f;
+
+		playerMoveDir.x = 0.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 0.0f;
+
+		playerMoveDir.y = 0.0f;
 		break;
 	case 'z':
 		cameraMoveDir.y = 0.0f;
+
+		playerMoveDir.y = 0.0f;
 		break;
 	}
 }
-
 
 void OnSpecialKeyDown(int key, int x, int y)
 {
@@ -77,7 +102,6 @@ void OnSpecialKeyUp(int key, int x, int y)
 {
 	ImGui_ImplGLUT_SpecialUpFunc(key, x ,y);
 }
-
 
 void OnMouseButton(int button, int state, int x, int y)
 {
@@ -105,12 +129,14 @@ void OnMouseMove(int x, int y)
 	mouseDeltaPos.y = (y - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
 
 	// update camera's direction
-	cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);  // left/right
-	cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y); // up/down
-	cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x); // forward/back
+	//cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);  // left/right
+	//cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y); // up/down
+	//cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x); // forward/back
 
 	// increase the mouse pos by the delta mouse pos
 	mousePos.x += mouseDeltaPos.x;
 	mousePos.y += mouseDeltaPos.y;
 
+	mouseInputs.x = mouseDeltaPos.x;
+	mouseInputs.y = mouseDeltaPos.y;
 }

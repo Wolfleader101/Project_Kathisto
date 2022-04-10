@@ -10,6 +10,8 @@
 
 #include "game/Game.h" //Includes the Game Object struct so I can access the player object
 
+#include "window/Events.h" //Includes Mouse Movements
+
 ///////////////////////////////////////////
 /////////	VARIABLES
 ///////////////////////////////////////////
@@ -27,7 +29,7 @@ extern float camRotationSpeed; //The speed at which the camera rotates around th
 extern float camMinVertAngle; //The minimum value that the camera can rotate vertically
 extern float camMaxVertAngle; //The maximum value that the camera can rotate vertically
 
-extern Vector2 camOrbitAngles; //Vertical (Pitch) angle, Horizontal (Yaw) angle
+extern Vector3 camOrbitAngles; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)
 
 extern Vector3 camForwardDir; //The camera's forward direction (Vector)
 extern Vector3 camPos; //The camera's position
@@ -38,9 +40,13 @@ extern Vector3 camUp; //The camera's Up-Vector
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
-void SetCamObjects(GameObjectManager* gameObjectManager); //CALLED ONCE
+void SetCamAttributes(GameObjectManager* gameObjectManager); //CALLED ONCE
 
 void ComputeCamPos(Time time); //LOOPED
+
+void UpdateCamFocus(); //LOOPED
+
+void ManualCamRotation(Time time); //LOOPED
 
 void ThirdPersonCamRender(Time time); //LOOPED
 
@@ -52,3 +58,5 @@ void ThirdPersonCamRender(Time time); //LOOPED
 //		- Used for coding the camera rotation 
 // https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
 //		- Used for calculating the forward vector and cross product
+// https://stackoverflow.com/questions/38751103/orbit-camera-c-glm
+//		- Used for Camera Rotations around a point
