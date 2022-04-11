@@ -44,6 +44,10 @@ void SetCamAttributes(GameObjectManager* gameObjectManager); //CALLED ONCE
 
 void ComputeCamPos(Time time); //LOOPED
 
+void CalculateCamPosition(); //LOOPED
+
+void CalculateCamVectors(); //LOOPED
+
 void UpdateCamFocus(); //LOOPED
 
 void ManualCamRotation(Time time); //LOOPED
@@ -60,3 +64,7 @@ void ThirdPersonCamRender(Time time); //LOOPED
 //		- Used for calculating the forward vector and cross product
 // https://stackoverflow.com/questions/38751103/orbit-camera-c-glm
 //		- Used for Camera Rotations around a point
+// https://technotip.com/7376/c-program-to-convert-degree-to-radian/
+//		- Converting from Degrees to Radians
+// https://www.braynzarsoft.net/viewtutorial/q16390-32-simple-3rd-person-camera
+//		- Calculating Forward, Right and Up Vectors

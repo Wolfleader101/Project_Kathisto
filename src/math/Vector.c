@@ -156,14 +156,11 @@ float Vec3DotProduct(Vector3 vec1, Vector3 vec2)
 
 Vector3 ForwardVec3(Vector3 vec3FromPos, Vector3 vec3ToPos) //Returns a Forward Vector
 {
-	Vector3 tmpVec = { 0, 0, 0 }; //Temporary vector for calculations
 	Vector3 tmpVecReturn = { 0, 0, 0 }; //Temporary vector for calculations, returned
 
-	tmpVec.x = vec3FromPos.x - vec3ToPos.x; //Calculates the X value of the Forward Vector
-	tmpVec.y = vec3FromPos.y - vec3ToPos.y; //Calculates the Y value of the Forward Vector
-	tmpVec.z = vec3FromPos.z - vec3ToPos.z; //Calculates the Z value of the Forward Vector
-
-	tmpVecReturn = Vec3Normalize(tmpVec); //Calculates the normalized version of the forward vector
+	tmpVecReturn.x = vec3FromPos.x - vec3ToPos.x; //Calculates the X value of the Forward Vector
+	tmpVecReturn.y = vec3FromPos.y - vec3ToPos.y; //Calculates the Y value of the Forward Vector
+	tmpVecReturn.z = vec3FromPos.z - vec3ToPos.z; //Calculates the Z value of the Forward Vector
 
 	return(tmpVecReturn);
 }

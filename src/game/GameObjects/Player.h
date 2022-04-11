@@ -30,4 +30,4 @@ extern Vector2 playerInput;
 
 OnStart OnPlayerStart(GameObject* gameObject); //Sets the starting variables of the player object
 
-OnUpdate OnPlayerUpdate(GameObject* gameObject); //Updates every frame
+OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject); //Updates every frame

@@ -91,7 +91,7 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
 }
 
-OnUpdate OnPlayerUpdate(GameObject* gameObject) //Updates every frame
+OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
 {
 	gameObject->transform.position.x += playerInput.x * (WALK_SPEED * time.deltaTime);
 	gameObject->transform.position.z += playerInput.y * (WALK_SPEED * time.deltaTime);
