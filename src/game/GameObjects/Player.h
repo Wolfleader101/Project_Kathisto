@@ -22,7 +22,7 @@ extern jumpHeight; //The maximum height that the player can jump
 
 extern float rotSmoothSpeed; //The speed at which the player character will rotate
 
-extern Vector3 playerMoveDir; 
+extern Vector2 playerInput;
 
 ///////////////////////////////////////////
 /////////	FUNCTIONS

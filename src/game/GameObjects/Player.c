@@ -14,7 +14,7 @@ float jumpHeight = 0.5f; //The maximum height that the player can jump
 
 float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
 
-Vector3 playerMoveDir = {0.0f, 0.0f, 0.0f};
+Vector2 playerInput = {0.0f, 0.0f}; //Left/Right Movement, Forward/Back Movement
 
 //Stores the verticies for the player object
 const Vector3 playerVertexBuffer[] = {
@@ -93,16 +93,6 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 
 OnUpdate OnPlayerUpdate(GameObject* gameObject) //Updates every frame
 {
-	Vector3 newPos = Vec3ScalarMultiply(camForwardDir, playerMoveDir.z * (WALK_SPEED * time.deltaTime));
-
-	gameObject->transform.position.x += newPos.x;
-	gameObject->transform.position.y += newPos.y;
-	gameObject->transform.position.z += newPos.z;
-
-	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(camForwardDir, camUp)), playerMoveDir.x * (WALK_SPEED * time.deltaTime));
-	gameObject->transform.position.x += newPos.x;
-	gameObject->transform.position.y += newPos.y;
-	gameObject->transform.position.z += newPos.z;
-
-	gameObject->transform.position.y += playerMoveDir.y * (UP_SPEED * time.deltaTime);
+	gameObject->transform.position.x += playerInput.x * (WALK_SPEED * time.deltaTime);
+	gameObject->transform.position.z += playerInput.y * (WALK_SPEED * time.deltaTime);
 }

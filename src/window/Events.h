@@ -7,6 +7,7 @@
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/CameraThirdPerson.h"
 #include "game/GameObjects/Player.h"
 
 extern bool USE_MENU_CURSOR_CURSOR;

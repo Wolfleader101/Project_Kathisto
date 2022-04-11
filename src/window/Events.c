@@ -15,32 +15,28 @@ void OnKeyDown(unsigned char key, int x, int y)
 	case 'w':
 		cameraMoveDir.z = 1.0f;
 
-		playerMoveDir.z = 1.0f;
+		playerInput.y = 1.0f;
 		break;
 	case 'a':
 		cameraMoveDir.x = -1.0f;
 
-		playerMoveDir.x = -1.0f;
+		playerInput.x = -1.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = -1.0f;
 
-		playerMoveDir.z = -1.0f;
+		playerInput.y = -1.0f;
 		break;
 	case 'd':
 		cameraMoveDir.x = 1.0f;
 
-		playerMoveDir.x = 1.0f;
+		playerInput.x = 1.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 1.0f;
-
-		playerMoveDir.y = 1.0f;
 		break;
 	case 'z':
 		cameraMoveDir.y = -1.0f;
-
-		playerMoveDir.y = -1.0f;
 		break;
 	case 27:
 		exit(0);
@@ -55,32 +51,28 @@ void OnKeyUp(unsigned char key, int x, int y)
 	case 'w':
 		cameraMoveDir.z = 0.0f;
 
-		playerMoveDir.z = 0.0f;
+		playerInput.y = 0.0f;
 		break;
 	case 'a':
 		cameraMoveDir.x = 0.0f;
 
-		playerMoveDir.x = 0.0f;
+		playerInput.x = 0.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = 0.0f;
 
-		playerMoveDir.z = 0.0f;
+		playerInput.y = 0.0f;
 		break;
 	case 'd':
 		cameraMoveDir.x = 0.0f;
 
-		playerMoveDir.x = 0.0f;
+		playerInput.x = 0.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 0.0f;
-
-		playerMoveDir.y = 0.0f;
 		break;
 	case 'z':
 		cameraMoveDir.y = 0.0f;
-
-		playerMoveDir.y = 0.0f;
 		break;
 	}
 }
