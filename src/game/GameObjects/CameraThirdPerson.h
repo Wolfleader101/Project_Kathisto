@@ -44,13 +44,13 @@ void SetCamAttributes(GameObjectManager* gameObjectManager); //CALLED ONCE
 
 void ComputeCamPos(Time time); //LOOPED
 
-void CalculateCamPosition(); //LOOPED
-
-void CalculateCamVectors(); //LOOPED
-
 void UpdateCamFocus(); //LOOPED
 
 void ManualCamRotation(Time time); //LOOPED
+
+void CalculateCamPosition(); //LOOPED
+
+void CalculateCamVectors(); //LOOPED
 
 void ThirdPersonCamRender(Time time); //LOOPED
 

@@ -12,13 +12,11 @@
 /////////	VARIABLES
 ///////////////////////////////////////////
 
-extern Vector3 playerPos; //The position of the player
-
 extern float maxSpeed; //The maximum speed that the player can move at
 extern float maxAcceleration; //The maximum acceleration that the player can achieve
 
-extern float maxAirAcceleration; //The maximum amount of control that the player has in the air
-extern jumpHeight; //The maximum height that the player can jump
+extern Vector3 desiredPlayerVel; //The desired velocity of the player object
+extern Vector3 playerVel; //The current velocity of the player object
 
 extern float rotSmoothSpeed; //The speed at which the player character will rotate
 
@@ -29,5 +27,7 @@ extern Vector2 playerInput;
 ///////////////////////////////////////////
 
 OnStart OnPlayerStart(GameObject* gameObject); //Sets the starting variables of the player object
+
+void CalculatePlayerVelcoity(Time time); //Calculates the velocity of the player each frame
 
 OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject); //Updates every frame

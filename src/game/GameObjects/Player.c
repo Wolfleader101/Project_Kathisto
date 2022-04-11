@@ -9,8 +9,8 @@
 float maxSpeed = 4.0f; //The maximum speed that the player can move at
 float maxAcceleration = 10.0f; //The maximum acceleration that the player can achieve
 
-float maxAirAcceleration = 1.0f; //The maximum amount of control that the player has in the air
-float jumpHeight = 0.5f; //The maximum height that the player can jump
+Vector3 desiredPlayerVel = { 0.0f, 0.0f, 0.0f }; //The desired velocity of the player object
+Vector3 playerVel = { 0.0f, 0.0f, 0.0f }; //The current velocity of the player object
 
 float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
 
@@ -91,8 +91,45 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
 }
 
+void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player each frame
+{
+	float maxSpeedChange = maxAcceleration * time.deltaTime;
+	
+	Vector3 desiredPlayerVel = {
+		playerInput.x * WALK_SPEED,
+		0.0f * WALK_SPEED,
+		playerInput.y * WALK_SPEED };
+
+	if (playerVel.x < desiredPlayerVel.x)
+	{
+		playerVel.x += maxSpeedChange;
+	}
+
+	if (playerVel.x > desiredPlayerVel.x)
+	{
+		playerVel.x -= maxSpeedChange;
+	}
+
+	if (playerVel.z < desiredPlayerVel.z)
+	{
+		playerVel.z += maxSpeedChange;
+	}
+
+	if (playerVel.z > desiredPlayerVel.z)
+	{
+		playerVel.z -= maxSpeedChange;
+	}
+}
+
 OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
 {
-	gameObject->transform.position.x += playerInput.x * (WALK_SPEED * time.deltaTime);
-	gameObject->transform.position.z += playerInput.y * (WALK_SPEED * time.deltaTime);
+	CalculatePlayerVelcoity(time);
+
+	Vector3 displacement = { //The displacement of the player from their original position
+		playerVel.x * time.deltaTime,
+		playerVel.y * time.deltaTime,
+		playerVel.z * time.deltaTime };
+	
+	gameObject->transform.position.x += displacement.x;
+	gameObject->transform.position.z += displacement.z;
 }

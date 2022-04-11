@@ -20,7 +20,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 	case 'a':
 		cameraMoveDir.x = -1.0f;
 
-		playerInput.x = -1.0f;
+		playerInput.x = 1.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = -1.0f;
@@ -30,7 +30,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 	case 'd':
 		cameraMoveDir.x = 1.0f;
 
-		playerInput.x = 1.0f;
+		playerInput.x = -1.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 1.0f;

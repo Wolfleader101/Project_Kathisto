@@ -43,9 +43,7 @@ void SetCamAttributes(GameObjectManager* gameObjectManager) //Sets the objects a
 
 	camFocusPoint = playerObject->transform.position; //The point that the camera is focusing on
 
-	camForwardDir = ForwardVec3(camFocusPoint, camPos); //Initial calculation of the Forward Vector (Cross product of the focus point and camera position)
-	camRight = Vec3CrossProduct(Vec3Normalize(tmpPosData), camForwardDir); //Calculate Right Vector (Using arbitrary vector and forward vector)
-	camUp = Vec3CrossProduct(camForwardDir, camRight); //Calculate Up Vector (Cross product of the forward vector and right vector)
+	CalculateCamVectors(); //Initially calculates the vectors for the camera
 }
 
 void ComputeCamPos(Time time) //Computes the camera position, rotation and such - LOOPED
@@ -61,32 +59,6 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 
 	CalculateCamPosition();
 	CalculateCamVectors();
-}
-
-void CalculateCamPosition() //Calculates the cameras new position
-{
-	tmpPosData.y = camFocusPoint.y - camForwardDir.y * camDistance; //Calculates the camera's new y position (Y-Offset from Player)
-	tmpPosData.x = camFocusPoint.x - camForwardDir.x * camDistance; //Calculates the camera's new x position (X-Offset from Player)
-	tmpPosData.z = camFocusPoint.z - camForwardDir.z * camDistance; //Calculates the camera's new z position (Z-Offset from Player)
-
-	camPos.x = tmpPosData.x; //Sets the variable camera position variable (used in gluLookAt), to the x position of camera object
-	camPos.y = tmpPosData.y; //Sets the variable camera position variable (used in gluLookAt), to the y position of camera object
-	camPos.z = tmpPosData.z; //Sets the variable camera position variable (used in gluLookAt), to the z position of camera object
-}
-
-void CalculateCamVectors() //Calculates the new vectors for the camera
-{
-	camForwardDir = ForwardVec3(camFocusPoint, camPos); //Initial calculation of the Forward Vector (Cross product of the focus point and camera position)
-	camForwardDir = Vec3Normalize(camForwardDir);
-
-	camRight.x = -(camForwardDir.z);
-	camRight.y = 0.0f;
-	camRight.z = camForwardDir.x;
-	camRight = Vec3Normalize(camRight);
-
-	camUp = Vec3CrossProduct(camForwardDir, camRight); //Calculate Up Vector (Cross product of the forward vector and right vector)
-	camUp.y = -(camUp.y);
-	camUp = Vec3Normalize(camUp);
 }
 
 void UpdateCamFocus() //Used to update the focus point of the camera each cycle
@@ -110,6 +82,10 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 		}
 		else
 			camOrbitAngles.y += camRotationSpeed * time.currTime * mouseInputs.x;
+
+		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
+		camForwardDir.y = sin(camOrbitAngles.x);
+		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
 	}
 	
 	if (currentMouseInputs.y < -(e) || currentMouseInputs.y > e)
@@ -120,7 +96,40 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 		}
 		else
 			camOrbitAngles.x += camRotationSpeed * time.currTime * mouseInputs.y;
+
+		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
+		camForwardDir.y = sin(camOrbitAngles.x);
+		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
 	}
+}
+
+void CalculateCamPosition() //Calculates the cameras new position
+{
+	tmpPosData.y = camFocusPoint.y - camForwardDir.y * camDistance; //Calculates the camera's new y position (Y-Offset from Player)
+	tmpPosData.x = camFocusPoint.x - camForwardDir.x * camDistance; //Calculates the camera's new x position (X-Offset from Player)
+	tmpPosData.z = camFocusPoint.z - camForwardDir.z * camDistance; //Calculates the camera's new z position (Z-Offset from Player)
+
+	camPos.x = tmpPosData.x; //Sets the variable camera position variable (used in gluLookAt), to the x position of camera object
+	camPos.y = tmpPosData.y; //Sets the variable camera position variable (used in gluLookAt), to the y position of camera object
+	camPos.z = tmpPosData.z; //Sets the variable camera position variable (used in gluLookAt), to the z position of camera object
+}
+
+void CalculateCamVectors() //Calculates the new vectors for the camera
+{
+	//FORWARD VECTOR
+	camForwardDir = ForwardVec3(camFocusPoint, camPos); //Initial calculation of the Forward Vector (Cross product of the focus point and camera position)
+	camForwardDir = Vec3Normalize(camForwardDir); //Normalizes the vector
+
+	//RIGHT VECTOR
+	camRight.x = -(camForwardDir.z);
+	camRight.y = 0.0f;
+	camRight.z = camForwardDir.x;
+	camRight = Vec3Normalize(camRight); //Normalizes the vector
+
+	//UP VECTOR
+	camUp = Vec3CrossProduct(camForwardDir, camRight); //Calculate Up Vector (Cross product of the forward vector and right vector)
+	camUp.y = -(camUp.y); //Flips the Y Value so the camera isn't upside down
+	camUp = Vec3Normalize(camUp); //Normalizes the vector
 }
 
 void ThirdPersonCamRender(Time time) //Computes the camera position, rotation and such - LOOPED
