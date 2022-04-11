@@ -19,7 +19,7 @@ float camRotationSpeed = 1.0f; //The speed at which the camera rotates around th
 float camMinVertAngle = -10.0f; //The minimum value that the camera can rotate vertically
 float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate vertically
 
-Vector3 camOrbitAngles = {25.0f, 180.0f, 0.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)
+Vector3 camOrbitAngles = {25.0f, 360.0f, 0.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)
 
 Vector3 camForwardDir = {0.0f, 0.0f, -1.0f}; //The camera's default forward direction (Vector)
 Vector3 camPos = {0.0f, 4.0f, -3.5f}; //The default camera position
@@ -55,7 +55,11 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 	//LATE UPDATE SECTION
 
 	UpdateCamFocus();
-	ManualCamRotation(time);
+
+	if (ManualCamRotation(time))
+	{
+		ConstrainCamAngles();
+	}
 
 	CalculateCamPosition();
 	CalculateCamVectors();
@@ -68,7 +72,7 @@ void UpdateCamFocus() //Used to update the focus point of the camera each cycle
 	camFocusPoint = newFocusTarget; //The focus point is set the the player's new position
 }
 
-void ManualCamRotation(Time time) //Calculates the camera's current rotation based on mouse inputs
+bool ManualCamRotation(Time time) //Calculates the camera's current rotation based on mouse inputs
 {
 	Vector2 currentMouseInputs = {mouseInputs.x, mouseInputs.y}; //The current inputs for the mouse
 
@@ -76,31 +80,40 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 
 	if (currentMouseInputs.x < -(e) || currentMouseInputs.x > e)
 	{
-		if ((camOrbitAngles.y >= 360.0f) || ((camOrbitAngles.y < 0.0f)))
-		{
-			camOrbitAngles.y = 0.0f;
-		}
-		else
-			camOrbitAngles.y += camRotationSpeed * time.currTime * mouseInputs.x;
+		camOrbitAngles.y += camRotationSpeed * time.currTime * mouseInputs.x;
 
 		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
 		camForwardDir.y = sin(camOrbitAngles.x);
 		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
+
+		return(true);
 	}
 	
 	if (currentMouseInputs.y < -(e) || currentMouseInputs.y > e)
 	{
-		if ((camOrbitAngles.x >= 90.0f) || ((camOrbitAngles.x < 0.0f)))
-		{
-			camOrbitAngles.x = 0.0f;
-		}
-		else
-			camOrbitAngles.x += camRotationSpeed * time.currTime * mouseInputs.y;
+		camOrbitAngles.x += camRotationSpeed * time.currTime * mouseInputs.y;
 
 		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
 		camForwardDir.y = sin(camOrbitAngles.x);
 		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
+
+		return(true);
 	}
+
+	return(false);
+}
+
+void ConstrainCamAngles() 
+{
+	if (camOrbitAngles.x < camMinVertAngle)
+	{
+		camOrbitAngles.x = camMinVertAngle;
+	}
+	else 
+		if (camOrbitAngles.x >= camMaxVertAngle)
+		{
+			camOrbitAngles.x = camMaxVertAngle;
+		}
 }
 
 void CalculateCamPosition() //Calculates the cameras new position

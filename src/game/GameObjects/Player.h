@@ -20,7 +20,7 @@ extern Vector3 playerVel; //The current velocity of the player object
 
 extern float rotSmoothSpeed; //The speed at which the player character will rotate
 
-extern Vector2 playerInput;
+extern Vector2 playerInput; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
 
 ///////////////////////////////////////////
 /////////	FUNCTIONS

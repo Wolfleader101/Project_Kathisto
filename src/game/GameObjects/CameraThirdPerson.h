@@ -46,7 +46,9 @@ void ComputeCamPos(Time time); //LOOPED
 
 void UpdateCamFocus(); //LOOPED
 
-void ManualCamRotation(Time time); //LOOPED
+bool ManualCamRotation(Time time); //LOOPED
+
+void ConstrainCamAngles(); //LOOPED
 
 void CalculateCamPosition(); //LOOPED
 

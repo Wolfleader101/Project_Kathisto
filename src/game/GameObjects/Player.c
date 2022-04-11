@@ -14,7 +14,7 @@ Vector3 playerVel = { 0.0f, 0.0f, 0.0f }; //The current velocity of the player o
 
 float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
 
-Vector2 playerInput = {0.0f, 0.0f}; //Left/Right Movement, Forward/Back Movement
+Vector2 playerInput = {0.0f, 0.0f}; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
 
 //Stores the verticies for the player object
 const Vector3 playerVertexBuffer[] = {
@@ -104,21 +104,21 @@ void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player 
 	{
 		playerVel.x += maxSpeedChange;
 	}
-
-	if (playerVel.x > desiredPlayerVel.x)
-	{
-		playerVel.x -= maxSpeedChange;
-	}
+	else
+		if (playerVel.x > desiredPlayerVel.x)
+		{
+			playerVel.x -= maxSpeedChange;
+		}
 
 	if (playerVel.z < desiredPlayerVel.z)
 	{
 		playerVel.z += maxSpeedChange;
 	}
-
-	if (playerVel.z > desiredPlayerVel.z)
-	{
-		playerVel.z -= maxSpeedChange;
-	}
+	else
+		if (playerVel.z > desiredPlayerVel.z)
+		{
+			playerVel.z -= maxSpeedChange;
+		}
 }
 
 OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
