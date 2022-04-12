@@ -63,4 +63,49 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	InitGameObject(wall_6);
 	SetupCallbacks(wall_6, OnWall6Start, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, wall_6);
+
+	GameObject* wall_7 = malloc(sizeof(GameObject));
+	InitGameObject(wall_7);
+	SetupCallbacks(wall_7, OnWall7Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_7);
+
+	GameObject* wall_8 = malloc(sizeof(GameObject));
+	InitGameObject(wall_8);
+	SetupCallbacks(wall_8, OnWall8Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_8);
+
+	GameObject* wall_9 = malloc(sizeof(GameObject));
+	InitGameObject(wall_9);
+	SetupCallbacks(wall_9, OnWall9Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_9);
+
+	GameObject* wall_10 = malloc(sizeof(GameObject));
+	InitGameObject(wall_10);
+	SetupCallbacks(wall_10, OnWall10Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_10);
+
+	GameObject* wall_11 = malloc(sizeof(GameObject));
+	InitGameObject(wall_11);
+	SetupCallbacks(wall_11, OnWall11Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_11);
+
+	GameObject* wall_12 = malloc(sizeof(GameObject));
+	InitGameObject(wall_12);
+	SetupCallbacks(wall_12, OnWall12Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_12);
+
+	GameObject* wall_13 = malloc(sizeof(GameObject));
+	InitGameObject(wall_13);
+	SetupCallbacks(wall_13, OnWall13Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_13);
+
+	GameObject* wall_14 = malloc(sizeof(GameObject));
+	InitGameObject(wall_14);
+	SetupCallbacks(wall_14, OnWall14Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_14);
+
+	GameObject* wall_15 = malloc(sizeof(GameObject));
+	InitGameObject(wall_15);
+	SetupCallbacks(wall_15, OnWall15Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_15);
 }
