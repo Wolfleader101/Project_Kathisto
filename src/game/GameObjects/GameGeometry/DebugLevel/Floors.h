@@ -9,3 +9,5 @@
 
 OnStart OnFloor1Start(GameObject* gameObject);
 OnStart OnFloor2Start(GameObject* gameObject);
+OnStart OnFloor3Start(GameObject* gameObject);
+OnStart OnFloor4Start(GameObject* gameObject);

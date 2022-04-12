@@ -16,6 +16,16 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	SetupCallbacks(ceiling_2, OnCeiling2Start, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, ceiling_2);
 
+	GameObject* ceiling_3 = malloc(sizeof(GameObject));
+	InitGameObject(ceiling_3);
+	SetupCallbacks(ceiling_3, OnCeiling3Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, ceiling_3);
+
+	GameObject* ceiling_4 = malloc(sizeof(GameObject));
+	InitGameObject(ceiling_4);
+	SetupCallbacks(ceiling_4, OnCeiling4Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, ceiling_4);
+
 	//////////////////////////////
 	////	FLOORS
 	//////////////////////////////
@@ -29,6 +39,16 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	InitGameObject(floor_2);
 	SetupCallbacks(floor_2, OnFloor2Start, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, floor_2);
+
+	GameObject* floor_3 = malloc(sizeof(GameObject));
+	InitGameObject(floor_3);
+	SetupCallbacks(floor_3, OnFloor3Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, floor_3);
+
+	GameObject* floor_4 = malloc(sizeof(GameObject));
+	InitGameObject(floor_4);
+	SetupCallbacks(floor_4, OnFloor4Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, floor_4);
 
 	//////////////////////////////
 	////	WALLS
@@ -108,4 +128,19 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	InitGameObject(wall_15);
 	SetupCallbacks(wall_15, OnWall15Start, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, wall_15);
+
+	GameObject* wall_16 = malloc(sizeof(GameObject));
+	InitGameObject(wall_16);
+	SetupCallbacks(wall_16, OnWall16Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_16);
+
+	GameObject* wall_17 = malloc(sizeof(GameObject));
+	InitGameObject(wall_17);
+	SetupCallbacks(wall_17, OnWall17Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_17);
+
+	GameObject* wall_18 = malloc(sizeof(GameObject));
+	InitGameObject(wall_18);
+	SetupCallbacks(wall_18, OnWall18Start, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_18);
 }

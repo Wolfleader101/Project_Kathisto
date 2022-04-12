@@ -233,9 +233,51 @@ OnStart OnWall15Start(GameObject* gameObject)
 
 	gameObject->mesh.colors = wall5ColorBuffer;
 
-	gameObject->transform.position = (Vector3){ 102.0f, 20.0f, 55.0f };
+	gameObject->transform.position = (Vector3){ 95.0f, 20.0f, 50.0f };
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
-	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
+
+	CalculateMeshBoundBox(&gameObject->mesh);
+}
+
+OnStart OnWall16Start(GameObject* gameObject)
+{
+	gameObject->name = "Wall_16";
+	gameObject->mesh = wallMesh;
+
+	gameObject->mesh.colors = wall5ColorBuffer;
+
+	gameObject->transform.position = (Vector3){ 95.0f, 20.0f, 20.0f };
+	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
+
+	CalculateMeshBoundBox(&gameObject->mesh);
+}
+
+OnStart OnWall17Start(GameObject* gameObject)
+{
+	gameObject->name = "Wall_17";
+	gameObject->mesh = wallMesh;
+
+	gameObject->mesh.colors = wall5ColorBuffer;
+
+	gameObject->transform.position = (Vector3){ 95.0f, 20.0f, -50.0f };
+	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
+
+	CalculateMeshBoundBox(&gameObject->mesh);
+}
+
+OnStart OnWall18Start(GameObject* gameObject)
+{
+	gameObject->name = "Wall_18";
+	gameObject->mesh = wallMesh;
+
+	gameObject->mesh.colors = wall5ColorBuffer;
+
+	gameObject->transform.position = (Vector3){ 95.0f, 20.0f, -20.0f };
+	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
 	CalculateMeshBoundBox(&gameObject->mesh);
 }

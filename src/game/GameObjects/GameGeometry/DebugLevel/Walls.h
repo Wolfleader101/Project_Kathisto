@@ -22,3 +22,6 @@ OnStart OnWall12Start(GameObject* gameObject);
 OnStart OnWall13Start(GameObject* gameObject);
 OnStart OnWall14Start(GameObject* gameObject);
 OnStart OnWall15Start(GameObject* gameObject);
+OnStart OnWall16Start(GameObject* gameObject);
+OnStart OnWall17Start(GameObject* gameObject);
+OnStart OnWall18Start(GameObject* gameObject);

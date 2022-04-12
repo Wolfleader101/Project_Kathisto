@@ -50,3 +50,29 @@ OnStart OnFloor2Start(GameObject* gameObject)
 
 	CalculateMeshBoundBox(&gameObject->mesh);
 }
+
+OnStart OnFloor3Start(GameObject* gameObject)
+{
+	gameObject->name = "Floor_3";
+	gameObject->mesh = floorMesh;
+
+	gameObject->mesh.colors = floor1ColorBuffer;
+
+	gameObject->transform.position = (Vector3){ 95.0f, 0.0f, 35.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 15.0f };
+
+	CalculateMeshBoundBox(&gameObject->mesh);
+}
+
+OnStart OnFloor4Start(GameObject* gameObject)
+{
+	gameObject->name = "Floor_4";
+	gameObject->mesh = floorMesh;
+
+	gameObject->mesh.colors = floor1ColorBuffer;
+
+	gameObject->transform.position = (Vector3){ 95.0f, 0.0f, -35.0f };
+	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 15.0f };
+
+	CalculateMeshBoundBox(&gameObject->mesh);
+}
