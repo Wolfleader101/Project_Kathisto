@@ -9,8 +9,14 @@
 ////	LEVEL GEOMETRY HEADERS
 /////////////////////////////////////////
 
-#include "game/GameObjects/GameGeometry/DebugLevel/Floor_1.h"
-#include "game/GameObjects/GameGeometry/DebugLevel/Floor_2.h"
+//CEILINGS
+#include "game/GameObjects/GameGeometry/DebugLevel/Ceilings.h"
+
+//FLOORS
+#include "game/GameObjects/GameGeometry/DebugLevel/Floors.h"
+
+//WALLS
+#include "game/GameObjects/GameGeometry/DebugLevel/Walls.h"
 
 /////////////////////////////////////////
 ////	BUILDING FUCNTIONS

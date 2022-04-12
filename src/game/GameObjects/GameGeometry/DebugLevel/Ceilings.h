@@ -7,4 +7,5 @@
 #include "game/Game.h"
 #include "math/mathUtils.h"
 
-OnStart OnFloor2Start(GameObject* gameObject);
+OnStart OnCeiling1Start(GameObject* gameObject);
+OnStart OnCeiling2Start(GameObject* gameObject);

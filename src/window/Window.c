@@ -1,7 +1,6 @@
 #include "Window.h"
 
 #include "game/GameObjects/Cube.h"
-#include "game/GameObjects/Floor.h"
 
 int WINDOW_WIDTH = 1750;
 int WINDOW_HEIGHT = 980;
