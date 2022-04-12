@@ -9,5 +9,11 @@ set(GAME
    src/game/GameObjects/Cube.c
    src/game/GameObjects/Floor.h
    src/game/GameObjects/Floor.c
+   src/game/GameObjects/GameGeometry/DebugGeo.h
+   src/game/GameObjects/GameGeometry/DebugGeo.c
+   src/game/GameObjects/GameGeometry/DebugLevel/Floor_1.h
+   src/game/GameObjects/GameGeometry/DebugLevel/Floor_1.c
+   src/game/GameObjects/GameGeometry/DebugLevel/Floor_2.h
+   src/game/GameObjects/GameGeometry/DebugLevel/Floor_2.c
 
     PARENT_SCOPE)
