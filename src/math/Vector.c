@@ -134,6 +134,36 @@ Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2)
 	return (Vector3) { vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z };
 }
 
+Vector2 Vec2Add(Vector2 vec1, Vector2 vec2)
+{
+	return (Vector2) { vec1.x + vec2.x, vec1.y + vec2.y };
+}
+Vector3 Vec3Add(Vector3 vec1, Vector3 vec2)
+{
+	return (Vector3) { vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z };
+}
+
+Vector2 Vec2Rotate(Vector2 vec, float angle)
+{
+	return (Vector2) { cos(angle * vec.x) - sin(angle * vec.y), sin(angle * vec.x) + cos(angle * vec.y) };
+}
+
+Vector3 Vec3RotateX(Vector3 vec, float angle)
+{
+	return (Vector3) { vec.x, vec.y* cos(angle) - vec.z * sin(angle), vec.z* cos(angle) + vec.y * sin(angle) };
+}
+
+Vector3 Vec3RotateY(Vector3 vec, float angle)
+{
+	return (Vector3) { vec.x * cos(angle) - vec.z * sin(angle), vec.y, vec.z* cos(angle) + vec.x * sin(angle) };
+}
+Vector3 Vec3RotateZ(Vector3 vec, float angle)
+{
+	return (Vector3) { vec.x * cos(angle) - vec.y * sin(angle), vec.y* cos(angle) + vec.x * sin(angle), vec.z };
+}
+
+
+
 Vector3 Vec3CrossProduct(Vector3 vec1, Vector3 vec2)
 {
 	return (Vector3) { (vec1.y * vec2.z) - (vec1.z * vec2.y), (vec1.z * vec2.x) - (vec1.x * vec2.z), (vec1.x * vec2.y) - (vec1.y * vec2.x) };

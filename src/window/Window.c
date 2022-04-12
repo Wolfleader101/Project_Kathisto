@@ -83,8 +83,8 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	InitGameObject(floorGameObject);
 
 	// setup their callbacks, start should never be NULL, however the others can be
-	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
-	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL);
+	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate);
+	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
@@ -117,6 +117,7 @@ void WindowRender(void)
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
 	UpdateGameObjects(time, &gameObjectManager);
+	FixedUpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 

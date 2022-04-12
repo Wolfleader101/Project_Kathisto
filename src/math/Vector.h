@@ -65,6 +65,15 @@ Vector3 Vec3ScalarAdd(Vector3 vec, float scalar);
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2);
 Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2);
 
+Vector2 Vec2Add(Vector2 vec1, Vector2 vec2);
+Vector3 Vec3Add(Vector3 vec1, Vector3 vec2);
+
+Vector2 Vec2Rotate(Vector2 vec, float angle);
+
+Vector3 Vec3RotateX(Vector3 vec, float angle);
+Vector3 Vec3RotateY(Vector3 vec, float angle);
+Vector3 Vec3RotateZ(Vector3 vecz, float angle);
+
 Vector3 Vec3CrossProduct(Vector3 vec1, Vector3 vec2);
 
 float Vec2DotProduct(Vector2 vec1, Vector2 vec2);
