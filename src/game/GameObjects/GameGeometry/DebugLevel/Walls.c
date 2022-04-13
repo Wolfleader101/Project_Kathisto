@@ -41,7 +41,7 @@ OnStart OnWall1Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall2Start(GameObject* gameObject)
@@ -55,7 +55,7 @@ OnStart OnWall2Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall3Start(GameObject* gameObject)
@@ -69,7 +69,7 @@ OnStart OnWall3Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall4Start(GameObject* gameObject)
@@ -83,7 +83,7 @@ OnStart OnWall4Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall5Start(GameObject* gameObject)
@@ -97,7 +97,7 @@ OnStart OnWall5Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall6Start(GameObject* gameObject)
@@ -111,7 +111,7 @@ OnStart OnWall6Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 40.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall7Start(GameObject* gameObject)
@@ -125,7 +125,7 @@ OnStart OnWall7Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall8Start(GameObject* gameObject)
@@ -139,7 +139,7 @@ OnStart OnWall8Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall9Start(GameObject* gameObject)
@@ -153,7 +153,7 @@ OnStart OnWall9Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall10Start(GameObject* gameObject)
@@ -167,7 +167,7 @@ OnStart OnWall10Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall11Start(GameObject* gameObject)
@@ -181,7 +181,7 @@ OnStart OnWall11Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall12Start(GameObject* gameObject)
@@ -195,7 +195,7 @@ OnStart OnWall12Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall13Start(GameObject* gameObject)
@@ -209,7 +209,7 @@ OnStart OnWall13Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall14Start(GameObject* gameObject)
@@ -223,7 +223,7 @@ OnStart OnWall14Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall15Start(GameObject* gameObject)
@@ -237,7 +237,7 @@ OnStart OnWall15Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall16Start(GameObject* gameObject)
@@ -251,7 +251,7 @@ OnStart OnWall16Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall17Start(GameObject* gameObject)
@@ -265,7 +265,7 @@ OnStart OnWall17Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
 
 OnStart OnWall18Start(GameObject* gameObject)
@@ -279,5 +279,5 @@ OnStart OnWall18Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
-	CalculateMeshBoundBox(&gameObject->mesh);
+
 }
