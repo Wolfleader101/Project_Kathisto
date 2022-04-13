@@ -1,7 +1,6 @@
 #include "Window.h"
 
 #include "game/GameObjects/Cube.h"
-#include "game/GameObjects/Floor.h"
 
 int WINDOW_WIDTH = 1750;
 int WINDOW_HEIGHT = 980;
@@ -77,18 +76,16 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
-	GameObject* floorGameObject = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
-	InitGameObject(floorGameObject);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate);
-	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
-	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
+
+	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
 	glutMainLoop();

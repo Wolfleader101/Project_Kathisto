@@ -36,7 +36,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	igText("F3 - Toggle between ingame/settings cursor");
 	igText("F4 - Toggle debug menu");
 
-	for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
 		if (gameObjectManager->gameObjects[i]->name != NULL)
 		{
