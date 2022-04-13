@@ -93,9 +93,20 @@ void TransformWidget(Transform* transform)
 }
 void RigidBodyWidget(RigidBody* rigidBody)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
+		igTreePop();
+		igSeparator();
+	}
 }
 void MeshWidget(Mesh* mesh)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("Mesh", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igCheckbox("Debug Mesh", &mesh->debug);
+		igTreePop();
+		igSeparator();
+	}
 }
