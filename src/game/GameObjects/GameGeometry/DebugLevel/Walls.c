@@ -1,19 +1,5 @@
 #include "Walls.h"
 
-// position of each of the ground points
-const Vector3 wallVertexBuffer[] = {
-	{ -1.0f, 0.0f, -1.0f },
-	{ -1.0f, 0.0f, 1.0f },
-	{ 1.0f,  0.0f, 1.0f },
-	{ 1.0f,  0.0f, -1.0f },
-};
-
-// index buffer on how to render the points
-const Vector3Int wallIndexBuffer[] = {
-	{0, 1, 2},
-	{2, 3, 0}
-};
-
 // simple RGBA color buffer
 const RGBA wall1ColorBuffer[] = { {1.0f, 0.3f, 0.3f, 1.0f} };
 const RGBA wall2ColorBuffer[] = { {0.3f, 1.0f, 0.3f, 1.0f} };
@@ -21,19 +7,10 @@ const RGBA wall3ColorBuffer[] = { {0.3f, 0.3f, 1.0f, 1.0f} };
 const RGBA wall4ColorBuffer[] = { {0.215f, 0.713f, 0.435f, 1.0f} };
 const RGBA wall5ColorBuffer[] = { {0.421f, 0.147f, 0.945f, 1.0f} };
 
-// create the mesh
-const Mesh wallMesh = {
-	.points = wallVertexBuffer,
-	.indices = wallIndexBuffer,
-	.pointSize = 4,
-	.indexCount = 6,
-	.colors = NULL,
-	.isUniformColor = true };
-
 OnStart OnWall1Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_1";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall1ColorBuffer;
 
@@ -47,7 +24,7 @@ OnStart OnWall1Start(GameObject* gameObject)
 OnStart OnWall2Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_2";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall2ColorBuffer;
 
@@ -61,7 +38,7 @@ OnStart OnWall2Start(GameObject* gameObject)
 OnStart OnWall3Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_3";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall1ColorBuffer;
 
@@ -75,7 +52,7 @@ OnStart OnWall3Start(GameObject* gameObject)
 OnStart OnWall4Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_4";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall2ColorBuffer;
 
@@ -89,7 +66,7 @@ OnStart OnWall4Start(GameObject* gameObject)
 OnStart OnWall5Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_5";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall3ColorBuffer;
 
@@ -103,7 +80,7 @@ OnStart OnWall5Start(GameObject* gameObject)
 OnStart OnWall6Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_6";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall3ColorBuffer;
 
@@ -117,7 +94,7 @@ OnStart OnWall6Start(GameObject* gameObject)
 OnStart OnWall7Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_7";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -131,7 +108,7 @@ OnStart OnWall7Start(GameObject* gameObject)
 OnStart OnWall8Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_8";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -145,7 +122,7 @@ OnStart OnWall8Start(GameObject* gameObject)
 OnStart OnWall9Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_9";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -159,7 +136,7 @@ OnStart OnWall9Start(GameObject* gameObject)
 OnStart OnWall10Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_10";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -173,7 +150,7 @@ OnStart OnWall10Start(GameObject* gameObject)
 OnStart OnWall11Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_11";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -187,7 +164,7 @@ OnStart OnWall11Start(GameObject* gameObject)
 OnStart OnWall12Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_12";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -201,7 +178,7 @@ OnStart OnWall12Start(GameObject* gameObject)
 OnStart OnWall13Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_13";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -215,7 +192,7 @@ OnStart OnWall13Start(GameObject* gameObject)
 OnStart OnWall14Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_14";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall4ColorBuffer;
 
@@ -229,7 +206,7 @@ OnStart OnWall14Start(GameObject* gameObject)
 OnStart OnWall15Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_15";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall5ColorBuffer;
 
@@ -243,7 +220,7 @@ OnStart OnWall15Start(GameObject* gameObject)
 OnStart OnWall16Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_16";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall5ColorBuffer;
 
@@ -257,7 +234,7 @@ OnStart OnWall16Start(GameObject* gameObject)
 OnStart OnWall17Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_17";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall5ColorBuffer;
 
@@ -271,7 +248,7 @@ OnStart OnWall17Start(GameObject* gameObject)
 OnStart OnWall18Start(GameObject* gameObject)
 {
 	gameObject->name = "Wall_18";
-	gameObject->mesh = wallMesh;
+	gameObject->mesh = planeMesh;
 
 	gameObject->mesh.colors = wall5ColorBuffer;
 
