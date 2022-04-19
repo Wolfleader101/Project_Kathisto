@@ -237,12 +237,40 @@ void FixedUpdateGameObject(Time time, GameObjectManager* gameObjectManager, Game
 	// push a matrix so u dont modify the root matrix
 	glPushMatrix();
 
+	//Check for gravity enabled
+	if (gameObject->rigidBody.useGravity) 
+	{
+		//Apply transformation
+		GravityTransform(time, gameObject);
+	}
+
 	CalculateBoundingBox(gameObject);
 	DetectCollision(gameObjectManager, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(time, gameObject);
 
 	glPopMatrix();
+}
+
+//Applies gravity transformation to object
+void GravityTransform(Time time, GameObject* gameObject)
+{
+	const float acceleration = 9.8;
+	const float terminal = 53;
+
+	//Increase velocity of object by 9.8 m/s
+	//Terminal velocity is 53m/s in Earth atmosphere
+	gameObject->rigidBody.velocity += acceleration * time.deltaTime;
+	if (gameObject->rigidBody.velocity > terminal) gameObject->rigidBody.velocity = terminal;
+
+	//Uncomment this and comment above to reduce acceleration to a fifth (TESTING PURPOSES - Can incorporate changing gravity into debug menu)
+	//gameObject->rigidBody.velocity += (acceleration / 5) * time.deltaTime;
+	//if (gameObject->rigidBody.velocity > terminal) gameObject->rigidBody.velocity = terminal;
+
+	//Subtract object's Y transform position by velocity per second
+	gameObject->transform.position.y -= gameObject->rigidBody.velocity * time.deltaTime;
+
+	//Resetting velocity must be done in collision resolution
 }
 
 void CalculateBoundingBox(GameObject* gameObject)
