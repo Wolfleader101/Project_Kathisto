@@ -261,10 +261,6 @@ void GravityTransform(Time time, GameObject* gameObject)
 	gameObject->rigidBody.velocity += G_ACCELERATION * time.deltaTime;
 	if (gameObject->rigidBody.velocity > T_VELOCITY) gameObject->rigidBody.velocity = T_VELOCITY;
 
-	//Uncomment this and comment above to reduce acceleration to a fifth (TESTING PURPOSES - Can incorporate changing gravity into debug menu)
-	//gameObject->rigidBody.velocity += (G_ACCELERATION / 5) * time.deltaTime;
-	//if (gameObject->rigidBody.velocity > T_VELOCITY) gameObject->rigidBody.velocity = T_VELOCITY;
-
 	//Subtract object's Y transform position by velocity per second
 	gameObject->transform.position.y -= gameObject->rigidBody.velocity * time.deltaTime;
 
