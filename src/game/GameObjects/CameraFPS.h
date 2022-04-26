@@ -7,8 +7,6 @@
 #include "math/Vector.h"
 #include "game/GameConstants.h"
 
-
-
 extern Vector3 fpsCamForwardDir;
 extern Vector3 fpsCameraPos;
 extern Vector3 fpsCamUp;
