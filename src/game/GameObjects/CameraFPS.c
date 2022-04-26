@@ -8,17 +8,40 @@ Vector3 fpsCamMoveDir = { 0.0f, 0.0f, 0.0f };
 Vector2 fpsMousePos = { 0.0f, 0.0f };
 Vector2 fpsMouseDeltaPos = { 0.0f, 0.0f };
 
+//Stores the colour data for each verticie for the player object (Invisible)
+const RGBA fpsPlayerColorBuffer[] = {
+	// front colors
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	// back colors
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 0.0f, 1.0f}
+};
+
+//Sets the mesh attributes for the player object
+Mesh playerMesh = {
+	.points = playerVertexBuffer,
+	.indices = playerIndexBuffer,
+	.pointSize = 8,
+	.indexCount = 36,
+	.colors = fpsPlayerColorBuffer,
+	.isUniformColor = true,
+	.debug = false
+};
+
 OnStart OnFPSCamStart(GameObject* gameObject)
 {
 	gameObject->name = "Player Cam (FPS)";
 
-	gameObject->mesh = cubeMeshCustColours;
-
-	gameObject->mesh.colors = cubeGColorBuffer;
+	gameObject->mesh = playerMesh;
 
 	gameObject->rigidBody.useGravity = false;
 
-	gameObject->transform.position = (Vector3){ 5.0f, 70.0f, 0.0f };
+	gameObject->transform.position = (Vector3){ fpsCameraPos.x, fpsCameraPos.y, fpsCameraPos.z };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 }
 
@@ -48,7 +71,7 @@ void ComputeFPSCameraPos(float deltaTime)
 
 }
 
-void CameraRenderFPS(float deltaTime)
+void OnFPSCamUpdate(float deltaTime)
 {
 	// compute the cameras position you can move
 	ComputeFPSCameraPos(deltaTime);

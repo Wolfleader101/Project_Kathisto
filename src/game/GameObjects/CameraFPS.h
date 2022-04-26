@@ -17,8 +17,6 @@ extern Vector3 fpsCamMoveDir;
 extern Vector2 fpsMousePos;
 extern Vector2 fpsMouseDeltaPos;
 
-
+OnStart OnFPSCamStart(GameObject* gameObject); //Creates the player's bounding box and sets their starting variables
 void ComputeFPSCameraPos(float deltaTime); // compute the position of the camera
-void CameraRenderFPS(float deltaTime); // called every time the camera should render
-
-OnStart OnFPSCamStart(GameObject* gameObject);
+OnUpdate OnFPSCamUpdate(float deltaTime); // called every time the camera should render

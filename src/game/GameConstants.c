@@ -11,6 +11,19 @@ const float T_VELOCITY = 53;
 ////	VERTEX BUFFERS
 ///////////////////////////////////////
 
+//Stores the verticies for the player object
+const Vector3 playerVertexBuffer[] = {
+	{ -0.5f, -0.9f, -0.5f },
+	{ 0.5f, -0.9f, -0.5f },
+	{ -0.5f,  0.9f, -0.5f },
+	{ 0.5f,  0.9f, -0.5f },
+
+	{ 0.5f,  0.9f,  0.5f },
+	{ 0.5f, -0.9f,  0.5f },
+	{ -0.5f,  0.9f,  0.5f },
+	{ -0.5f, -0.9f,  0.5f },
+};
+
 //Plane Vertexes
 const Vector3 planeVertexBuffer[] = {
 	{ -1.0f, 0.0f, -1.0f },
@@ -25,7 +38,6 @@ const Vector3 cubeVertexBuffer[] = {
 	{ 1.0f, -1.0f, -1.0f },
 	{ -1.0f,  1.0f, -1.0f },
 	{ 1.0f,  1.0f, -1.0f },
-
 
 	{ 1.0f,  1.0f,  1.0f },
 	{ 1.0f, -1.0f,  1.0f },
