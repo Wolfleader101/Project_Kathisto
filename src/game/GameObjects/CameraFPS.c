@@ -39,6 +39,8 @@ OnStart OnFPSCamStart(GameObject* gameObject)
 
 	gameObject->mesh = playerMesh;
 
+	CalculateMeshBoundBox(&gameObject->mesh); //Calculates the boudning box (AABB) around the mesh
+
 	gameObject->rigidBody.useGravity = false;
 
 	gameObject->transform.position = (Vector3){ fpsCameraPos.x, fpsCameraPos.y, fpsCameraPos.z };
