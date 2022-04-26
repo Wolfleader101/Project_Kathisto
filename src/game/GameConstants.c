@@ -37,6 +37,28 @@ const Vector3 cubeVertexBuffer[] = {
 ////	FACE BUFFERS
 ///////////////////////////////////////
 
+//Stores the verticie order (Faces) for the player object
+const Vector3Int playerIndexBuffer[] = {
+	// front
+	{0, 2, 1},
+	{1, 3, 2},
+	// right
+	{1, 3, 4},
+	{4, 5, 1},
+	// back
+	{5, 4, 6},
+	{6, 7, 5},
+	// left
+	{7, 6, 0},
+	{0, 2, 6},
+	// bottom
+	{0, 1, 7},
+	{7, 5, 1},
+	// top
+	{2, 3, 6},
+	{6, 4, 3}
+};
+
 //Plane Face Order
 const Vector3Int planeIndexBuffer[] = {
 	{0, 1, 2},

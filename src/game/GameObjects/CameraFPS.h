@@ -20,3 +20,5 @@ extern Vector2 fpsMouseDeltaPos;
 
 void ComputeFPSCameraPos(float deltaTime); // compute the position of the camera
 void CameraRenderFPS(float deltaTime); // called every time the camera should render
+
+OnStart OnFPSCamStart(GameObject* gameObject);
