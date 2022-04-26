@@ -10,6 +10,7 @@
 
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/CameraFPS.h"
 #include "math/Vector.h"
 
 #include "game/GameObjects/GameGeometry/DebugGeo.h" //In Charge of building the Debug Geometry 

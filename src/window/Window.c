@@ -114,7 +114,7 @@ void WindowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	CameraRender(time.deltaTime);
+	CameraRenderFPS(time.deltaTime);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
