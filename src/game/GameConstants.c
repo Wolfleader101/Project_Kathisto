@@ -2,10 +2,14 @@
 
 const float MOUSE_SENS = 0.001f;
 const float WALK_SPEED = 15.0f;
+const float SPRINT_SPEED = 25.0f;
 const float UP_SPEED = 10.0f;
 const float G_ACCELERATION = 9.8;
 const float T_VELOCITY = 53;
 
+const int shiftKey = GLUT_ACTIVE_SHIFT; //Sets the default state of the Shift Key to a glutGetModifier() value
+const int crtlKey = GLUT_ACTIVE_CTRL; //Sets the default state of the Ctrl Key to a glutGetModifier() value
+const int altKey = GLUT_ACTIVE_ALT; //Sets the default state of the Alt Key to a glutGetModifier() value
 
 ///////////////////////////////////////
 ////	VERTEX BUFFERS

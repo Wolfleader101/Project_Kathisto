@@ -7,9 +7,12 @@
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/CameraFPS.h"
 
 extern bool USE_MENU_CURSOR_CURSOR;
 extern bool TOGGLE_MENU;
+
+void ModifierKeys(); //Used to capture the modifier keys (glutGetModifiers()) (Seems to only work in OnSpecialKeyDown())
 
 void OnKeyDown(unsigned char key, int x, int y); // on key down
 void OnKeyUp(unsigned char key, int x, int y); // on key up

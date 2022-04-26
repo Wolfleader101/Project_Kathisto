@@ -6,9 +6,22 @@
 bool USE_MENU_CURSOR = false;
 bool TOGGLE_MENU = true;
 
+void ModifierKeys()
+{
+	int modKeyInput = glutGetModifiers(); //Inputs from the Modififier Keys (glutGetModifiers()) (Seems to only work in OnSpecialKeyDown())
+
+	if (modKeyInput == shiftKey)
+	{
+		fpsMovementSpeed = SPRINT_SPEED;
+	}
+	else
+		fpsMovementSpeed = WALK_SPEED;
+}
+
 void OnKeyDown(unsigned char key, int x, int y)
 {
 	ImGui_ImplGLUT_KeyboardFunc(key, x, y);
+
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 1.0f;
@@ -40,15 +53,23 @@ void OnKeyUp(unsigned char key, int x, int y)
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 0.0f;
+
+		fpsMovementSpeed = WALK_SPEED;
 		break;
 	case 'a':
 		cameraMoveDir.x = 0.0f;
+
+		fpsMovementSpeed = WALK_SPEED;
 		break;
 	case 's':
 		cameraMoveDir.z = 0.0f;
+
+		fpsMovementSpeed = WALK_SPEED;
 		break;
 	case 'd':
 		cameraMoveDir.x = 0.0f;
+
+		fpsMovementSpeed = WALK_SPEED;
 		break;
 	case ' ':
 		cameraMoveDir.y = 0.0f;
@@ -59,9 +80,10 @@ void OnKeyUp(unsigned char key, int x, int y)
 	}
 }
 
-
 void OnSpecialKeyDown(int key, int x, int y)
 {
+	ModifierKeys();
+	
 	switch (key)
 	{
 	case GLUT_KEY_F3:
