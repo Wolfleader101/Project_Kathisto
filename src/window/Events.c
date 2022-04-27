@@ -22,6 +22,8 @@ void OnKeyDown(unsigned char key, int x, int y)
 {
 	ImGui_ImplGLUT_KeyboardFunc(key, x, y);
 
+	//ModifierKeys();
+
 	switch (key) {
 	case 'w':
 		cameraMoveDir.z = 1.0f;
