@@ -56,10 +56,7 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 
 	UpdateCamFocus();
 
-	if (ManualCamRotation(time))
-	{
-		ConstrainCamAngles();
-	}
+	ManualCamRotation(time);
 
 	CalculateCamPosition();
 	CalculateCamVectors();
@@ -72,45 +69,26 @@ void UpdateCamFocus() //Used to update the focus point of the camera each cycle
 	camFocusPoint = newFocusTarget; //The focus point is set the the player's new position
 }
 
-bool ManualCamRotation(Time time) //Calculates the camera's current rotation based on mouse inputs
+void ManualCamRotation(Time time) //Calculates the camera's current rotation based on mouse inputs
 {
-	Vector2 currentMouseInputs = {mouseInputs.x, mouseInputs.y}; //The current inputs for the mouse
+	camOrbitAngles.x += camRotationSpeed * time.currTime * mouseInputs.y; //Calculates the x orbit angle (Pitch)
+	camOrbitAngles.y += camRotationSpeed * time.currTime * mouseInputs.x; //Calculates the y orbit angle (Yaw)
 
-	const float e = 0.001f; //MOUSE SENSITIVITY - A check to make sure mouse inputs are above 0.001f
+	ConstrainCamAngles();
 
-	if (currentMouseInputs.x < -(e) || currentMouseInputs.x > e)
-	{
-		camOrbitAngles.y += camRotationSpeed * time.currTime * mouseInputs.x;
-
-		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
-		camForwardDir.y = sin(camOrbitAngles.x);
-		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
-
-		return(true);
-	}
-	
-	if (currentMouseInputs.y < -(e) || currentMouseInputs.y > e)
-	{
-		camOrbitAngles.x += camRotationSpeed * time.currTime * mouseInputs.y;
-
-		camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x);
-		camForwardDir.y = sin(camOrbitAngles.x);
-		camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
-
-		return(true);
-	}
-
-	return(false);
+	camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x); 
+	camForwardDir.y = sin(camOrbitAngles.x);
+	camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
 }
 
-void ConstrainCamAngles() 
+void ConstrainCamAngles() //Constrains the angles of the camera to fit within camMinVertAngle and camMaxVertAngle
 {
-	if (camOrbitAngles.x < camMinVertAngle)
+	if (camOrbitAngles.x < camMinVertAngle) //If it's less than the minimum, set it to the minimum
 	{
 		camOrbitAngles.x = camMinVertAngle;
 	}
-	else 
-		if (camOrbitAngles.x >= camMaxVertAngle)
+	else
+		if (camOrbitAngles.x > camMaxVertAngle) //If it's greater than the maximum, set it to the maximum
 		{
 			camOrbitAngles.x = camMaxVertAngle;
 		}
