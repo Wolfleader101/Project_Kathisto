@@ -56,10 +56,11 @@ void ComputeCamPos(Time time) //Computes the camera position, rotation and such 
 
 	UpdateCamFocus();
 
+	CalculateCamVectors();
+
 	ManualCamRotation(time);
 
 	CalculateCamPosition();
-	CalculateCamVectors();
 }
 
 void UpdateCamFocus() //Used to update the focus point of the camera each cycle
@@ -87,11 +88,11 @@ void ConstrainCamAngles() //Constrains the angles of the camera to fit within ca
 	{
 		camOrbitAngles.x = camMinVertAngle;
 	}
-	else
-		if (camOrbitAngles.x > camMaxVertAngle) //If it's greater than the maximum, set it to the maximum
-		{
-			camOrbitAngles.x = camMaxVertAngle;
-		}
+
+	if (camOrbitAngles.x > camMaxVertAngle) //If it's greater than the maximum, set it to the maximum
+	{
+		camOrbitAngles.x = camMaxVertAngle;
+	}
 }
 
 void CalculateCamPosition() //Calculates the cameras new position
@@ -130,7 +131,7 @@ void ThirdPersonCamRender(Time time) //Computes the camera position, rotation an
 
 	//CAMERA POSITION CHANGE
 	//Changes the position/rotation of the camera
-	gluLookAt(camPos.x, camPos.y, camPos.z,					//Camera X, Y, Z Position
-		camFocusPoint.x, camFocusPoint.y, camFocusPoint.z,	//Camera X, Y, Z Focal Point
-		camUp.x, camUp.y, camUp.z);							//Camera X, Y, Z Up-Vector
+	gluLookAt(	camPos.x, camPos.y, camPos.z,						//Camera X, Y, Z Position
+				camFocusPoint.x, camFocusPoint.y, camFocusPoint.z,	//Camera X, Y, Z Focal Point
+				camUp.x, camUp.y, camUp.z);							//Camera X, Y, Z Up-Vector
 }
