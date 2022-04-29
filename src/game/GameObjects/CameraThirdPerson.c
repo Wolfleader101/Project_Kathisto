@@ -15,11 +15,11 @@ Vector3 camFocusPoint = {0.0f, 0.0f, 0.0f}; //The point which the camera will fo
 float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amount
 
 float camDistance = 8.0f; //The distance of the camera from the focal point
-float camRotationSpeed = 1.0f; //The speed at which the camera rotates around the player object (In degrees per-second)
-float camMinVertAngle = -10.0f; //The minimum value that the camera can rotate vertically
-float camMaxVertAngle = 60.0f; //The maximum value that the camera can rotate vertically
+float camRotationSpeed = 15.0f; //The speed at which the camera rotates around the player object (In degrees per-second)
+float camMinVertAngle = -4.0f; //The minimum value that the camera can rotate vertically
+float camMaxVertAngle = 50.0f; //The maximum value that the camera can rotate vertically
 
-Vector3 camOrbitAngles = {25.0f, 360.0f, 0.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)
+Vector3 camOrbitAngles = {0.0f, 360.0f, 0.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)
 
 Vector3 camForwardDir = {0.0f, 0.0f, -1.0f}; //The camera's default forward direction (Vector)
 Vector3 camPos = {0.0f, 4.0f, -3.5f}; //The default camera position
@@ -77,9 +77,9 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 
 	ConstrainCamAngles();
 
-	camForwardDir.x = cos(camOrbitAngles.y) * cos(camOrbitAngles.x); 
-	camForwardDir.y = sin(camOrbitAngles.x);
-	camForwardDir.z = -sin(camOrbitAngles.y) * cos(camOrbitAngles.x);
+	camForwardDir.x = cos((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
+	camForwardDir.y = -sin((camOrbitAngles.x / 180) * PI_CONST);
+	camForwardDir.z = sin((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
 }
 
 void ConstrainCamAngles() //Constrains the angles of the camera to fit within camMinVertAngle and camMaxVertAngle
