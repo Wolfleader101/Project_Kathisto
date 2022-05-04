@@ -73,7 +73,6 @@ struct GameObject
 	OnFixedUpdate OnFixedUpdate;
 };
 
-
 typedef struct GameObjectManager
 {
 	GameObject** gameObjects;

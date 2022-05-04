@@ -7,6 +7,9 @@ cmake_minimum_required (VERSION 3.8)
 set(PROJECT_NAME Project_Kathisto)
 project(${PROJECT_NAME} LANGUAGES C)
 
+option(FREEGLUT_BUILD_DEMOS OFF)
+option(FREEGLUT_BUILD_SHARED_LIBS OFF)
+
 # find openGL
 find_package(OpenGL REQUIRED)
 

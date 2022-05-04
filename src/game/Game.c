@@ -239,7 +239,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	glPushMatrix();
 
 	//Check for gravity enabled
-	if (gameObject->rigidBody.useGravity) 
+	if (gameObject->rigidBody.useGravity && !gameObject->rigidBody.isStatic)
 	{
 		//Apply transformation
 		GravityTransform(fixedTime, gameObject);

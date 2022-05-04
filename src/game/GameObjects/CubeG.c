@@ -25,4 +25,5 @@ OnStart OnCubeGStart(GameObject* gameObject)
 
 	gameObject->transform.position = (Vector3){ 5.0f, 70.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
+
 }
