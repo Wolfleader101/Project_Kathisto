@@ -8,6 +8,7 @@ extern const float WALK_SPEED;
 extern const float UP_SPEED;
 extern const float G_ACCELERATION;
 extern const float T_VELOCITY;
+extern const float PHYSICS_TIME_STEP;
 
 extern const Vector3 planeVertexBuffer[]; //Plane Vertexes
 extern const Vector3 cubeVertexBuffer[]; //Cube Vertexes

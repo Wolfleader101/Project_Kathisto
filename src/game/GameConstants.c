@@ -3,9 +3,9 @@
 const float MOUSE_SENS = 0.001f;
 const float WALK_SPEED = 15.0f;
 const float UP_SPEED = 10.0f;
-const float G_ACCELERATION = 9.8;
-const float T_VELOCITY = 53;
-
+const float G_ACCELERATION = 9.8f;
+const float T_VELOCITY = 53.0f;
+const float PHYSICS_TIME_STEP = 20; // in ms
 
 ///////////////////////////////////////
 ////	VERTEX BUFFERS

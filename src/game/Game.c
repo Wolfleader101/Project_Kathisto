@@ -225,15 +225,15 @@ void DrawGizmos(Time time, Vector3 maxSize)
 	glEnd();
 }
 
-void FixedUpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
+void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		FixedUpdateGameObject(time, gameObjectManager, gameObjectManager->gameObjects[i]);
+		FixedUpdateGameObject(fixedTime, gameObjectManager, gameObjectManager->gameObjects[i]);
 	}
 }
 
-void FixedUpdateGameObject(Time time, GameObjectManager* gameObjectManager, GameObject* gameObject)
+void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	// push a matrix so u dont modify the root matrix
 	glPushMatrix();
@@ -242,27 +242,27 @@ void FixedUpdateGameObject(Time time, GameObjectManager* gameObjectManager, Game
 	if (gameObject->rigidBody.useGravity) 
 	{
 		//Apply transformation
-		GravityTransform(time, gameObject);
+		GravityTransform(fixedTime, gameObject);
 	}
 
 	CalculateBoundingBox(gameObject);
-	DetectCollision(gameObjectManager, gameObject);
+	if(!gameObject->rigidBody.isStatic) DetectCollision(gameObjectManager, gameObject);
 
-	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(time, gameObject);
+	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
 	glPopMatrix();
 }
 
 //Applies gravity transformation to object
-void GravityTransform(Time time, GameObject* gameObject)
+void GravityTransform(Time fixedTime, GameObject* gameObject)
 {
 	//Increase velocity of object by 9.8 m/s
 	//Terminal velocity is 53m/s in Earth atmosphere
-	gameObject->rigidBody.velocity += G_ACCELERATION * time.deltaTime;
-	if (gameObject->rigidBody.velocity > T_VELOCITY) gameObject->rigidBody.velocity = T_VELOCITY;
+	gameObject->rigidBody.velocity.y -= G_ACCELERATION * fixedTime.deltaTime;
+	if (abs(gameObject->rigidBody.velocity.y) > T_VELOCITY) gameObject->rigidBody.velocity.y = -T_VELOCITY;
 
 	//Subtract object's Y transform position by velocity per second
-	gameObject->transform.position.y -= gameObject->rigidBody.velocity * time.deltaTime;
+	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
 
 	//Resetting velocity must be done in collision resolution
 }
@@ -314,6 +314,9 @@ void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObjec
 			(objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y) &&
 			(objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z))
 		{
+			// get the cross product where the intersection is happening
+			// then inverse the vectors direction, and then apply the velocity to that
+			//Vector3 intersection = Vec3CrossProduct(objBox, )
 			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
 		}
 	}
@@ -347,7 +350,7 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
 	rigidBody->mass = 0.0f;
-	rigidBody->velocity = 0.0f;
+	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
 }
 

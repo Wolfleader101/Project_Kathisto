@@ -3,14 +3,20 @@
 #include "game/GameObjects/Cube.h"
 #include "game/GameObjects/CubeG.h"
 
-int WINDOW_WIDTH = 1750;
-int WINDOW_HEIGHT = 980;
+int WINDOW_WIDTH = 1280;
+int WINDOW_HEIGHT = 750;
 
 int frame = 0;
 int timebase = 0;
 int fps = 0;
 
 Time time = {
+	.currTime = 0,
+	.prevTime = 0.0f,
+	.deltaTime = 0.0f,
+};
+
+Time fixedTime = {
 	.currTime = 0,
 	.prevTime = 0.0f,
 	.deltaTime = 0.0f,
@@ -48,6 +54,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// rendering callbacks
 	glutDisplayFunc(WindowRender);
 	glutIdleFunc(WindowRender);
+
+	// fixed update
+	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
 
 	// keyboard and mouse input
 	glutKeyboardFunc(OnKeyDown); // on key down
@@ -103,7 +112,7 @@ void WindowRender(void)
 {
 
 	// calculate delta time (time since last frame)
-	CalculateDeltaTime();
+	CalculateTime();
 
 	GuiUpdate(&gameObjectManager);
 
@@ -119,7 +128,6 @@ void WindowRender(void)
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
 	UpdateGameObjects(time, &gameObjectManager);
-	FixedUpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 
@@ -127,15 +135,31 @@ void WindowRender(void)
 
 	// swap the buffers
 	glutSwapBuffers();
-	//glutPostRedisplay();
 }
 
-void CalculateDeltaTime()
+void FixedUpdate(int val)
+{
+	// setup the next tick
+	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
+
+	CalculateFixedTime();
+
+	FixedUpdateGameObjects(fixedTime, &gameObjectManager);
+}
+
+void CalculateTime()
 {
 	// get the current delta time (time since last frame)
 	time.currTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
 	time.deltaTime = (time.currTime - time.prevTime);
 	time.prevTime = time.currTime;
+}
+
+void CalculateFixedTime()
+{
+	fixedTime.currTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+	fixedTime.deltaTime = (fixedTime.currTime - fixedTime.prevTime);
+	fixedTime.prevTime = fixedTime.currTime;
 }
 
 void ReshapeWindow(int width, int height)

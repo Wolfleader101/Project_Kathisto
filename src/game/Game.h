@@ -46,7 +46,7 @@ typedef struct RigidBody
 	bool isStatic;
 	bool useGravity;
 	float mass;
-	float velocity;
+	Vector3 velocity;
 
 	BoudingBox boundingBox;
 
@@ -95,7 +95,7 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* Game
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
 GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager);
-void FixedUpdateGameObjects(Time time, GameObjectManager* gameObjectManager);
+void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager);
 
 void InitGameObject(GameObject* gameObject); // initialise the game object
 void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate); // setup the callbacks
@@ -106,8 +106,8 @@ void InitMesh(Mesh* mesh);
 void InitRigidBody(RigidBody* RigidBody);
 
 void UpdateGameObject(Time time, GameObject* gameObject); // called every frame update
-void FixedUpdateGameObject(Time time, GameObjectManager* gameObjectManager, GameObject* gameObject); // caled for physics update
-void GravityTransform(Time time, GameObject* gameObject);
+void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject); // caled for physics update
+void GravityTransform(Time fixedTime, GameObject* gameObject);
 
 void UpdateTransform(Time time, Transform* transform);
 void UpdateMesh(Time time, Mesh* mesh);
