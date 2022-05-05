@@ -28,6 +28,7 @@ typedef struct Mesh
 	RGBA* colors;
 	bool isUniformColor;
 	bool debug;
+	bool disableMesh;
 } Mesh;
 
 typedef struct BoudingBox

@@ -148,7 +148,8 @@ void UpdateGameObject(Time time, GameObject* gameObject)
 
 	UpdateTransform(time, &gameObject->transform);
 
-	UpdateMesh(time, mesh);
+	if(!gameObject->mesh.disableMesh)
+		UpdateMesh(time, mesh);
 
 	if (gameObject->debug)
 		DrawGizmos(time, gameObject->rigidBody.boundingBox.maxPos);
@@ -283,6 +284,8 @@ void DrawBoundingBox(BoudingBox box)
 	};
 
 	glColor3f(0.0f, 1.0f, 0.15f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glVertexPointer(3, GL_FLOAT, 0, boundBoxVertexBuffer);
 
@@ -430,12 +433,15 @@ void InitMesh(Mesh* mesh)
 	mesh->indexCount = 0;
 	mesh->colors = NULL;
 	mesh->isUniformColor = false;
+	mesh->debug = false;
+	mesh->disableMesh = false;
 }
 
 void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
+	rigidBody->debug = false;
 	rigidBody->mass = 0.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
