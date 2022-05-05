@@ -154,14 +154,12 @@ void UpdateGameObject(Time time, GameObject* gameObject)
 	if (gameObject->debug)
 		DrawGizmos(time, gameObject->rigidBody.boundingBox.maxPos);
 
-	if (gameObject->rigidBody.debug)
-		DrawBoundingBox(gameObject->rigidBody.boundingBox);
-
-
 	if (gameObject->OnLateUpdate != NULL) gameObject->OnLateUpdate(time, gameObject);
 
-
 	glPopMatrix();
+
+	if (gameObject->rigidBody.debug)
+		DrawBoundingBox(gameObject->rigidBody.boundingBox);
 }
 
 void UpdateTransform(Time time, Transform* transform)
@@ -269,6 +267,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 
 void DrawBoundingBox(BoudingBox box)
 {
+	glPushMatrix();
 	const Vector3 boundBoxVertexBuffer[] = 
 	{
 	box.minPos,
@@ -283,7 +282,7 @@ void DrawBoundingBox(BoudingBox box)
 	{ box.minPos.x, box.minPos.y,  box.maxPos.z },
 	};
 
-	glColor3f(0.0f, 1.0f, 0.15f);
+	glColor3f(1.0f, 0.0f, 0.9f);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -292,6 +291,8 @@ void DrawBoundingBox(BoudingBox box)
 	glDrawElements(GL_LINE_LOOP, 36, GL_UNSIGNED_INT, cubeIndexBuffer);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glPopMatrix();
 }
 
 void CalculateBoundingBox(GameObject* gameObject)
@@ -306,6 +307,7 @@ void CalculateBoundingBox(GameObject* gameObject)
 	min = Vec3RotateY(min, transform->rotation.y);
 	min = Vec3RotateZ(min, transform->rotation.z);
 	min = Vec3Add(transform->position, min);
+
 	Vector3 max = min;
 
 	for (size_t i = 0; i < mesh->pointSize; i++)
@@ -333,7 +335,6 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 {
 	// half the boxes height/widhtwhatever
 	gameObject->transform.position.y = box->maxPos.y + 1.0f;
-
 
 	// add 25% decay, only go back up 75% of the way
 	gameObject->rigidBody.velocity.y *= 0.75;
