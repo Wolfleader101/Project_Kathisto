@@ -257,7 +257,6 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 void GravityTransform(Time fixedTime, GameObject* gameObject)
 {
 
-	if (gameObject->rigidBody.isColliding) return;
 	//Increase velocity of object by 9.8 m/s
 	//Terminal velocity is 53m/s in Earth atmosphere
 	gameObject->rigidBody.velocity.y -= G_ACCELERATION * fixedTime.deltaTime;
@@ -306,16 +305,20 @@ void CalculateBoundingBox(GameObject* gameObject)
 
 void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 {
-	gameObject->transform.position.y = box->maxPos.y + 1.1f;
+	// half the boxes height/widhtwhatever
+	gameObject->transform.position.y = box->maxPos.y + 1.0f;
 
-	if (gameObject->rigidBody.velocity.y >= 0.0f) return;
-
-	gameObject->rigidBody.velocity.y += 6.0f;
+	gameObject->rigidBody.velocity.y *= 0.75;
 	gameObject->rigidBody.velocity.y = -gameObject->rigidBody.velocity.y;
+
+	if (Vec3Length(gameObject->rigidBody.velocity) <= 1.8f) return;
 
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
 
+	printf("%.2f\n", Vec3Length(gameObject->rigidBody.velocity));
 }
+// get the normal of the plane
+// reflect around the normal
 
 void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
