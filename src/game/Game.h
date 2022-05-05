@@ -41,13 +41,23 @@ typedef struct BoudingBox
 	size_t gameObjectId;
 } BoudingBox;
 
+typedef struct SphereBody
+{
+	bool isSphere;
+	float radius;
+
+} SphereBody;
+
+
 typedef struct RigidBody
 {
 	bool isStatic;
 	bool useGravity;
+	bool isColliding;
 	float mass;
 	Vector3 velocity;
 
+	SphereBody sphereBody;
 	BoudingBox boundingBox;
 
 } RigidBody;
@@ -113,6 +123,6 @@ void UpdateMesh(Time time, Mesh* mesh);
 void DrawGizmos(Time time, Vector3 maxSize);
 
 void CalculateBoundingBox(GameObject* gameObject);
-void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObject);
+void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);
 
 void SimulateRigidBody(RigidBody* RigidBody); // simulate rigid body

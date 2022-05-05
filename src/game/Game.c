@@ -246,7 +246,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	}
 
 	CalculateBoundingBox(gameObject);
-	if(!gameObject->rigidBody.isStatic) DetectCollision(gameObjectManager, gameObject);
+	if(!gameObject->rigidBody.isStatic) DetectCollision(fixedTime, gameObjectManager, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -256,6 +256,8 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 //Applies gravity transformation to object
 void GravityTransform(Time fixedTime, GameObject* gameObject)
 {
+
+	if (gameObject->rigidBody.isColliding) return;
 	//Increase velocity of object by 9.8 m/s
 	//Terminal velocity is 53m/s in Earth atmosphere
 	gameObject->rigidBody.velocity.y -= G_ACCELERATION * fixedTime.deltaTime;
@@ -302,10 +304,70 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 {
+	gameObject->transform.position.y = box->maxPos.y + (gameObject->rigidBody.boundingBox.minPos.y / 2);
+
+	if (gameObject->rigidBody.velocity.y >= 0.0f) return;
+
+	gameObject->rigidBody.velocity.y += 6.0f;
+	gameObject->rigidBody.velocity.y = -gameObject->rigidBody.velocity.y;
+
+	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
+
+}
+
+void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
+{
+	if (gameObject->rigidBody.sphereBody.isSphere)
+	{
+		float radius = gameObject->rigidBody.sphereBody.radius;
+
+		for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
+		{
+			if (gameObject->rigidBody.sphereBody.isSphere)
+			{
+				double dx = pow((double)gameObject->transform.position.x - gameObjectManager->gameObjects[i]->transform.position.x, 2);
+				double dy = pow((double)gameObject->transform.position.y - gameObjectManager->gameObjects[i]->transform.position.y, 2);
+				double dz = pow((double)gameObject->transform.position.z - gameObjectManager->gameObjects[i]->transform.position.z, 2);
+				float distance = sqrt(dx + dy + dz);
+				float radii = gameObject->rigidBody.sphereBody.radius 
+							  + gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
+				if (distance <= radii)
+				{
+					//SphereResolution(fixedTime, gameObject);
+				}
+			}
+			else
+			{
+				BoudingBox* box = &gameObjectManager->boundingBoxes[i];
+				// do plane collision detection
+				float cx = fmaxf(box->minPos.x, fminf(gameObject->transform.position.x, box->maxPos.x));
+				float cy = fmaxf(box->minPos.y, fminf(gameObject->transform.position.y, box->maxPos.y));
+				float cz = fmaxf(box->minPos.z, fminf(gameObject->transform.position.z, box->maxPos.z));
+
+				double px = pow((double)cx - gameObject->transform.position.x, 2);
+				double py = pow((double)cy - gameObject->transform.position.y, 2);
+				double pz = pow((double)cz - gameObject->transform.position.z, 2);
+				float distance = sqrt(px + py + pz);
+
+				if (distance < gameObject->rigidBody.sphereBody.radius)
+				{
+					// colliding with
+					SphereResolution(fixedTime, gameObject, box);
+					gameObject->rigidBody.isColliding = true;
+				}
+				else
+				{
+					gameObject->rigidBody.isColliding = false;
+
+				}
+			}
+		}
+	}
+
 	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
-	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
 	{
 		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
 
@@ -315,9 +377,18 @@ void DetectCollision(GameObjectManager* gameObjectManager, GameObject* gameObjec
 			(objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z))
 		{
 			// get the cross product where the intersection is happening
-			// then inverse the vectors direction, and then apply the velocity to that
+			// then inverse the vectors direction, and then apply the direction to the velocity
+			// then add decay to the velocity
 			//Vector3 intersection = Vec3CrossProduct(objBox, )
 			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
+
+			SphereResolution(fixedTime, gameObject, checkgBox);
+			gameObject->rigidBody.isColliding = true;
+
+		}
+		else
+		{
+			gameObject->rigidBody.isColliding = false;
 		}
 	}
 }
