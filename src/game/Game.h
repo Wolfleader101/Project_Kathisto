@@ -6,92 +6,9 @@
 #include <stdbool.h>
 #include <GL/freeglut.h>
 
+#include "game/GameTypes.h"
+#include "game/GameConstants.h"
 #include "math/Vector.h"
-
-typedef struct Time
-{
-	float currTime;
-	float prevTime;
-	float deltaTime;
-} Time;
-
-typedef struct Transform
-{
-	Vector3 position;
-	Vector3 rotation;
-	Vector3 scale;
-
-} Transform;
-
-typedef struct Mesh
-{
-	Vector3* points;
-	size_t pointSize;
-	Vector3Int* indices;
-	int indexCount;
-	RGBA* colors;
-	bool isUniformColor;
-	bool debug;
-} Mesh;
-
-typedef struct BoudingBox
-{
-	Vector3 minPos;
-	Vector3 maxPos;
-	size_t gameObjectId;
-} BoudingBox;
-
-typedef struct SphereBody
-{
-	bool isSphere;
-	float radius;
-
-} SphereBody;
-
-
-typedef struct RigidBody
-{
-	bool isStatic;
-	bool useGravity;
-	bool isColliding;
-	float mass;
-	Vector3 velocity;
-
-	SphereBody sphereBody;
-	BoudingBox boundingBox;
-
-} RigidBody;
-
-typedef struct GameObject GameObject;
-typedef void (*OnStart)(GameObject*);
-typedef void (*OnUpdate)(Time, GameObject*);
-typedef void (*OnLateUpdate)(Time, GameObject*);
-typedef void (*OnFixedUpdate)(Time, GameObject*);
-
-struct GameObject
-{
-	size_t id;
-	char* name;
-	Transform transform;
-	Mesh mesh;
-	RigidBody rigidBody;
-	bool debug;
-
-	OnStart OnStart;
-	OnUpdate OnUpdate;
-	OnLateUpdate OnLateUpdate;
-	OnFixedUpdate OnFixedUpdate;
-};
-
-typedef struct GameObjectManager
-{
-	GameObject** gameObjects;
-	BoudingBox** boundingBoxes;
-
-	size_t count;
-	size_t lastIndex;
-	size_t freeSpace;
-} GameObjectManager;
 
 
 // game manager struct??
@@ -121,6 +38,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject);
 void UpdateTransform(Time time, Transform* transform);
 void UpdateMesh(Time time, Mesh* mesh);
 void DrawGizmos(Time time, Vector3 maxSize);
+void DrawBoundingBox(BoudingBox box);
 
 void CalculateBoundingBox(GameObject* gameObject);
 void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "GameConstants.h"
 
 void InitGameObjectManager(GameObjectManager* gameObjectManager)
 {
@@ -19,6 +18,7 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	}
 }
 
+// TODO FIX THIS METHOD??
 void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 {
 	const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
@@ -39,13 +39,10 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 	}
 }
 
-/**
- * @brief
- * 	When a GameObject is added:
-		add the game object to the end of the game object list at index of count using realloc
-		increase count by 1
- * @param gameObjectManager
- * @param gameObject
+/*	
+When a GameObject is added:
+	add the game object to the end of the game object list at index of count using realloc
+	increase count by 1
  */
 void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
@@ -74,17 +71,14 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 	gameObjectManager->lastIndex++;
 }
 
-/**
- * @brief
- * When a GameObject is removed:
-		remove the gameobject from the game object list by setting by freeing it
-		for all gameobjects where index > deleted index
-		copy the gameobject over to gameobject[i - 1]
-		take 1 from count
-		freespace add 1
-		lastIndex take 1
- * @param gameObjectManager
- * @param id
+/*
+When a GameObject is removed:
+	remove the gameobject from the game object list by setting by freeing it
+	for all gameobjects where index > deleted index
+	copy the gameobject over to gameobject[i - 1]
+	take 1 from count
+	freespace add 1
+	lastIndex take 1
  */
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
@@ -159,8 +153,12 @@ void UpdateGameObject(Time time, GameObject* gameObject)
 	if (gameObject->debug)
 		DrawGizmos(time, gameObject->rigidBody.boundingBox.maxPos);
 
+	if (gameObject->rigidBody.debug)
+		DrawBoundingBox(gameObject->rigidBody.boundingBox);
+
 
 	if (gameObject->OnLateUpdate != NULL) gameObject->OnLateUpdate(time, gameObject);
+
 
 	glPopMatrix();
 }
@@ -268,6 +266,31 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	//Resetting velocity must be done in collision resolution
 }
 
+void DrawBoundingBox(BoudingBox box)
+{
+	const Vector3 boundBoxVertexBuffer[] = 
+	{
+	box.minPos,
+	{ box.maxPos.x, box.minPos.y, box.minPos.z },
+	{ box.minPos.x, box.maxPos.y, box.minPos.z },
+	{ box.maxPos.x, box.maxPos.y, box.minPos.z },
+
+
+	box.maxPos,
+	{ box.maxPos.x, box.minPos.y, box.maxPos.z },
+	{ box.minPos.x, box.maxPos.y, box.maxPos.z },
+	{ box.minPos.x, box.minPos.y,  box.maxPos.z },
+	};
+
+	glColor3f(0.0f, 1.0f, 0.15f);
+
+	glVertexPointer(3, GL_FLOAT, 0, boundBoxVertexBuffer);
+
+	glDrawElements(GL_LINE_LOOP, 36, GL_UNSIGNED_INT, cubeIndexBuffer);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 void CalculateBoundingBox(GameObject* gameObject)
 {
 	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
@@ -308,14 +331,14 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 	// half the boxes height/widhtwhatever
 	gameObject->transform.position.y = box->maxPos.y + 1.0f;
 
+
+	// add 25% decay, only go back up 75% of the way
 	gameObject->rigidBody.velocity.y *= 0.75;
 	gameObject->rigidBody.velocity.y = -gameObject->rigidBody.velocity.y;
 
 	if (Vec3Length(gameObject->rigidBody.velocity) <= 1.8f) return;
 
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
-
-	printf("%.2f\n", Vec3Length(gameObject->rigidBody.velocity));
 }
 // get the normal of the plane
 // reflect around the normal
@@ -358,7 +381,6 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 				{
 					// colliding with
 					SphereResolution(fixedTime, gameObject, box);
-					gameObject->rigidBody.isColliding = true;
 					return;
 				}
 			}
@@ -382,11 +404,9 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
 
 			SphereResolution(fixedTime, gameObject, checkgBox);
-			gameObject->rigidBody.isColliding = true;
 			return;
 		}
 	}
-	gameObject->rigidBody.isColliding = false;
 }
 
 void FreeGameObject(GameObject* gameObject)

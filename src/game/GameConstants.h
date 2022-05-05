@@ -1,7 +1,8 @@
-#include "math/Vector.h"
-#include "game/Game.h"
-
 #pragma once
+
+#include "game/GameTypes.h"
+#include "game/Game.h"
+#include "math/Vector.h"
 
 extern const float MOUSE_SENS;
 extern const float WALK_SPEED;

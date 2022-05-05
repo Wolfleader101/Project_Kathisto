@@ -3,8 +3,8 @@
 #include "game/GameObjects/Cube.h"
 #include "game/GameObjects/CubeG.h"
 
-int WINDOW_WIDTH = 1280;
-int WINDOW_HEIGHT = 750;
+int WINDOW_WIDTH = 1750;
+int WINDOW_HEIGHT = 980;
 
 int frame = 0;
 int timebase = 0;

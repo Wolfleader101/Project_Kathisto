@@ -1,4 +1,5 @@
 set(GAME
+   src/game/GameTypes.h
    src/game/Game.h
    src/game/Game.c
    src/game/GameConstants.h

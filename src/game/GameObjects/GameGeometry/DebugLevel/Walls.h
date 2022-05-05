@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "game/GameConstants.h"
+
 #include "math/Vector.h"
 #include "game/Game.h"
 #include "math/mathUtils.h"
-#include "game/GameConstants.h"
 
 OnStart OnWall1Start(GameObject* gameObject);
 OnStart OnWall2Start(GameObject* gameObject);
