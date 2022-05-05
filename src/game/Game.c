@@ -306,7 +306,7 @@ void CalculateBoundingBox(GameObject* gameObject)
 
 void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 {
-	gameObject->transform.position.y = box->maxPos.y + (gameObject->rigidBody.boundingBox.minPos.y / 2);
+	gameObject->transform.position.y = box->maxPos.y + 1.1f;
 
 	if (gameObject->rigidBody.velocity.y >= 0.0f) return;
 
@@ -356,11 +356,7 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 					// colliding with
 					SphereResolution(fixedTime, gameObject, box);
 					gameObject->rigidBody.isColliding = true;
-				}
-				else
-				{
-					gameObject->rigidBody.isColliding = false;
-
+					return;
 				}
 			}
 		}
@@ -384,13 +380,10 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 
 			SphereResolution(fixedTime, gameObject, checkgBox);
 			gameObject->rigidBody.isColliding = true;
-
-		}
-		else
-		{
-			gameObject->rigidBody.isColliding = false;
+			return;
 		}
 	}
+	gameObject->rigidBody.isColliding = false;
 }
 
 void FreeGameObject(GameObject* gameObject)
