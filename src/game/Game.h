@@ -9,6 +9,7 @@
 #include "game/GameTypes.h"
 #include "game/GameConstants.h"
 #include "math/Vector.h"
+#include "math/mathUtils.h"
 
 
 // game manager struct??

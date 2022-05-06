@@ -99,6 +99,7 @@ void RigidBodyWidget(RigidBody* rigidBody)
 		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Velocity", &rigidBody->velocity, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat("Mass", &rigidBody->mass, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 		igTreePop();
 		igSeparator();
 	}

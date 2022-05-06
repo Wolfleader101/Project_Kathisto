@@ -253,16 +253,55 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 //Applies gravity transformation to object
 void GravityTransform(Time fixedTime, GameObject* gameObject)
 {
+	RigidBody* rb = &gameObject->rigidBody;
 
-	//Increase velocity of object by 9.8 m/s
-	//Terminal velocity is 53m/s in Earth atmosphere
-	gameObject->rigidBody.velocity.y -= G_ACCELERATION * fixedTime.deltaTime;
-	if (abs(gameObject->rigidBody.velocity.y) > T_VELOCITY) gameObject->rigidBody.velocity.y = -T_VELOCITY;
+	//Increase velocity of object by 9.81 m/s
+	rb->velocity.y -= G_ACCELERATION * fixedTime.deltaTime;
+
+	//Terminal velocity is based on a formaula of v_t
+	// v_t = sqrt((2 * m * g)/(*p * A * Cd))
+
+	// g = gravity acceleration in m/s^2
+	// m = mass of object
+	// p = density of fluid (in this case air)
+	// A = cross sectional area in m^2
+	// Cd = coefficient of drag
+
+
+	// density of air 1.225kg/m^3
+	// co efficent for streamline shape is smaller,
+	// cube is 1.05
+	// sphere is 0.47
+	
+	float area = 0.0f;
+	float coefficentDrag = 0.0f;
+
+	if (rb->sphereBody.isSphere)
+	{
+		// if sphere
+		area = PI * rb->sphereBody.radius;
+		coefficentDrag = 0.47;
+	}
+	else
+	{
+		// if cube
+		float cubeWidth = rb->boundingBox.maxPos.x - rb->boundingBox.minPos.x;
+		float cubeHeight = rb->boundingBox.maxPos.y - rb->boundingBox.maxPos.y;
+		area = cubeWidth * cubeHeight;
+		coefficentDrag = 1.05;
+	}
+
+	const float airDensity = 1.225;
+
+	float x = 2 * rb->mass * G_ACCELERATION;
+	float y = airDensity * area * coefficentDrag;
+	float terminalVelocity = sqrtf(x / y);
+
+	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 
 	//Subtract object's Y transform position by velocity per second
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
 
-	//Resetting velocity must be done in collision resolution
 }
 
 void DrawBoundingBox(BoudingBox box)
@@ -336,10 +375,17 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 	// half the boxes height/widhtwhatever
 	gameObject->transform.position.y = box->maxPos.y + 1.0f;
 
-	// add 25% decay, only go back up 75% of the way
-	gameObject->rigidBody.velocity.y *= 0.75;
+	
+	// decay = max of 0.5, (mass * 1.5) / 100
+	float decay = fmaxf((gameObject->rigidBody.mass * 1.5f) / 100, 0.5f);
+
+	// add decay
+	gameObject->rigidBody.velocity.y *= decay;
+	
+	// invert velocity
 	gameObject->rigidBody.velocity.y = -gameObject->rigidBody.velocity.y;
 
+	// if velocity is less than or equal to if its on the floor, stop
 	if (Vec3Length(gameObject->rigidBody.velocity) <= 1.8f) return;
 
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
@@ -443,7 +489,7 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
 	rigidBody->debug = false;
-	rigidBody->mass = 0.0f;
+	rigidBody->mass = 15.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
 }
