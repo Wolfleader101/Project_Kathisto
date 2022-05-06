@@ -286,16 +286,16 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	{
 		// if cube
 		float cubeWidth = rb->boundingBox.maxPos.x - rb->boundingBox.minPos.x;
-		float cubeHeight = rb->boundingBox.maxPos.y - rb->boundingBox.maxPos.y;
+		float cubeHeight = rb->boundingBox.maxPos.y - rb->boundingBox.minPos.y;
 		area = cubeWidth * cubeHeight;
 		coefficentDrag = 1.05;
 	}
 
-	const float airDensity = 1.225;
 
 	float x = 2 * rb->mass * G_ACCELERATION;
-	float y = airDensity * area * coefficentDrag;
-	float terminalVelocity = sqrtf(x / y);
+	float y = AIR_DENSITY * area * coefficentDrag;
+	float z = x / y;
+ 	float terminalVelocity = sqrt(z);
 
 	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 
@@ -489,9 +489,10 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
 	rigidBody->debug = false;
-	rigidBody->mass = 15.0f;
+	rigidBody->mass = 50.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
+	rigidBody->sphereBody = (SphereBody){ .isSphere = false, .radius = 0.0f };
 }
 
 void SimulateRigidBody(RigidBody* RigidBody)
