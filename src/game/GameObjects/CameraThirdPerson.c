@@ -26,6 +26,9 @@ Vector3 camPos = {0.0f, 4.0f, -3.5f}; //The default camera position
 Vector3 camRight = { 1.0f, 0.0f, 0.0f }; //The camera's Right-Vector
 Vector3 camUp = {0.0f, 1.0f, 0.0f}; //The camera's Up-Vector
 
+Vector3 camForwardDirFlat = { 0.0f, 0.0f, -1.0f }; //The camera's default forward direction (Vector) flattened to have a Y of 0
+Vector3 camRightFlat = { 1.0f, 0.0f, 0.0f }; //The camera's default right direction (Vector) flattened to have a Y of 0
+
 ///////////////////////////////////////////
 /////////	FUNCTIONS
 ///////////////////////////////////////////
@@ -80,6 +83,14 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 	camForwardDir.x = cos((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
 	camForwardDir.y = -sin((camOrbitAngles.x / 180) * PI_CONST);
 	camForwardDir.z = sin((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
+
+	camForwardDir = Vec3Normalize(camForwardDir); //Normalizes the vector
+
+	camForwardDirFlat.x = camForwardDir.x; //Makes the flat vector equal to the normal vector's x coordinate
+	camForwardDirFlat.z = camForwardDir.z; //Makes the flat vector equal to the normal vector's z coordinate
+
+	camRightFlat.x = camRight.x; //Makes the flat vector equal to the normal vector's x coordinate
+	camRightFlat.z = camRight.z; //Makes the flat vector equal to the normal vector's z coordinate
 }
 
 void ConstrainCamAngles() //Constrains the angles of the camera to fit within camMinVertAngle and camMaxVertAngle

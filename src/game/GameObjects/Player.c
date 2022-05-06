@@ -94,11 +94,8 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player each frame
 {
 	float maxSpeedChange = maxAcceleration * time.deltaTime;
-	
-	Vector3 desiredPlayerVel = {
-		playerInput.x * WALK_SPEED,
-		0.0f * WALK_SPEED,
-		playerInput.y * WALK_SPEED };
+
+	MovePlayer();
 
 	if (playerVel.x < desiredPlayerVel.x)
 	{
@@ -119,6 +116,33 @@ void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player 
 		{
 			playerVel.z -= maxSpeedChange;
 		}
+}
+
+void MovePlayer() //Function to move the player relative to the camera object
+{
+	if (PLAYERFORWARD_TOGGLE == true) //Moves character forward
+	{
+		desiredPlayerVel.x = camForwardDirFlat.x * WALK_SPEED;
+		desiredPlayerVel.z = camForwardDirFlat.z * WALK_SPEED;
+	}
+
+	if (PLAYERBACKWARD_TOGGLE == true) //Moves character backward
+	{
+		desiredPlayerVel.x = -camForwardDirFlat.x * WALK_SPEED;
+		desiredPlayerVel.z = -camForwardDirFlat.z * WALK_SPEED;
+	}
+
+	if (PLAYERLEFT_TOGGLE == true) //Moves character left
+	{
+		desiredPlayerVel.x = -camRightFlat.x * WALK_SPEED;
+		desiredPlayerVel.z = -camRightFlat.z * WALK_SPEED;
+	}
+
+	if (PLAYERRIGHT_TOGGLE == true) //Moves character right
+	{
+		desiredPlayerVel.x = camRightFlat.x * WALK_SPEED;
+		desiredPlayerVel.z = camRightFlat.z * WALK_SPEED;
+	}
 }
 
 OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame

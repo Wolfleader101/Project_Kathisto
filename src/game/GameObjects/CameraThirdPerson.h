@@ -32,6 +32,9 @@ extern Vector3 camPos; //The camera's position
 extern Vector3 camRight; //The camera's Right-Vector
 extern Vector3 camUp; //The camera's Up-Vector
 
+extern Vector3 camForwardDirFlat; //The camera's default forward direction (Vector) flattened to have a Y of 0
+Vector3 camRightFlat; //The camera's default right direction (Vector) flattened to have a Y of 0
+
 ///////////////////////////////////////////
 /////////	FUNCTIONS
 ///////////////////////////////////////////

@@ -13,6 +13,11 @@
 extern bool USE_MENU_CURSOR_CURSOR;
 extern bool TOGGLE_MENU;
 
+extern bool PLAYERFORWARD_TOGGLE;
+extern bool PLAYERBACKWARD_TOGGLE;
+extern bool PLAYERLEFT_TOGGLE;
+extern bool PLAYERRIGHT_TOGGLE;
+
 Vector2 mouseInputs; //Stores Mouse Inputs
 
 void OnKeyDown(unsigned char key, int x, int y); // on key down

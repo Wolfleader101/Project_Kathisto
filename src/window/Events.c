@@ -6,6 +6,11 @@
 bool USE_MENU_CURSOR = false;
 bool TOGGLE_MENU = true;
 
+bool PLAYERFORWARD_TOGGLE = false;
+bool PLAYERBACKWARD_TOGGLE = false;
+bool PLAYERLEFT_TOGGLE = false;
+bool PLAYERRIGHT_TOGGLE = false;
+
 Vector2 mouseInputs = {0.0f, 0.0f}; //Stores Mouse Inputs
 
 void OnKeyDown(unsigned char key, int x, int y)
@@ -16,21 +21,29 @@ void OnKeyDown(unsigned char key, int x, int y)
 		cameraMoveDir.z = 1.0f;
 
 		playerInput.y = 1.0f;
+
+		PLAYERFORWARD_TOGGLE = true;
 		break;
 	case 'a':
 		cameraMoveDir.x = -1.0f;
 
 		playerInput.x = 1.0f;
+
+		PLAYERLEFT_TOGGLE = true;
 		break;
 	case 's':
 		cameraMoveDir.z = -1.0f;
 
 		playerInput.y = -1.0f;
+
+		PLAYERBACKWARD_TOGGLE = true;
 		break;
 	case 'd':
 		cameraMoveDir.x = 1.0f;
 
 		playerInput.x = -1.0f;
+
+		PLAYERRIGHT_TOGGLE = true;
 		break;
 	case ' ':
 		cameraMoveDir.y = 1.0f;
@@ -52,21 +65,41 @@ void OnKeyUp(unsigned char key, int x, int y)
 		cameraMoveDir.z = 0.0f;
 
 		playerInput.y = 0.0f;
+
+		PLAYERFORWARD_TOGGLE = false;
+
+		desiredPlayerVel.x = 0.0f;
+		desiredPlayerVel.z = 0.0f;
 		break;
 	case 'a':
 		cameraMoveDir.x = 0.0f;
 
 		playerInput.x = 0.0f;
+
+		PLAYERLEFT_TOGGLE = false;
+
+		desiredPlayerVel.x = 0.0f;
+		desiredPlayerVel.z = 0.0f;
 		break;
 	case 's':
 		cameraMoveDir.z = 0.0f;
 
 		playerInput.y = 0.0f;
+
+		PLAYERBACKWARD_TOGGLE = false;
+
+		desiredPlayerVel.x = 0.0f;
+		desiredPlayerVel.z = 0.0f;
 		break;
 	case 'd':
 		cameraMoveDir.x = 0.0f;
 
 		playerInput.x = 0.0f;
+
+		PLAYERRIGHT_TOGGLE = false;
+
+		desiredPlayerVel.x = 0.0f;
+		desiredPlayerVel.z = 0.0f;
 		break;
 	case ' ':
 		cameraMoveDir.y = 0.0f;

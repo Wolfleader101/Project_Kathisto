@@ -30,4 +30,6 @@ OnStart OnPlayerStart(GameObject* gameObject); //Sets the starting variables of 
 
 void CalculatePlayerVelcoity(Time time); //Calculates the velocity of the player each frame
 
+void MovePlayer(); //Function to move the player relative to the camera object
+
 OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject); //Updates every frame
