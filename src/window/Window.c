@@ -96,7 +96,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL);
 
 	// add them to the game object manager where start will be called
-	GameObjectManagerAdd(&gameObjectManager, cube);
+	//GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
 
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry

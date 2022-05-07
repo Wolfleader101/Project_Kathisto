@@ -376,8 +376,10 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
 	gameObject->transform.position.y = box->maxPos.y + 1.0f;
 
 	
-	// decay = max of 0.5, (mass * 1.5) / 100
-	float decay = fmaxf((gameObject->rigidBody.mass * 1.5f) / 100, 0.5f);
+	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
+
+	// decay value between 0-1
+	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
 	// add decay
 	gameObject->rigidBody.velocity.y *= decay;
