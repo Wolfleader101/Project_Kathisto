@@ -36,7 +36,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	igText("F3 - Toggle between ingame/settings cursor");
 	igText("F4 - Toggle debug menu");
 
-	for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
 		if (gameObjectManager->gameObjects[i]->name != NULL)
 		{
@@ -93,9 +93,20 @@ void TransformWidget(Transform* transform)
 }
 void RigidBodyWidget(RigidBody* rigidBody)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
+		igTreePop();
+		igSeparator();
+	}
 }
 void MeshWidget(Mesh* mesh)
 {
-
+	if (igCollapsingHeader_TreeNodeFlags("Mesh", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		igCheckbox("Debug Mesh", &mesh->debug);
+		igTreePop();
+		igSeparator();
+	}
 }

@@ -1,7 +1,7 @@
 #include "Window.h"
 
 #include "game/GameObjects/Cube.h"
-#include "game/GameObjects/Floor.h"
+#include "game/GameObjects/CubeG.h"
 
 int WINDOW_WIDTH = 1750;
 int WINDOW_HEIGHT = 980;
@@ -76,25 +76,27 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
-	GameObject* floorGameObject = malloc(sizeof(GameObject));
-	GameObject* playerObject = malloc(sizeof(GameObject));
+	GameObject* cubeG = malloc(sizeof(GameObject));
+  GameObject* playerObject = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
-	InitGameObject(floorGameObject);
-	InitGameObject(playerObject);
+	InitGameObject(cubeG);
+  InitGameObject(playerObject);
 
 	// setup their callbacks, start should never be NULL, however the others can be
-	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
-	SetupCallbacks(floorGameObject, OnFloorStart, NULL, NULL);
-	SetupCallbacks(playerObject, OnPlayerStart, OnPlayerUpdate, NULL);
+	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate);
+	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL);
+  SetupCallbacks(playerObject, OnPlayerStart, OnPlayerUpdate, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
-	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
-	GameObjectManagerAdd(&gameObjectManager, playerObject);
+	GameObjectManagerAdd(&gameObjectManager, cubeG);
+  GameObjectManagerAdd(&gameObjectManager, playerObject);
 
-	//Sets the objects needed for the camera
+  //Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
+  
+	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
 	glutMainLoop();
@@ -124,6 +126,7 @@ void WindowRender(void)
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
 	UpdateGameObjects(time, &gameObjectManager);
+	FixedUpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 

@@ -6,6 +6,6 @@
 #include "math/Vector.h"
 #include "game/Game.h"
 #include "math/mathUtils.h"
+#include "game/GameConstants.h"
 
-
-OnStart OnFloorStart(GameObject *gameObject);
+OnStart OnCubeGStart(GameObject* gameObject);

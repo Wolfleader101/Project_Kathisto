@@ -9,9 +9,13 @@ set(GAME
    src/game/GameObjects/CameraThirdPerson.c
    src/game/GameObjects/Cube.h
    src/game/GameObjects/Cube.c
-   src/game/GameObjects/Floor.h
-   src/game/GameObjects/Floor.c
-   src/game/GameObjects/Player.h
-   src/game/GameObjects/Player.c
+   src/game/GameObjects/GameGeometry/DebugGeo.h
+   src/game/GameObjects/GameGeometry/DebugGeo.c
+   src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.h
+   src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.c
+   src/game/GameObjects/GameGeometry/DebugLevel/Floors.h
+   src/game/GameObjects/GameGeometry/DebugLevel/Floors.c
+   src/game/GameObjects/GameGeometry/DebugLevel/Walls.h
+   src/game/GameObjects/GameGeometry/DebugLevel/Walls.c
 
     PARENT_SCOPE)

@@ -14,6 +14,7 @@
 #include "game/GameObjects/Player.h" //Includes access to the player object
 #include "math/Vector.h"
 
+#include "game/GameObjects/GameGeometry/DebugGeo.h" //In Charge of building the Debug Geometry 
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
