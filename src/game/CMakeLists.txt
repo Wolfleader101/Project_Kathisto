@@ -9,6 +9,8 @@ set(GAME
    src/game/GameObjects/CameraThirdPerson.c
    src/game/GameObjects/Cube.h
    src/game/GameObjects/Cube.c
+   src/game/GameObjects/Player.h
+   src/game/GameObjects/Player.c
    src/game/GameObjects/GameGeometry/DebugGeo.h
    src/game/GameObjects/GameGeometry/DebugGeo.c
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.h
