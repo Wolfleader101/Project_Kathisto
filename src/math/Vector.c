@@ -10,6 +10,11 @@ Vector3 EmptyVec3(){
 	return (Vector3){0.0f, 0.0f, 0.0f};
 }
 
+Quaternion EmptyQuaternion() 
+{
+	return (Quaternion) { 0.0f, 0.0f, 0.0f, 0.0f };
+}
+
 Vector2 ArrayToVec2(const float arr[2])
 {
 	return (Vector2) { arr[0], arr[1] };
@@ -177,4 +182,67 @@ float Vec2DotProduct(Vector2 vec1, Vector2 vec2)
 float Vec3DotProduct(Vector3 vec1, Vector3 vec2)
 {
 	return ((vec1.x * vec2.x) + (vec1.y * vec2.y) + (vec1.z * vec2.z));
+}
+
+Vector3 ForwardVec3(Vector3 vec3FromPos, Vector3 vec3ToPos) //Returns a Forward Vector
+{
+	Vector3 tmpVecReturn = { 0, 0, 0 }; //Temporary vector for calculations, returned
+
+	tmpVecReturn.x = vec3FromPos.x - vec3ToPos.x; //Calculates the X value of the Forward Vector
+	tmpVecReturn.y = vec3FromPos.y - vec3ToPos.y; //Calculates the Y value of the Forward Vector
+	tmpVecReturn.z = vec3FromPos.z - vec3ToPos.z; //Calculates the Z value of the Forward Vector
+
+	return(tmpVecReturn);
+}
+
+Vector3 Vector3ZRotation(Vector3 inputVec3, float rotAmount) //Rotation of a 3D Vector around the Z-Axis (Roll)
+{
+	Vector3 tmpVecReturn = { 0, 0, 0 }; //Temporary vector for calculations, returned
+
+	tmpVecReturn.x = (inputVec3.x * cos(rotAmount)) - (inputVec3.y * sin(rotAmount));
+	tmpVecReturn.y = (inputVec3.x * sin(rotAmount)) - (inputVec3.y * cos(rotAmount));
+	tmpVecReturn.z = inputVec3.z;
+
+	return(tmpVecReturn);
+}
+
+Vector3 Vector3YRotation(Vector3 inputVec3, float rotAmount) //Rotation of a 3D Vector around the Y-Axis (Yaw)
+{
+	Vector3 tmpVecReturn = { 0, 0, 0 }; //Temporary vector for calculations, returned
+
+	tmpVecReturn.x = (inputVec3.x * cos(rotAmount)) + (inputVec3.z * sin(rotAmount));
+	tmpVecReturn.y = inputVec3.y;
+	tmpVecReturn.z = (-inputVec3.x * sin(rotAmount)) + (inputVec3.z * cos(rotAmount));
+
+	return(tmpVecReturn);
+}
+
+Vector3 Vector3XRotation(Vector3 inputVec3, float rotAmount) //Rotation of a 3D Vector around the X-Axis (Pitch)
+{
+	Vector3 tmpVecReturn = { 0, 0, 0 }; //Temporary vector for calculations, returned
+
+	tmpVecReturn.x = inputVec3.x;
+	tmpVecReturn.y = (inputVec3.y * cos(rotAmount)) - (inputVec3.z * sin(rotAmount));
+	tmpVecReturn.z = (inputVec3.y * sin(rotAmount)) + (inputVec3.z * cos(rotAmount));
+
+	return(tmpVecReturn);
+}
+
+Quaternion EulerToQuaternion(Vector3 eulerAngles) //Converts a set of Euler Angles to a Quaternion (Eruler == Yaw, Pitch, Roll)
+{
+	Quaternion tmpQuaternion = { 0, 0, 0, 0 }; //Temporary vector for Quaternion, returned
+
+	float c1 = cos(eulerAngles.x / 2);
+	float c2 = cos(eulerAngles.y / 2);
+	float c3 = cos(eulerAngles.z / 2);
+	float s1 = sin(eulerAngles.x / 2);
+	float s2 = sin(eulerAngles.y / 2);
+	float s3 = sin(eulerAngles.z / 2);
+
+	tmpQuaternion.w = (c1 * c2 * c3) - (s1 * s2 * s3); //Conversion for the W-Variable of a Quaternion
+	tmpQuaternion.x = (s1 * s2 * c3) + (c1 * c2 * s3); //Conversion for the X-Variable of a Quaternion
+	tmpQuaternion.y = (s1 * c2 * c3) + (c1 * s2 * s3); //Conversion for the Y-Variable of a Quaternion
+	tmpQuaternion.z = (c1 * s2 * c3) - (s1 * c2 * s3); //Conversion for the Z-Variable of a Quaternion
+	
+	return(tmpQuaternion);
 }

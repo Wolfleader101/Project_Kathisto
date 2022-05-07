@@ -5,6 +5,8 @@ set(GAME
    src/game/GameConstants.c
    src/game/GameObjects/Camera.h
    src/game/GameObjects/Camera.c
+   src/game/GameObjects/CameraThirdPerson.h
+   src/game/GameObjects/CameraThirdPerson.c
    src/game/GameObjects/Cube.h
    src/game/GameObjects/Cube.c
    src/game/GameObjects/GameGeometry/DebugGeo.h

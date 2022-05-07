@@ -61,7 +61,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	glutMouseFunc(OnMouseButton); // on mouse click
 	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
 
-
 	//glutFullScreen();
 
 	// hide the cursor
@@ -78,18 +77,25 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* cubeG = malloc(sizeof(GameObject));
+  GameObject* playerObject = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
+  InitGameObject(playerObject);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate);
 	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL);
+  SetupCallbacks(playerObject, OnPlayerStart, OnPlayerUpdate, NULL);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
+  GameObjectManagerAdd(&gameObjectManager, playerObject);
 
+  //Sets the objects needed for the camera
+	SetCamAttributes(&gameObjectManager);
+  
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
@@ -114,7 +120,8 @@ void WindowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	CameraRender(time.deltaTime);
+	//CameraRender(time.deltaTime);
+	ThirdPersonCamRender(time);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
