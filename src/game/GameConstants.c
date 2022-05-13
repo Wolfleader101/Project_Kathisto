@@ -7,6 +7,17 @@ const float G_ACCELERATION = 9.81f;
 const float AIR_DENSITY = 1.225f;
 const float PHYSICS_TIME_STEP = 20; // in ms
 
+const int VECTOR_DIRECTIONS_LENGTH = 6;
+const Vector3 VECTOR_DIRECTIONS[] =
+{
+	{0, 1, 0}, // up
+	{0, -1, 0}, // down
+	{1, 0, 0}, // left
+	{-1, 0, 0}, // right
+	{0, 0, 1}, //forward
+	{0, 0, -1}, // back
+};
+
 ///////////////////////////////////////
 ////	VERTEX BUFFERS
 ///////////////////////////////////////

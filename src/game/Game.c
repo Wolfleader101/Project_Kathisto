@@ -39,7 +39,7 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 	}
 }
 
-/*	
+/*
 When a GameObject is added:
 	add the game object to the end of the game object list at index of count using realloc
 	increase count by 1
@@ -148,7 +148,7 @@ void UpdateGameObject(Time time, GameObject* gameObject)
 
 	UpdateTransform(time, &gameObject->transform);
 
-	if(!gameObject->mesh.disableMesh)
+	if (!gameObject->mesh.disableMesh)
 		UpdateMesh(time, mesh);
 
 	if (gameObject->debug)
@@ -243,7 +243,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	}
 
 	CalculateBoundingBox(gameObject);
-	if(!gameObject->rigidBody.isStatic) DetectCollision(fixedTime, gameObjectManager, gameObject);
+	if (!gameObject->rigidBody.isStatic) DetectCollision(fixedTime, gameObjectManager, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -272,7 +272,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	// co efficent for streamline shape is smaller,
 	// cube is 1.05
 	// sphere is 0.47
-	
+
 	float area = 0.0f;
 	float coefficentDrag = 0.0f;
 
@@ -295,7 +295,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	float x = 2 * rb->mass * G_ACCELERATION;
 	float y = AIR_DENSITY * area * coefficentDrag;
 	float z = x / y;
- 	float terminalVelocity = sqrt(z);
+	float terminalVelocity = sqrt(z);
 
 	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 
@@ -307,7 +307,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 void DrawBoundingBox(BoudingBox box)
 {
 	glPushMatrix();
-	const Vector3 boundBoxVertexBuffer[] = 
+	const Vector3 boundBoxVertexBuffer[] =
 	{
 	box.minPos,
 	{ box.maxPos.x, box.minPos.y, box.minPos.z },
@@ -370,27 +370,38 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-void SphereResolution(Time fixedTime, GameObject* gameObject, BoudingBox* box)
+void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
 {
-	// half the boxes height/widhtwhatever
-	gameObject->transform.position.y = box->maxPos.y + 1.0f;
+	Vector3 normal = Vec3Normalize(collidingObject->transform.position);
 
-	
+
+	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
+	Vector3 MulDotPlane = Vec3ScalarMultiply(normal, dotDirNormal);
+	Vector3 ScalarByTwo = Vec3ScalarMultiply(MulDotPlane, 2);
+	Vector3 newDir = Vec3Subtract(gameObject->rigidBody.velocity, ScalarByTwo);
+
+	Vector3 normalNewDir = Vec3Normalize(newDir);
+
+	gameObject->rigidBody.velocity = newDir;
+
+	// half the boxes height,width,length
+	float leftAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
+	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
+	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
+	if(normalNewDir.x == 1.0f) gameObject->transform.position.x = collidingObject->rigidBody.boundingBox.maxPos.x + (leftAmount / 2);
+	if(normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+	if(normalNewDir.z == 1.0f) gameObject->transform.position.z = collidingObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
+
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
-
-	// decay value between 0-1
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
-
-	// add decay
-	gameObject->rigidBody.velocity.y *= decay;
-	
-	// invert velocity
-	gameObject->rigidBody.velocity.y = -gameObject->rigidBody.velocity.y;
+	gameObject->rigidBody.velocity = Vec3ScalarMultiply(gameObject->rigidBody.velocity, decay);
 
 	// if velocity is less than or equal to if its on the floor, stop
-	if (Vec3Length(gameObject->rigidBody.velocity) <= 1.8f) return;
+	if (Vec3Length(gameObject->rigidBody.velocity) <= 0.1f) return;
 
+	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
+	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
 }
 // get the normal of the plane
 // reflect around the normal
@@ -409,8 +420,8 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 				double dy = pow((double)gameObject->transform.position.y - gameObjectManager->gameObjects[i]->transform.position.y, 2);
 				double dz = pow((double)gameObject->transform.position.z - gameObjectManager->gameObjects[i]->transform.position.z, 2);
 				float distance = sqrt(dx + dy + dz);
-				float radii = gameObject->rigidBody.sphereBody.radius 
-							  + gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
+				float radii = gameObject->rigidBody.sphereBody.radius
+					+ gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
 				if (distance <= radii)
 				{
 					//SphereResolution(fixedTime, gameObject);
@@ -445,21 +456,19 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
 
 		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
-		if ((objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x) &&
-			(objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y) &&
-			(objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z))
+		bool xCollision = objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x;
+		bool yCollision = objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y;
+		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
+		if (xCollision && yCollision && zCollision)
 		{
-			// get the cross product where the intersection is happening
-			// then inverse the vectors direction, and then apply the direction to the velocity
-			// then add decay to the velocity
-			//Vector3 intersection = Vec3CrossProduct(objBox, )
 			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
 
-			SphereResolution(fixedTime, gameObject, checkgBox);
+			SphereResolution(fixedTime, gameObject, gameObjectManager->gameObjects[i]);
 			return;
 		}
 	}
 }
+
 
 void FreeGameObject(GameObject* gameObject)
 {

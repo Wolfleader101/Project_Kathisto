@@ -124,6 +124,16 @@ Vector3 Vec3ScalarAdd(Vector3 vec, float scalar)
 	return (Vector3) { vec.x + scalar, vec.y + scalar, vec.z + scalar };
 }
 
+Vector2 Vec2ScalarSubtract(Vector2 vec, float scalar)
+{
+	return (Vector2) {vec.x - scalar, vec.y - scalar};
+}
+
+Vector3 Vec3ScalarSubtract(Vector3 vec, float scalar)
+{
+	return (Vector3) { vec.x - scalar, vec.y - scalar, vec.z - scalar};
+}
+
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2)
 {
 	return (Vector2) { vec1.x * vec2.x, vec1.y * vec2.y };
@@ -141,6 +151,16 @@ Vector2 Vec2Add(Vector2 vec1, Vector2 vec2)
 Vector3 Vec3Add(Vector3 vec1, Vector3 vec2)
 {
 	return (Vector3) { vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z };
+}
+
+Vector2 Vec2Subtract(Vector2 vec1, Vector2 vec2)
+{
+	return (Vector2) { vec1.x - vec2.x, vec1.y - vec2.y };
+}
+
+Vector3 Vec3Subtract(Vector3 vec1, Vector3 vec2)
+{
+	return (Vector3) { vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z };
 }
 
 Vector2 Vec2Rotate(Vector2 vec, float angle)

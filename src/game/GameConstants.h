@@ -11,6 +11,10 @@ extern const float G_ACCELERATION;
 extern const float AIR_DENSITY;
 extern const float PHYSICS_TIME_STEP;
 
+
+extern const int VECTOR_DIRECTIONS_LENGTH;
+extern const Vector3 VECTOR_DIRECTIONS[];
+
 extern const Vector3 planeVertexBuffer[]; //Plane Vertexes
 extern const Vector3 cubeVertexBuffer[]; //Cube Vertexes
 
