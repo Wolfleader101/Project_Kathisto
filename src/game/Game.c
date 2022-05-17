@@ -409,7 +409,7 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collid
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-//	gameObject->rigidBody.velocity = Vec3ScalarMultiply(gameObject->rigidBody.velocity, decay);
+	//gameObject->rigidBody.velocity = Vec3Multiply(gameObject->rigidBody.velocity, Vec3ScalarMultiply(normalNewDir, decay));
 	if (normalNewDir.x == 1.0f) gameObject->rigidBody.velocity.x *= decay;
 	if (normalNewDir.y == 1.0f) gameObject->rigidBody.velocity.y *= decay;
 	if (normalNewDir.z == 1.0f) gameObject->rigidBody.velocity.z *= decay;
@@ -418,8 +418,6 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collid
 	if (Vec3Length(gameObject->rigidBody.velocity) <= 0.7f) return;
 
 }
-// get the normal of the plane
-// reflect around the normal
 
 void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
