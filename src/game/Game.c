@@ -247,6 +247,24 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
+	float coefficentDrag = 1.05;
+
+	float cubeWidth = gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x;
+	float cubeHeight = gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y;
+	float area = cubeWidth * cubeHeight;
+		
+	float drag = 5.0f;// 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.x * gameObject->rigidBody.velocity.x) * area * coefficentDrag;
+
+	if(abs(gameObject->rigidBody.velocity.x) > 0.0f)
+		gameObject->rigidBody.velocity.x -= drag * fixedTime.deltaTime;
+
+	if (abs(gameObject->rigidBody.velocity.z) > 0.0f)
+		gameObject->rigidBody.velocity.z -= drag * fixedTime.deltaTime;
+
+	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
+	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
+	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
+
 	glPopMatrix();
 }
 
@@ -298,10 +316,6 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	float terminalVelocity = sqrt(z);
 
 	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
-
-	//Subtract object's Y transform position by velocity per second
-	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
-
 }
 
 void DrawBoundingBox(BoudingBox box)
@@ -394,14 +408,15 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collid
 
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
-	gameObject->rigidBody.velocity = Vec3ScalarMultiply(gameObject->rigidBody.velocity, decay);
+
+//	gameObject->rigidBody.velocity = Vec3ScalarMultiply(gameObject->rigidBody.velocity, decay);
+	if (normalNewDir.x == 1.0f) gameObject->rigidBody.velocity.x *= decay;
+	if (normalNewDir.y == 1.0f) gameObject->rigidBody.velocity.y *= decay;
+	if (normalNewDir.z == 1.0f) gameObject->rigidBody.velocity.z *= decay;
 
 	// if velocity is less than or equal to if its on the floor, stop
-	if (Vec3Length(gameObject->rigidBody.velocity) <= 0.1f) return;
+	if (Vec3Length(gameObject->rigidBody.velocity) <= 0.7f) return;
 
-	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
-	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
-	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
 }
 // get the normal of the plane
 // reflect around the normal
