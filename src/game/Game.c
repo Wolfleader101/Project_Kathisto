@@ -92,6 +92,7 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 
 		// move the bounding box pointers
 		gameObjectManager->boundingBoxes[i - 1] = gameObjectManager->boundingBoxes[i];
+		// TODO FIX THIS ERORR???
 		gameObjectManager->boundingBoxes[i - 1]->gameObjectId = i - 1;
 
 		// free the last object
@@ -252,10 +253,10 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	float cubeWidth = gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x;
 	float cubeHeight = gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y;
 	float area = cubeWidth * cubeHeight;
-		
+
 	float drag = 5.0f;// 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.x * gameObject->rigidBody.velocity.x) * area * coefficentDrag;
 
-	if(abs(gameObject->rigidBody.velocity.x) > 0.0f)
+	if (abs(gameObject->rigidBody.velocity.x) > 0.0f)
 		gameObject->rigidBody.velocity.x -= drag * fixedTime.deltaTime;
 
 	if (abs(gameObject->rigidBody.velocity.z) > 0.0f)
@@ -356,9 +357,10 @@ void CalculateBoundingBox(GameObject* gameObject)
 	Mesh* mesh = &gameObject->mesh;
 
 	Vector3 min = Vec3Multiply(transform->scale, mesh->points[0]);
-	min = Vec3RotateX(min, transform->rotation.x);
-	min = Vec3RotateY(min, transform->rotation.y);
-	min = Vec3RotateZ(min, transform->rotation.z);
+	min = Vec3RotateX(min, transform->rotation.x * PI / 180);
+	min = Vec3RotateY(min, transform->rotation.y * PI / 180);
+	min = Vec3RotateZ(min, transform->rotation.z * PI / 180);
+
 	min = Vec3Add(transform->position, min);
 
 	Vector3 max = min;
@@ -366,9 +368,10 @@ void CalculateBoundingBox(GameObject* gameObject)
 	for (size_t i = 0; i < mesh->pointSize; i++)
 	{
 		Vector3 pos = Vec3Multiply(transform->scale, mesh->points[i]);
-		pos = Vec3RotateX(pos, transform->rotation.x);
-		pos = Vec3RotateY(pos, transform->rotation.y);
-		pos = Vec3RotateZ(pos, transform->rotation.z);
+
+		pos = Vec3RotateX(pos, transform->rotation.x * PI / 180);
+		pos = Vec3RotateY(pos, transform->rotation.y * PI / 180);
+		pos = Vec3RotateZ(pos, transform->rotation.z * PI / 180);
 		pos = Vec3Add(transform->position, pos);
 
 		if (pos.x < min.x) min.x = pos.x;
@@ -394,28 +397,51 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collid
 	Vector3 ScalarByTwo = Vec3ScalarMultiply(MulDotPlane, 2);
 	Vector3 newDir = Vec3Subtract(gameObject->rigidBody.velocity, ScalarByTwo);
 
+	gameObject->rigidBody.velocity = newDir;
+
 	Vector3 normalNewDir = Vec3Normalize(newDir);
 
-	gameObject->rigidBody.velocity = newDir;
+
 
 	// half the boxes height,width,length
 	float leftAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
 	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
 	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
-	if(normalNewDir.x == 1.0f) gameObject->transform.position.x = collidingObject->rigidBody.boundingBox.maxPos.x + (leftAmount / 2);
-	if(normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
-	if(normalNewDir.z == 1.0f) gameObject->transform.position.z = collidingObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
-
+	if (normalNewDir.x == 1.0f) gameObject->transform.position.x = collidingObject->rigidBody.boundingBox.maxPos.x + (leftAmount / 2);
+	if (normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+	if (normalNewDir.z == 1.0f) gameObject->transform.position.z = collidingObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
+
+	if (!collidingObject->rigidBody.isStatic)
+	{
+
+		if (normalNewDir.x == 1.0f) collidingObject->transform.position.x = gameObject->rigidBody.boundingBox.maxPos.x + (leftAmount / 2);
+		if (normalNewDir.y == 1.0f) collidingObject->transform.position.y = gameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+		if (normalNewDir.z == 1.0f) collidingObject->transform.position.z = gameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
+
+
+
+		// transfer half of the decay to the gameobject
+		// add velocity to it
+		// e.g
+		// .25( decay) * mass = veloicty
+		if (newDir.x == 0 && newDir.y == 0 && newDir.z == 0) return;
+
+		Vector3 newVel = Vec3ScalarMultiply(Vec3ScalarMultiply(normalNewDir, (decay * collidingObject->rigidBody.mass) / 2), -1.0f);
+		collidingObject->rigidBody.velocity = newVel;
+	}
+
+	// if velocity is less than or equal to if its on the floor, stop
+	//if (Vec3Length(gameObject->rigidBody.velocity) <= 0.7f) return;
+
 
 	//gameObject->rigidBody.velocity = Vec3Multiply(gameObject->rigidBody.velocity, Vec3ScalarMultiply(normalNewDir, decay));
 	if (normalNewDir.x == 1.0f) gameObject->rigidBody.velocity.x *= decay;
 	if (normalNewDir.y == 1.0f) gameObject->rigidBody.velocity.y *= decay;
 	if (normalNewDir.z == 1.0f) gameObject->rigidBody.velocity.z *= decay;
 
-	// if velocity is less than or equal to if its on the floor, stop
-	if (Vec3Length(gameObject->rigidBody.velocity) <= 0.7f) return;
+
 
 }
 
@@ -474,7 +500,7 @@ void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameO
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
 		if (xCollision && yCollision && zCollision)
 		{
-			printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
+			//printf("%s is inside of %s\n", gameObject->name, gameObjectManager->gameObjects[checkgBox->gameObjectId]->name);
 
 			SphereResolution(fixedTime, gameObject, gameObjectManager->gameObjects[i]);
 			return;
@@ -512,14 +538,9 @@ void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
-	rigidBody->debug = false;
+	rigidBody->debug = true;
 	rigidBody->mass = 50.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
 	rigidBody->sphereBody = (SphereBody){ .isSphere = false, .radius = 0.0f };
-}
-
-void SimulateRigidBody(RigidBody* RigidBody)
-{
-
 }

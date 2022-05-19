@@ -170,16 +170,29 @@ Vector2 Vec2Rotate(Vector2 vec, float angle)
 
 Vector3 Vec3RotateX(Vector3 vec, float angle)
 {
-	return (Vector3) { vec.x, vec.y* cos(angle) - vec.z * sin(angle), vec.z* cos(angle) + vec.y * sin(angle) };
+	return (Vector3) { 
+		vec.x, 
+		vec.y * cos(angle) - vec.z * sin(angle), 
+		vec.z * cos(angle) + vec.y * sin(angle) 
+	};
 }
 
 Vector3 Vec3RotateY(Vector3 vec, float angle)
 {
-	return (Vector3) { vec.x * cos(angle) - vec.z * sin(angle), vec.y, vec.z* cos(angle) + vec.x * sin(angle) };
+	return (Vector3) { 
+		vec.x * cos(angle) + vec.z * sin(angle), 
+		vec.y, 
+		vec.z * cos(angle) - vec.x * sin(angle) 
+	};
 }
+
 Vector3 Vec3RotateZ(Vector3 vec, float angle)
 {
-	return (Vector3) { vec.x * cos(angle) - vec.y * sin(angle), vec.y* cos(angle) + vec.x * sin(angle), vec.z };
+	return (Vector3) { 
+		vec.x * cos(angle) - vec.y * sin(angle), 
+		vec.y * cos(angle) + vec.x * sin(angle), 
+		vec.z 
+	};
 }
 
 

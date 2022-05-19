@@ -28,7 +28,7 @@ const Vector3 planeVertexBuffer[] = {
 	{ -1.0f, 0.0f, 1.0f },
 	{ 1.0f,  0.0f, 1.0f },
 	{ 1.0f,  0.0f, -1.0f },
-};
+}; 
 
 //Cube Vertexes
 const Vector3 cubeVertexBuffer[] = {

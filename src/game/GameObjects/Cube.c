@@ -23,6 +23,8 @@ OnStart OnCubeStart(GameObject* gameObject)
 
 	gameObject->transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
+	gameObject->rigidBody.useGravity = true;
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)

@@ -195,7 +195,7 @@ OnStart OnWall13Start(GameObject* gameObject)
 	gameObject->mesh.colors = wall4ColorBuffer;
 
 	gameObject->transform.position = (Vector3){ 102.0f, 20.0f, 0.0f };
-	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
+	gameObject->transform.rotation = (Vector3){ 0.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
 
@@ -210,7 +210,7 @@ OnStart OnWall14Start(GameObject* gameObject)
 	gameObject->mesh.colors = wall4ColorBuffer;
 
 	gameObject->transform.position = (Vector3){ 88.0f, 20.0f, 0.0f };
-	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
+	gameObject->transform.rotation = (Vector3){ 0.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
 
