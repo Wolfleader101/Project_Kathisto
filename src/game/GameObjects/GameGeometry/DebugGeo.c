@@ -6,7 +6,7 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	////	CEILINGS
 	//////////////////////////////
 
-	/*GameObject* ceiling_1 = malloc(sizeof(GameObject));
+	GameObject* ceiling_1 = malloc(sizeof(GameObject));
 	InitGameObject(ceiling_1);
 	SetupCallbacks(ceiling_1, OnCeiling1Start, NULL, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, ceiling_1);
@@ -24,7 +24,7 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	GameObject* ceiling_4 = malloc(sizeof(GameObject));
 	InitGameObject(ceiling_4);
 	SetupCallbacks(ceiling_4, OnCeiling4Start, NULL, NULL, NULL);
-	GameObjectManagerAdd(gameObjectManager, ceiling_4);*/
+	GameObjectManagerAdd(gameObjectManager, ceiling_4);
 
 	//////////////////////////////
 	////	FLOORS
@@ -35,44 +35,44 @@ void BuildDebugGeo(GameObjectManager* gameObjectManager) //In charge of building
 	SetupCallbacks(floor_1, OnFloor1Start, NULL, NULL, NULL);
 	GameObjectManagerAdd(gameObjectManager, floor_1);
 
-	//GameObject* floor_2 = malloc(sizeof(GameObject));
-	//InitGameObject(floor_2);
-	//SetupCallbacks(floor_2, OnFloor2Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, floor_2);
+	GameObject* floor_2 = malloc(sizeof(GameObject));
+	InitGameObject(floor_2);
+	SetupCallbacks(floor_2, OnFloor2Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, floor_2);
 
-	//GameObject* floor_3 = malloc(sizeof(GameObject));
-	//InitGameObject(floor_3);
-	//SetupCallbacks(floor_3, OnFloor3Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, floor_3);
+	GameObject* floor_3 = malloc(sizeof(GameObject));
+	InitGameObject(floor_3);
+	SetupCallbacks(floor_3, OnFloor3Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, floor_3);
 
-	//GameObject* floor_4 = malloc(sizeof(GameObject));
-	//InitGameObject(floor_4);
-	//SetupCallbacks(floor_4, OnFloor4Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, floor_4);
+	GameObject* floor_4 = malloc(sizeof(GameObject));
+	InitGameObject(floor_4);
+	SetupCallbacks(floor_4, OnFloor4Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, floor_4);
 
 	//////////////////////////////
 	////	WALLS
 	//////////////////////////////
 
-	//GameObject* wall_1 = malloc(sizeof(GameObject));
-	//InitGameObject(wall_1);
-	//SetupCallbacks(wall_1, OnWall1Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, wall_1);
+	GameObject* wall_1 = malloc(sizeof(GameObject));
+	InitGameObject(wall_1);
+	SetupCallbacks(wall_1, OnWall1Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_1);
 
-	//GameObject* wall_2 = malloc(sizeof(GameObject));
-	//InitGameObject(wall_2);
-	//SetupCallbacks(wall_2, OnWall2Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, wall_2);
+	GameObject* wall_2 = malloc(sizeof(GameObject));
+	InitGameObject(wall_2);
+	SetupCallbacks(wall_2, OnWall2Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_2);
 
-	//GameObject* wall_3 = malloc(sizeof(GameObject));
-	//InitGameObject(wall_3);
-	//SetupCallbacks(wall_3, OnWall3Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, wall_3);
+	GameObject* wall_3 = malloc(sizeof(GameObject));
+	InitGameObject(wall_3);
+	SetupCallbacks(wall_3, OnWall3Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_3);
 
-	//GameObject* wall_4 = malloc(sizeof(GameObject));
-	//InitGameObject(wall_4);
-	//SetupCallbacks(wall_4, OnWall4Start, NULL, NULL, NULL);
-	//GameObjectManagerAdd(gameObjectManager, wall_4);
+	GameObject* wall_4 = malloc(sizeof(GameObject));
+	InitGameObject(wall_4);
+	SetupCallbacks(wall_4, OnWall4Start, NULL, NULL, NULL);
+	GameObjectManagerAdd(gameObjectManager, wall_4);
 
 	GameObject* wall_5 = malloc(sizeof(GameObject));
 	InitGameObject(wall_5);

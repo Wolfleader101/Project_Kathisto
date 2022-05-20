@@ -67,6 +67,10 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 	//if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
 	gameObjectManager->gameObjects[gameObjectManager->lastIndex]->OnStart(gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
 
+
+	// calculate bounding box
+	CalculateBoundingBox(gameObject);
+
 	gameObjectManager->freeSpace--;
 	gameObjectManager->lastIndex++;
 }
@@ -243,7 +247,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 		GravityTransform(fixedTime, gameObject);
 	}
 
-	CalculateBoundingBox(gameObject);
+	if(!gameObject->rigidBody.isStatic) CalculateBoundingBox(gameObject);
 	if (!gameObject->rigidBody.isStatic) DetectCollision(fixedTime, gameObjectManager, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
@@ -357,9 +361,10 @@ void CalculateBoundingBox(GameObject* gameObject)
 	Mesh* mesh = &gameObject->mesh;
 
 	Vector3 min = Vec3Multiply(transform->scale, mesh->points[0]);
-	min = Vec3RotateX(min, transform->rotation.x * PI / 180);
-	min = Vec3RotateY(min, transform->rotation.y * PI / 180);
 	min = Vec3RotateZ(min, transform->rotation.z * PI / 180);
+	min = Vec3RotateY(min, transform->rotation.y * PI / 180);
+	min = Vec3RotateX(min, transform->rotation.x * PI / 180);
+
 
 	min = Vec3Add(transform->position, min);
 
@@ -368,10 +373,10 @@ void CalculateBoundingBox(GameObject* gameObject)
 	for (size_t i = 0; i < mesh->pointSize; i++)
 	{
 		Vector3 pos = Vec3Multiply(transform->scale, mesh->points[i]);
-
-		pos = Vec3RotateX(pos, transform->rotation.x * PI / 180);
-		pos = Vec3RotateY(pos, transform->rotation.y * PI / 180);
 		pos = Vec3RotateZ(pos, transform->rotation.z * PI / 180);
+		pos = Vec3RotateY(pos, transform->rotation.y * PI / 180);
+		pos = Vec3RotateX(pos, transform->rotation.x * PI / 180);
+
 		pos = Vec3Add(transform->position, pos);
 
 		if (pos.x < min.x) min.x = pos.x;
@@ -538,7 +543,7 @@ void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
-	rigidBody->debug = true;
+	rigidBody->debug = false;
 	rigidBody->mass = 50.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
