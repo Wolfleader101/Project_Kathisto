@@ -9,6 +9,8 @@ set(GAME
    src/game/GameConstants.c
    src/game/Physics.h
    src/game/Physics.c
+   src/game/Rendering.h
+   src/game/Rendering.c
 
 
 
