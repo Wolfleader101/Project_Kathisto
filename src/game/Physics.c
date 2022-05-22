@@ -106,7 +106,7 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	float z = x / y;
 	float terminalVelocity = sqrt(z);
 
-	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
+	if (fabs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 }
 
 void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
@@ -124,21 +124,25 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collid
 		float uSlide = 0.32f;
 		float force = uSlide * normalForce;
 
-		if (abs(rigidBody->velocity.x) > 0.0f)
-		{
-			if (rigidBody->velocity.x > 0.0f)
-				rigidBody->velocity.x -= force * fixedTime.deltaTime;
-			else
-				rigidBody->velocity.x += force * fixedTime.deltaTime;
-		}
 
-		if (abs(rigidBody->velocity.z) > 0.0f)
+		if(rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
 		{
-			if (rigidBody->velocity.z > 0.0f)
-				rigidBody->velocity.z -= force * fixedTime.deltaTime;
-			else
-				rigidBody->velocity.z += force * fixedTime.deltaTime;
+			rigidBody->velocity.x = 0.0f;
 		}
+		else if (rigidBody->velocity.x > 0.0f)
+			rigidBody->velocity.x -= force * fixedTime.deltaTime;
+		else if (rigidBody->velocity.x < 0.0f)
+			rigidBody->velocity.x += force * fixedTime.deltaTime;
+
+		if (rigidBody->velocity.z >= -0.1f && rigidBody->velocity.z <= 0.1f)
+		{
+			rigidBody->velocity.z = 0.0f;
+		}
+		else if (rigidBody->velocity.z > 0.0f)
+			rigidBody->velocity.z -= force * fixedTime.deltaTime;
+		else if (rigidBody->velocity.z < 0.0f)
+			rigidBody->velocity.z += force * fixedTime.deltaTime;
+
 
 		return;
 	}
@@ -150,26 +154,25 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collid
 	float cubeHeight = rigidBody->boundingBox.maxPos.y - rigidBody->boundingBox.minPos.y;
 	float area = cubeWidth * cubeHeight;
 
-	float drag = 0.5f;
-	if (abs(rigidBody->velocity.x) > 0.0f)
+	float xdrag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
+	float zdrag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.z * area * coefficentDrag;
+
+
+	if (rigidBody->velocity.x == 0.0f)
 	{
-		drag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
-
-		if (rigidBody->velocity.x > 0.0f)
-			rigidBody->velocity.x -= drag * fixedTime.deltaTime;
-		else
-			rigidBody->velocity.x += drag * fixedTime.deltaTime;
 	}
+	else if (rigidBody->velocity.x > 0.0f)
+		rigidBody->velocity.x -= xdrag * fixedTime.deltaTime;
+	else if (rigidBody->velocity.x < 0.0f)
+		rigidBody->velocity.x += xdrag * fixedTime.deltaTime;
 
-	if (abs(rigidBody->velocity.z) > 0.0f)
+	if (rigidBody->velocity.z == 0.0f)
 	{
-		drag = 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.z * gameObject->rigidBody.velocity.z) * area * coefficentDrag;
-		if (rigidBody->velocity.z > 0.0f)
-			rigidBody->velocity.z -= drag * fixedTime.deltaTime;
-		else
-			rigidBody->velocity.z += drag * fixedTime.deltaTime;
-
 	}
+	else if (rigidBody->velocity.z > 0.0f)
+		rigidBody->velocity.z -= zdrag * fixedTime.deltaTime;
+	else if (rigidBody->velocity.z < 0.0f)
+		rigidBody->velocity.z += zdrag * fixedTime.deltaTime;
 
 }
 
