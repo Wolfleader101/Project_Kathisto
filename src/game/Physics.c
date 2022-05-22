@@ -113,40 +113,12 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collid
 {
 	RigidBody* rigidBody = &gameObject->rigidBody;
 
-	// DRAG
-	float coefficentDrag = 1.05;
-
-	float cubeWidth = rigidBody->boundingBox.maxPos.x - rigidBody->boundingBox.minPos.x;
-	float cubeHeight = rigidBody->boundingBox.maxPos.y - rigidBody->boundingBox.minPos.y;
-	float area = cubeWidth * cubeHeight;
-
-	float drag = 0.5f;
-	if (abs(rigidBody->velocity.x) > 0.0f)
-	{
-		drag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
-
-		if(rigidBody->velocity.x > 0.0f)
-			rigidBody->velocity.x -= drag * fixedTime.deltaTime;
-		else
-			rigidBody->velocity.x += drag * fixedTime.deltaTime;
-	}
-
-	if (abs(rigidBody->velocity.z) > 0.0f)
-	{
-		drag = 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.z * gameObject->rigidBody.velocity.z) * area * coefficentDrag;
-		if(rigidBody->velocity.z > 0.0f)
-			rigidBody->velocity.z -= drag * fixedTime.deltaTime;
-		else
-			rigidBody->velocity.z += drag * fixedTime.deltaTime;
-
-	}
-
-	// friction
+	// ground friction
 	if (rigidBody->onGround && collidingObject != NULL)
 	{
 		//https://sciencing.com/calculate-force-friction-6454395.html
 		//https://www.omnicalculator.com/physics/friction
-		
+
 		float normalForce = rigidBody->mass * G_ACCELERATION * cos(collidingObject->transform.rotation.z);
 		// static coefficent of wood is 0.6 but wood sliding is .32
 		float uSlide = 0.32f;
@@ -154,7 +126,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collid
 
 		if (abs(rigidBody->velocity.x) > 0.0f)
 		{
-			if(rigidBody->velocity.x > 0.0f)
+			if (rigidBody->velocity.x > 0.0f)
 				rigidBody->velocity.x -= force * fixedTime.deltaTime;
 			else
 				rigidBody->velocity.x += force * fixedTime.deltaTime;
@@ -167,7 +139,38 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collid
 			else
 				rigidBody->velocity.z += force * fixedTime.deltaTime;
 		}
+
+		return;
 	}
+
+	// Air DRAG
+	float coefficentDrag = 1.05;
+
+	float cubeWidth = rigidBody->boundingBox.maxPos.x - rigidBody->boundingBox.minPos.x;
+	float cubeHeight = rigidBody->boundingBox.maxPos.y - rigidBody->boundingBox.minPos.y;
+	float area = cubeWidth * cubeHeight;
+
+	float drag = 0.5f;
+	if (abs(rigidBody->velocity.x) > 0.0f)
+	{
+		drag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
+
+		if (rigidBody->velocity.x > 0.0f)
+			rigidBody->velocity.x -= drag * fixedTime.deltaTime;
+		else
+			rigidBody->velocity.x += drag * fixedTime.deltaTime;
+	}
+
+	if (abs(rigidBody->velocity.z) > 0.0f)
+	{
+		drag = 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.z * gameObject->rigidBody.velocity.z) * area * coefficentDrag;
+		if (rigidBody->velocity.z > 0.0f)
+			rigidBody->velocity.z -= drag * fixedTime.deltaTime;
+		else
+			rigidBody->velocity.z += drag * fixedTime.deltaTime;
+
+	}
+
 }
 
 void CalculateBoundingBox(GameObject* gameObject)
@@ -286,7 +289,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 	}
 	else
 	{
- 		normal = Vec3Normalize(collidingObject->transform.position);
+		normal = Vec3Normalize(collidingObject->transform.position);
 		gameObject->rigidBody.onGround = false;
 
 	}
