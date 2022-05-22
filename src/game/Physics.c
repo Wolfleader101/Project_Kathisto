@@ -13,7 +13,6 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->sphereBody = (SphereBody){ .isSphere = false, .radius = 0.0f };
 }
 
-
 void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
@@ -24,38 +23,36 @@ void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager
 
 void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
+	// if the game object is static, it should not have physics
+	if (gameObject->rigidBody.isStatic) return;
+
 	// push a matrix so u dont modify the root matrix
 	glPushMatrix();
 
 	//Check for gravity enabled
-	if (gameObject->rigidBody.useGravity && !gameObject->rigidBody.isStatic)
+	if (gameObject->rigidBody.useGravity)
 	{
 		//Apply gravity transformation
 		GravityTransform(fixedTime, gameObject);
 	}
 
-	if (!gameObject->rigidBody.isStatic) CalculateBoundingBox(gameObject);
-	if (!gameObject->rigidBody.isStatic) DetectCollision(fixedTime, gameObjectManager, gameObject);
+	// apply friction and drag
+	PhysicsTransform(fixedTime, &gameObject->rigidBody);
+
+	GameObject* collidingObject = IsColliding(gameObjectManager, gameObject);
+	// @Charlie On Collision should be here
+	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
+	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
+	if (collidingObject != NULL) CollisionResolution(fixedTime, gameObject, collidingObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
-
-	float coefficentDrag = 1.05;
-
-	float cubeWidth = gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x;
-	float cubeHeight = gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y;
-	float area = cubeWidth * cubeHeight;
-
-	float drag = 5.0f;// 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.x * gameObject->rigidBody.velocity.x) * area * coefficentDrag;
-
-	if (abs(gameObject->rigidBody.velocity.x) > 0.0f)
-		gameObject->rigidBody.velocity.x -= drag * fixedTime.deltaTime;
-
-	if (abs(gameObject->rigidBody.velocity.z) > 0.0f)
-		gameObject->rigidBody.velocity.z -= drag * fixedTime.deltaTime;
 
 	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
 	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
+
+	// calculate the bounding box after transformations have been done so it doesn't sink into the ground
+	CalculateBoundingBox(gameObject);
 
 	glPopMatrix();
 }
@@ -110,6 +107,25 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 }
 
+void PhysicsTransform(Time fixedTime, RigidBody* rigidBody)
+{
+
+	// DRAG
+	float coefficentDrag = 1.05;
+
+	float cubeWidth = rigidBody->boundingBox.maxPos.x - rigidBody->boundingBox.minPos.x;
+	float cubeHeight = rigidBody->boundingBox.maxPos.y - rigidBody->boundingBox.minPos.y;
+	float area = cubeWidth * cubeHeight;
+
+	float drag = 5.0f;// 0.5f * AIR_DENSITY * (gameObject->rigidBody.velocity.x * gameObject->rigidBody.velocity.x) * area * coefficentDrag;
+
+	if (abs(rigidBody->velocity.x) > 0.0f)
+		rigidBody->velocity.x -= drag * fixedTime.deltaTime;
+
+	if (abs(rigidBody->velocity.z) > 0.0f)
+		rigidBody->velocity.z -= drag * fixedTime.deltaTime;
+}
+
 void CalculateBoundingBox(GameObject* gameObject)
 {
 	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
@@ -143,7 +159,79 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
+GameObject* IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject)
+{
+	if (gameObject->rigidBody.sphereBody.isSphere)
+	{
+		return SphereCollision(gameObjectManager, gameObject);
+	}
+
+	return BoxCollision(gameObjectManager, gameObject);
+}
+
+GameObject* SphereCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+{
+	float radius = gameObject->rigidBody.sphereBody.radius;
+
+	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
+	{
+		if (gameObject->rigidBody.sphereBody.isSphere)
+		{
+			double dx = pow((double)gameObject->transform.position.x - gameObjectManager->gameObjects[i]->transform.position.x, 2);
+			double dy = pow((double)gameObject->transform.position.y - gameObjectManager->gameObjects[i]->transform.position.y, 2);
+			double dz = pow((double)gameObject->transform.position.z - gameObjectManager->gameObjects[i]->transform.position.z, 2);
+			float distance = sqrt(dx + dy + dz);
+			float radii = gameObject->rigidBody.sphereBody.radius
+				+ gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
+			if (distance <= radii)
+			{
+				return gameObjectManager->gameObjects[i];
+			}
+		}
+		// do plane collision detection
+		else
+		{
+			BoudingBox* box = &gameObjectManager->boundingBoxes[i];
+			float cx = fmaxf(box->minPos.x, fminf(gameObject->transform.position.x, box->maxPos.x));
+			float cy = fmaxf(box->minPos.y, fminf(gameObject->transform.position.y, box->maxPos.y));
+			float cz = fmaxf(box->minPos.z, fminf(gameObject->transform.position.z, box->maxPos.z));
+
+			double px = pow((double)cx - gameObject->transform.position.x, 2);
+			double py = pow((double)cy - gameObject->transform.position.y, 2);
+			double pz = pow((double)cz - gameObject->transform.position.z, 2);
+			float distance = sqrt(px + py + pz);
+
+			if (distance < gameObject->rigidBody.sphereBody.radius)
+			{
+				return gameObjectManager->gameObjects[i];
+			}
+		}
+	}
+
+	return NULL;
+}
+
+GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+{
+	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
+	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
+	{
+		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
+
+		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
+		bool xCollision = objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x;
+		bool yCollision = objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y;
+		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
+		if (xCollision && yCollision && zCollision)
+		{
+			return gameObjectManager->gameObjects[i];
+		}
+	}
+
+	return NULL;
+}
+
+void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
 {
 	Vector3 normal;
 	// assuming that a vector of 0,0,0 is the floor...
@@ -200,67 +288,4 @@ void SphereResolution(Time fixedTime, GameObject* gameObject, GameObject* collid
 	if (normalNewDir.z == 1.0f) gameObject->rigidBody.velocity.z *= decay;
 
 
-
-}
-
-// TODO in code cleanup
-void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
-{
-	if (gameObject->rigidBody.sphereBody.isSphere)
-	{
-		float radius = gameObject->rigidBody.sphereBody.radius;
-
-		for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
-		{
-			if (gameObject->rigidBody.sphereBody.isSphere)
-			{
-				double dx = pow((double)gameObject->transform.position.x - gameObjectManager->gameObjects[i]->transform.position.x, 2);
-				double dy = pow((double)gameObject->transform.position.y - gameObjectManager->gameObjects[i]->transform.position.y, 2);
-				double dz = pow((double)gameObject->transform.position.z - gameObjectManager->gameObjects[i]->transform.position.z, 2);
-				float distance = sqrt(dx + dy + dz);
-				float radii = gameObject->rigidBody.sphereBody.radius
-					+ gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
-				if (distance <= radii)
-				{
-					//SphereResolution(fixedTime, gameObject);
-				}
-			}
-			else
-			{
-				BoudingBox* box = &gameObjectManager->boundingBoxes[i];
-				// do plane collision detection
-				float cx = fmaxf(box->minPos.x, fminf(gameObject->transform.position.x, box->maxPos.x));
-				float cy = fmaxf(box->minPos.y, fminf(gameObject->transform.position.y, box->maxPos.y));
-				float cz = fmaxf(box->minPos.z, fminf(gameObject->transform.position.z, box->maxPos.z));
-
-				double px = pow((double)cx - gameObject->transform.position.x, 2);
-				double py = pow((double)cy - gameObject->transform.position.y, 2);
-				double pz = pow((double)cz - gameObject->transform.position.z, 2);
-				float distance = sqrt(px + py + pz);
-
-				if (distance < gameObject->rigidBody.sphereBody.radius)
-				{
-					// colliding with
-					SphereResolution(fixedTime, gameObject, box);
-					return;
-				}
-			}
-		}
-	}
-
-	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
-	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
-	{
-		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
-
-		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
-		bool xCollision = objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x;
-		bool yCollision = objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y;
-		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
-		if (xCollision && yCollision && zCollision)
-		{
-			SphereResolution(fixedTime, gameObject, gameObjectManager->gameObjects[i]);
-			return;
-		}
-	}
 }
