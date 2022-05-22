@@ -1,7 +1,6 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <math.h>
 
 typedef struct Vector2
@@ -40,6 +39,9 @@ typedef struct Vector3Int
 
 Vector2 EmptyVec2();
 Vector3 EmptyVec3();
+
+bool isVec2Empty(Vector2 vec);
+bool isVec3Empty(Vector3 vec);
 
 Vector2 ArrayToVec2(const float arr[2]);
 Vector3 ArrayToVec3(const float arr[3]);

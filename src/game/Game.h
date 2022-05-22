@@ -1,26 +1,11 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <GL/freeglut.h>
 
+#include "game/GameIncludes.h"
 #include "game/GameTypes.h"
 #include "game/GameConstants.h"
-#include "math/Vector.h"
-#include "math/mathUtils.h"
 
 
-// game manager struct??
-// contains all managers, e.g game object manager etc
-// not needed for this unit tbh
-
-void InitGameObjectManager(GameObjectManager* gameObjectManager);
-void GameObjectManagerIncrease(GameObjectManager* gameObjectManager);
-void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* GameObject);
-void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
-GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager);
 void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager);
 
@@ -43,5 +28,3 @@ void DrawBoundingBox(BoudingBox box);
 
 void CalculateBoundingBox(GameObject* gameObject);
 void DetectCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);
-
-void SimulateRigidBody(RigidBody* RigidBody); // simulate rigid body

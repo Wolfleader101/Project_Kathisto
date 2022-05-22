@@ -10,6 +10,16 @@ Vector3 EmptyVec3(){
 	return (Vector3){0.0f, 0.0f, 0.0f};
 }
 
+bool isVec2Empty(Vector2 vec)
+{
+	return vec.x == 0 && vec.y == 0;
+}
+
+bool isVec3Empty(Vector3 vec)
+{
+	return vec.x == 0 && vec.y == 0 && vec.z == 0;
+}
+
 Vector2 ArrayToVec2(const float arr[2])
 {
 	return (Vector2) { arr[0], arr[1] };

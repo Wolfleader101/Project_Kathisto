@@ -1,7 +1,6 @@
 #pragma once
 
-#include <stdbool.h>
-#include "math/Vector.h"
+#include "GameIncludes.h"
 
 
 typedef struct Time
@@ -48,6 +47,7 @@ typedef struct SphereBody
 typedef struct RigidBody
 {
 	bool isStatic;
+	bool isFloor;
 	bool useGravity;
 	float mass;
 	Vector3 velocity;
@@ -79,6 +79,9 @@ struct GameObject
 	OnFixedUpdate OnFixedUpdate;
 };
 
+/**
+ * @brief GameObjectManager struct which contains an array of gameobject pointers, and bounding boxes
+*/
 typedef struct GameObjectManager
 {
 	GameObject** gameObjects;
@@ -88,13 +91,3 @@ typedef struct GameObjectManager
 	size_t lastIndex;
 	size_t freeSpace;
 } GameObjectManager;
-
-typedef enum
-{
-	UP = 1 << 0,
-	DOWN = 1 << 1,
-	LEFT = 1 << 2,
-	RIGHT = 1 << 3,
-	FORWARD = 1 << 4,
-	BACK = 1 << 5
-} CollisionDir;

@@ -10,9 +10,10 @@ OnStart OnFloor1Start(GameObject* gameObject)
 
 	gameObject->mesh.colors = floor1ColorBuffer;
 
-	gameObject->transform.position = (Vector3){ 0.0, 1.0f, 0.0f };
+	gameObject->transform.position = (Vector3){ 0.0, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 60.0f };
 	gameObject->rigidBody.isStatic = true;
+	gameObject->rigidBody.isFloor = true;
 }
 
 OnStart OnFloor2Start(GameObject* gameObject)
@@ -25,6 +26,7 @@ OnStart OnFloor2Start(GameObject* gameObject)
 	gameObject->transform.position = (Vector3){ 190.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 60.0f };
 	gameObject->rigidBody.isStatic = true;
+	gameObject->rigidBody.isFloor = true;
 }
 
 OnStart OnFloor3Start(GameObject* gameObject)
@@ -37,6 +39,7 @@ OnStart OnFloor3Start(GameObject* gameObject)
 	gameObject->transform.position = (Vector3){ 95.0f, 0.0f, 35.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 15.0f };
 	gameObject->rigidBody.isStatic = true;
+	gameObject->rigidBody.isFloor = true;
 }
 
 OnStart OnFloor4Start(GameObject* gameObject)
@@ -49,4 +52,5 @@ OnStart OnFloor4Start(GameObject* gameObject)
 	gameObject->transform.position = (Vector3){ 95.0f, 0.0f, -35.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 15.0f };
 	gameObject->rigidBody.isStatic = true;
+	gameObject->rigidBody.isFloor = true;
 }
