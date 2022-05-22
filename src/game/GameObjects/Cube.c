@@ -20,6 +20,7 @@ OnStart OnCubeStart(GameObject* gameObject)
 	gameObject->mesh = cubeMeshCustColours;
 
 	gameObject->mesh.colors = cubeColorBuffer;
+	gameObject->mesh.isUniformColor = true;
 
 	gameObject->transform.position = (Vector3){ 5.0f, 10.0f, -5.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
