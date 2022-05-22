@@ -304,10 +304,14 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 
 	gameObject->rigidBody.velocity = newDir;
 
-	Vector3 normalNewDir = Vec3Normalize(newDir);
-
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
+
+	Vector3 normalNewDir = Vec3Normalize(newDir);
+
+	//look into on ground collision??
+	//float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
+	//if (normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
 
 	// if colliding game object is static or on ground, do not move it
 	if (!collidingObject->rigidBody.isStatic && !collidingObject->rigidBody.onGround)
