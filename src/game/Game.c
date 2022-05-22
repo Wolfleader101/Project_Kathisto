@@ -1,13 +1,5 @@
 #include "Game.h"
 
-void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
-{
-	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
-	{
-		UpdateGameObject(time, gameObjectManager->gameObjects[i]);
-	}
-}
-
 void InitGameObject(GameObject* gameObject)
 {
 	gameObject->id = 0;
@@ -21,12 +13,33 @@ void InitGameObject(GameObject* gameObject)
 	gameObject->OnFixedUpdate = NULL;
 }
 
+void InitTransform(Transform* transform)
+{
+	transform->position = EmptyVec3();
+	transform->rotation = EmptyVec3();
+	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
+}
+
 void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate)
 {
 	gameObject->OnStart = OnStart;
 	gameObject->OnUpdate = OnUpdate;
 	gameObject->OnLateUpdate = OnLateUpdate;
 	gameObject->OnFixedUpdate = OnFixedUpdate;
+}
+
+void FreeGameObject(GameObject* gameObject)
+{
+	free(gameObject);
+	gameObject = NULL;
+}
+
+void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
+{
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+	{
+		UpdateGameObject(time, gameObjectManager->gameObjects[i]);
+	}
 }
 
 void UpdateGameObject(Time time, GameObject* gameObject)
@@ -66,29 +79,4 @@ void UpdateTransform(Time time, Transform* transform)
 	glRotatef(rot->z, 0.0f, 0.0f, 1.0f);
 
 	glScalef(scale->x, scale->y, scale->z);
-}
-
-void FreeGameObject(GameObject* gameObject)
-{
-	//free(gameObject->name);
-	free(gameObject);
-	gameObject = NULL;
-}
-
-void InitTransform(Transform* transform)
-{
-	transform->position = EmptyVec3();
-	transform->rotation = EmptyVec3();
-	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
-}
-
-void InitMesh(Mesh* mesh)
-{
-	mesh->points = NULL;
-	mesh->indices = NULL;
-	mesh->indexCount = 0;
-	mesh->colors = NULL;
-	mesh->isUniformColor = false;
-	mesh->debug = false;
-	mesh->disableMesh = false;
 }

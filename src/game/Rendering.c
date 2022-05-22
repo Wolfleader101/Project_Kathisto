@@ -1,5 +1,17 @@
 #include "Rendering.h"
 
+void InitMesh(Mesh* mesh)
+{
+	mesh->points = NULL;
+	mesh->pointSize = 0;
+	mesh->indices = NULL;
+	mesh->indexCount = 0;
+	mesh->colors = NULL;
+	mesh->isUniformColor = false;
+	mesh->debug = false;
+	mesh->disableMesh = false;
+}
+
 void DrawMesh(Time time, Mesh* mesh)
 {
 	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);

@@ -2,7 +2,6 @@
 
 #include "GameIncludes.h"
 
-
 typedef struct Time
 {
 	float currTime;
