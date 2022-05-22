@@ -1,6 +1,5 @@
 #include "Physics.h"
 
-
 void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
