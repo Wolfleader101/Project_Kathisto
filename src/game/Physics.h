@@ -9,7 +9,7 @@ void InitRigidBody(RigidBody* RigidBody);
 void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager);
 void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject); // caled for physics update
 void GravityTransform(Time fixedTime, GameObject* gameObject);
-void PhysicsTransform(Time fixedTime, RigidBody* rigidBody);
+void PhysicsTransform(Time fixedTime, GameObject* gameObject);
 void CalculateBoundingBox(GameObject* gameObject);
 
 GameObject* IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject);

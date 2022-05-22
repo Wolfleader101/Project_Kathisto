@@ -47,6 +47,7 @@ typedef struct RigidBody
 {
 	bool isStatic;
 	bool isFloor;
+	bool onGround;
 	bool useGravity;
 	float mass;
 	Vector3 velocity;

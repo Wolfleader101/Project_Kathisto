@@ -4,6 +4,7 @@ void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
 	rigidBody->isFloor = false;
+	rigidBody->onGround = false;
 	rigidBody->useGravity = false;
 	rigidBody->debug = false;
 	rigidBody->mass = 50.0f;
@@ -35,14 +36,16 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 		GravityTransform(fixedTime, gameObject);
 	}
 
-	// apply friction and drag
-	PhysicsTransform(fixedTime, &gameObject->rigidBody);
-
 	GameObject* collidingObject = IsColliding(gameObjectManager, gameObject);
 	// @Charlie On Collision should be here
 	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
 	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
 	if (collidingObject != NULL) CollisionResolution(fixedTime, gameObject, collidingObject);
+
+	if (collidingObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
+
+	// apply friction and drag
+	PhysicsTransform(fixedTime, gameObject);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -106,8 +109,9 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	if (abs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 }
 
-void PhysicsTransform(Time fixedTime, RigidBody* rigidBody)
+void PhysicsTransform(Time fixedTime, GameObject* gameObject)
 {
+	RigidBody* rigidBody = &gameObject->rigidBody;
 
 	// DRAG
 	float coefficentDrag = 1.05;
@@ -123,6 +127,23 @@ void PhysicsTransform(Time fixedTime, RigidBody* rigidBody)
 
 	if (abs(rigidBody->velocity.z) > 0.0f)
 		rigidBody->velocity.z -= drag * fixedTime.deltaTime;
+
+
+	if (rigidBody->onGround)
+	{
+		//https://sciencing.com/calculate-force-friction-6454395.html
+		
+		float normalForce = rigidBody->mass * G_ACCELERATION * cos(gameObject->transform.rotation.y);
+		// static coefficent of wood is 0.6 but wood sliding is .32
+		float uSlide = 0.32f;
+		float force = uSlide * normalForce;
+
+		if (abs(rigidBody->velocity.x) > 0.0f)
+			rigidBody->velocity.x -= force * fixedTime.deltaTime;
+
+		if (abs(rigidBody->velocity.z) > 0.0f)
+			rigidBody->velocity.z -= force * fixedTime.deltaTime;
+	}
 }
 
 void CalculateBoundingBox(GameObject* gameObject)
@@ -237,10 +258,12 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 	if (isVec3Empty(collidingObject->transform.position) || collidingObject->rigidBody.isFloor)
 	{
 		normal = (Vector3){ 0.0f, 1.0f, 0.0f };
+		gameObject->rigidBody.onGround = true;
 	}
 	else
 	{
 		normal = Vec3Normalize(collidingObject->transform.position);
+		gameObject->rigidBody.onGround = false;
 	}
 
 
@@ -265,14 +288,11 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-	if (!collidingObject->rigidBody.isStatic)
+	if (!collidingObject->rigidBody.isStatic && !collidingObject->rigidBody.onGround)
 	{
-
 		if (normalNewDir.x == 1.0f) collidingObject->transform.position.x = gameObject->rigidBody.boundingBox.maxPos.x + (leftAmount / 2);
 		if (normalNewDir.y == 1.0f) collidingObject->transform.position.y = gameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
 		if (normalNewDir.z == 1.0f) collidingObject->transform.position.z = gameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
-
-
 
 		// transfer a % of the decay to the gameobject
 		// .25( decay) * mass / 2 = veloicty
