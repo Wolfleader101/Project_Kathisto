@@ -105,14 +105,14 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 		// free the last object
 		if (i == gameObjectManager->lastIndex - 1)
 		{
-			gameObjectManager->gameObjects[i - 1];
 			gameObjectManager->gameObjects[i] = NULL;
+			gameObjectManager->boundingBoxes[i] = NULL;
 		}
 	}
 
 	gameObjectManager->boundingBoxes[id] = NULL;
 
-	gameObjectManager->count--;
+	//gameObjectManager->count--;
 	gameObjectManager->freeSpace++;
 	gameObjectManager->lastIndex--;
 }

@@ -258,6 +258,10 @@ GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameO
 	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
 	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
 	{
+		if (gameObjectManager->boundingBoxes[i] == NULL)
+		{
+			gameObjectManager->boundingBoxes[i] = &gameObjectManager->gameObjects[i]->rigidBody;
+		}
 		if (gameObjectManager->boundingBoxes[i]->gameObjectId == gameObject->id) continue;
 
 		BoudingBox* checkgBox = gameObjectManager->boundingBoxes[i];
