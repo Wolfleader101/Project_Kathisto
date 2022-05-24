@@ -1,14 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <GL/freeglut.h>
-
-#include "math/mathUtils.h" //Includes Math Utilities for Calculations and Constants
-#include "math/Vector.h" //Includes definitions for Vectors
-#include "game/GameConstants.h" //Includes constant variables that are used across the game
-#include "math/mathUtils.h" //Includes custom maths utilities
-
+#include "game/GameIncludes.h"
+#include "game/GameObjectManager.h"
 #include "game/Game.h" //Includes the Game Object struct so I can access the player object
 
 #include "window/Events.h" //Includes Mouse Movements
@@ -17,6 +10,7 @@
 /////////	VARIABLES
 ///////////////////////////////////////////
 
+extern GameObject* playerObject; //The object for the player
 extern Vector3 camFocusPoint; //The point which the camera will focus on
 extern float camFocusRadius; //Relaxes the view of the focus point by a set amount
 
