@@ -90,7 +90,7 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->rigidBody.useGravity = true;
 	gameObject->rigidBody.isStatic = false;
 
-	gameObject->transform.position = (Vector3){0.0f, 1.0f, 0.0f}; //Sets initial position (Transform) of mesh
+	gameObject->transform.position = (Vector3){0.0f, 4.0f, 0.0f}; //Sets initial position (Transform) of mesh
 	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
 }
 
