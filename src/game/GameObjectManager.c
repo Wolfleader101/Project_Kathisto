@@ -86,11 +86,14 @@ When a GameObject is removed:
  */
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
-	FreeGameObject(gameObjectManager->gameObjects[id]);
 	if (gameObjectManager->gameObjects[id] == NULL) return;
-	for (size_t i = id + 1; i < gameObjectManager->count; i++)
+
+	FreeGameObject(gameObjectManager->gameObjects[id]);
+
+	for (size_t i = id + 1; i < gameObjectManager->lastIndex; i++)
 	{
 		// move the game object pointers
+		// this is just copying the pointer -- need to do a deep copy!!!!
 		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
 		gameObjectManager->gameObjects[i - 1]->id = i - 1;
 
@@ -100,9 +103,14 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 		gameObjectManager->boundingBoxes[i - 1]->gameObjectId = i - 1;
 
 		// free the last object
-		if (i == gameObjectManager->count - 1)
-			FreeGameObject(gameObjectManager->gameObjects[i]);
+		if (i == gameObjectManager->lastIndex - 1)
+		{
+			gameObjectManager->gameObjects[i - 1];
+			gameObjectManager->gameObjects[i] = NULL;
+		}
 	}
+
+	gameObjectManager->boundingBoxes[id] = NULL;
 
 	gameObjectManager->count--;
 	gameObjectManager->freeSpace++;

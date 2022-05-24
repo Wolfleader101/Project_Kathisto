@@ -13,14 +13,6 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->sphereBody = (SphereBody){ .isSphere = false, .radius = 0.0f };
 }
 
-void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager)
-{
-	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
-	{
-		FixedUpdateGameObject(fixedTime, gameObjectManager, gameObjectManager->gameObjects[i]);
-	}
-}
-
 void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	// if the game object is static, it should not have physics

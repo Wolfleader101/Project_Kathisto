@@ -2,6 +2,7 @@
 
 #include "game/GameIncludes.h"
 #include "game/GameTypes.h"
+#include "game/GameObject.h"
 
 // TODO REWRITE GAME OBJECT MANAGER TO LINKED LIST
 void InitGameObjectManager(GameObjectManager* gameObjectManager);

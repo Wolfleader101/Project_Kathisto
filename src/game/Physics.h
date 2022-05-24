@@ -6,7 +6,6 @@
 
 
 void InitRigidBody(RigidBody* RigidBody);
-void FixedUpdateGameObjects(Time fixedTime, GameObjectManager* gameObjectManager);
 void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject); // caled for physics update
 void GravityTransform(Time fixedTime, GameObject* gameObject);
 void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collidingObject);
