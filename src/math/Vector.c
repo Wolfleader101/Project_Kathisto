@@ -18,6 +18,7 @@ bool isVec2Empty(Vector2 vec)
 bool isVec3Empty(Vector3 vec)
 {
 	return vec.x == 0 && vec.y == 0 && vec.z == 0;
+}
 
 Quaternion EmptyQuaternion() 
 {
