@@ -11,7 +11,7 @@
 void InitGameObject(GameObject* gameObject); // initialise the game object
 void InitTransform(Transform* transform);
 
-void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate); // setup the callbacks
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate, OnCollision OnCollision); // setup the callbacks
 void FreeGameObject(GameObject* gameObject); // free the game object
 
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager);

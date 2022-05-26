@@ -40,8 +40,8 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	// @Charlie On Collision should be here
 	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
 	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
-	if (collidingObject != NULL) CollisionResolution(fixedTime, gameObject, collidingObject);
-
+	if (collidingObject != NULL && !gameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collidingObject);
+	if (collidingObject != NULL && gameObject->OnCollision && collidingObject->OnCollision) gameObject->OnCollision(fixedTime, gameObject, collidingObject);
 	if (collidingObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
 	// apply friction and drag

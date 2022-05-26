@@ -49,6 +49,7 @@ typedef struct RigidBody
 	bool isFloor;
 	bool onGround;
 	bool useGravity;
+	bool isTrigger;
 	float mass;
 	Vector3 velocity;
 
@@ -63,6 +64,7 @@ typedef void (*OnStart)(GameObject*);
 typedef void (*OnUpdate)(Time, GameObject*);
 typedef void (*OnLateUpdate)(Time, GameObject*);
 typedef void (*OnFixedUpdate)(Time, GameObject*);
+typedef void (*OnCollision)(Time, GameObject*, GameObject*);
 
 struct GameObject
 {
@@ -77,6 +79,7 @@ struct GameObject
 	OnUpdate OnUpdate;
 	OnLateUpdate OnLateUpdate;
 	OnFixedUpdate OnFixedUpdate;
+	OnCollision OnCollision;
 };
 
 /**

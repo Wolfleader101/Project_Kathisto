@@ -11,6 +11,8 @@ void InitGameObject(GameObject* gameObject)
 	gameObject->OnStart = NULL;
 	gameObject->OnUpdate = NULL;
 	gameObject->OnFixedUpdate = NULL;
+	gameObject->OnCollision = NULL;
+	gameObject->rigidBody.isTrigger = false;
 }
 
 void InitTransform(Transform* transform)
@@ -20,12 +22,13 @@ void InitTransform(Transform* transform)
 	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 }
 
-void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate)
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate, OnCollision OnCollision)
 {
 	gameObject->OnStart = OnStart;
 	gameObject->OnUpdate = OnUpdate;
 	gameObject->OnLateUpdate = OnLateUpdate;
 	gameObject->OnFixedUpdate = OnFixedUpdate;
+	gameObject->OnCollision = OnCollision;
 }
 
 void FreeGameObject(GameObject* gameObject)

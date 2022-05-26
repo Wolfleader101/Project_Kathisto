@@ -160,3 +160,7 @@ OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
 	gameObject->transform.position.x += displacement.x;
 	gameObject->transform.position.z += displacement.z;
 }
+
+OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject) //Updates every frame
+{
+}
