@@ -94,10 +94,16 @@ typedef struct GameObjectManager
 
 typedef enum
 {
-	UP = 1 << 0,
-	DOWN = 1 << 1,
-	LEFT = 1 << 2,
-	RIGHT = 1 << 3,
-	FORWARD = 1 << 4,
-	BACK = 1 << 5
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	FORWARD,
+	BACK,
 } CollisionDir;
+
+typedef struct CollisionData
+{
+	GameObject* collidingGameObject;
+	CollisionDir collidingFace;
+} CollisionData;

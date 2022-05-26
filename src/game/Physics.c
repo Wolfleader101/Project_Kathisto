@@ -28,16 +28,16 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 		GravityTransform(fixedTime, gameObject);
 	}
 
-	GameObject* collidingObject = IsColliding(gameObjectManager, gameObject);
+	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
 	// @Charlie On Collision should be here
 	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
 	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
-	if (collidingObject != NULL) CollisionResolution(fixedTime, gameObject, collidingObject);
+	if (collisionData.collidingGameObject != NULL) CollisionResolution(fixedTime, gameObject, collisionData);
 
-	if (collidingObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
+	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
 	// apply friction and drag
-	PhysicsTransform(fixedTime, gameObject, collidingObject);
+	PhysicsTransform(fixedTime, gameObject, collisionData);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -101,17 +101,17 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	if (fabs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
 }
 
-void PhysicsTransform(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
+void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
 	RigidBody* rigidBody = &gameObject->rigidBody;
 
 	// ground friction
-	if (rigidBody->onGround && collidingObject != NULL)
+	if (rigidBody->onGround && collisionData.collidingGameObject != NULL)
 	{
 		//https://sciencing.com/calculate-force-friction-6454395.html
 		//https://www.omnicalculator.com/physics/friction
 
-		float normalForce = rigidBody->mass * G_ACCELERATION * cos(collidingObject->transform.rotation.z);
+		float normalForce = rigidBody->mass * G_ACCELERATION * cos(collisionData.collidingGameObject->transform.rotation.z);
 		// static coefficent of wood is 0.6 but wood sliding is .32
 		float uSlide = 0.32f;
 		float force = uSlide * normalForce;
@@ -201,7 +201,7 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-GameObject* IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject)
+CollisionData IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	if (gameObject->rigidBody.sphereBody.isSphere)
 	{
@@ -211,7 +211,7 @@ GameObject* IsColliding(GameObjectManager* gameObjectManager, GameObject* gameOb
 	return BoxCollision(gameObjectManager, gameObject);
 }
 
-GameObject* SphereCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	float radius = gameObject->rigidBody.sphereBody.radius;
 
@@ -227,7 +227,8 @@ GameObject* SphereCollision(GameObjectManager* gameObjectManager, GameObject* ga
 				+ gameObjectManager->gameObjects[i]->rigidBody.sphereBody.radius;
 			if (distance <= radii)
 			{
-				return gameObjectManager->gameObjects[i];
+				// TODO FIX THIS
+				return (CollisionData) { .collidingFace = 0, .collidingGameObject = gameObjectManager->gameObjects[i] };
 			}
 		}
 		// do plane collision detection
@@ -245,15 +246,17 @@ GameObject* SphereCollision(GameObjectManager* gameObjectManager, GameObject* ga
 
 			if (distance < gameObject->rigidBody.sphereBody.radius)
 			{
-				return gameObjectManager->gameObjects[i];
+				// TODO FIX THIS
+				return (CollisionData) { .collidingFace = 0, .collidingGameObject = gameObjectManager->gameObjects[i] };
+				//return gameObjectManager->gameObjects[i];
 			}
 		}
 	}
 
-	return NULL;
+	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };;
 }
 
-GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
 	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
@@ -270,11 +273,11 @@ GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameO
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
 		if (xCollision && yCollision && zCollision)
 		{
-			float max = 0.0f;
+			float max = -2.0f;
 			size_t best_match = 0u;
 			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
 			{
-				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->transform.position));
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
 				if (dot > max)
 				{
 					printf("collision dot: %.2f\n", dot);
@@ -284,30 +287,34 @@ GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameO
 				}
 			}
 
-			printf("best match: %d\n", best_match);
-
-			return gameObjectManager->gameObjects[i];
+			return (CollisionData) {.collidingFace = best_match, .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 
-	return NULL;
+	return (CollisionData){.collidingFace  = 0, .collidingGameObject = NULL};
 }
 
-void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* collidingObject)
+void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	Vector3 normal;
 	// assuming that a vector of 0,0,0 is the floor...
-	if (isVec3Empty(collidingObject->transform.position))
-	{
-		normal = (Vector3){ 0.0f, 1.0f, 0.0f };
+	//if (isVec3Empty(collidingObject->transform.position))
+	//{
+	//	normal = (Vector3){ 0.0f, 1.0f, 0.0f };
+	//	gameObject->rigidBody.onGround = true;
+	//}
+	//else
+	//{
+	//	normal = Vec3Normalize(collidingObject->transform.position);
+	//	gameObject->rigidBody.onGround = false;
+
+	//}
+
+	if (collisionData.collidingGameObject->rigidBody.isFloor)
 		gameObject->rigidBody.onGround = true;
-	}
 	else
-	{
-		normal = Vec3Normalize(collidingObject->transform.position);
 		gameObject->rigidBody.onGround = false;
 
-	}
+	Vector3 normal = VECTOR_DIRECTIONS[collisionData.collidingFace];
 
 	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
 	Vector3 MulDotPlane = Vec3ScalarMultiply(normal, dotDirNormal);
@@ -326,14 +333,14 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 	//if (normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
 
 	// if colliding game object is static or on ground, do not move it
-	if (!collidingObject->rigidBody.isStatic && !collidingObject->rigidBody.onGround)
+	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)
 	{
 		// transfer a % of the decay to the gameobject
 		// .25( decay) * mass / 2 = veloicty
 		if (newDir.x == 0 && newDir.y == 0 && newDir.z == 0) return;
 
-		Vector3 newVel = Vec3ScalarMultiply(Vec3ScalarMultiply(normalNewDir, (decay * collidingObject->rigidBody.mass) / 2), -1.0f);
-		collidingObject->rigidBody.velocity = newVel;
+		Vector3 newVel = Vec3ScalarMultiply(Vec3ScalarMultiply(normalNewDir, (decay * collisionData.collidingGameObject->rigidBody.mass) / 2), -1.0f);
+		collisionData.collidingGameObject->rigidBody.velocity = newVel;
 	}
 
 	if (normalNewDir.x > 0.0f) gameObject->rigidBody.velocity.x *= decay;

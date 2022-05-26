@@ -87,8 +87,10 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->mesh = playerMesh; //Sets object mesh
 	CalculateBoundingBox(&gameObject->mesh); //Calculates the boudning box (AABB) around the mesh
 
-	gameObject->transform.position = (Vector3){0.0f, 1.0f, 0.0f}; //Sets initial position (Transform) of mesh
+	gameObject->transform.position = (Vector3){0.0f, 10.0f, 0.0f}; //Sets initial position (Transform) of mesh
 	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
+
+	gameObject->rigidBody.useGravity = true;
 }
 
 void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player each frame
