@@ -3,9 +3,20 @@
 const float MOUSE_SENS = 0.001f;
 const float WALK_SPEED = 15.0f;
 const float UP_SPEED = 10.0f;
-const float G_ACCELERATION = 9.8;
-const float T_VELOCITY = 53;
+const float G_ACCELERATION = 9.81f;
+const float AIR_DENSITY = 1.225f;
+const float PHYSICS_TIME_STEP = 20; // in ms
 
+const int VECTOR_DIRECTIONS_LENGTH = 6;
+const Vector3 VECTOR_DIRECTIONS[] =
+{
+	{0, 1, 0}, // up
+	{0, -1, 0}, // down
+	{1, 0, 0}, // left
+	{-1, 0, 0}, // right
+	{0, 0, 1}, //forward
+	{0, 0, -1}, // back
+};
 
 ///////////////////////////////////////
 ////	VERTEX BUFFERS
@@ -17,7 +28,7 @@ const Vector3 planeVertexBuffer[] = {
 	{ -1.0f, 0.0f, 1.0f },
 	{ 1.0f,  0.0f, 1.0f },
 	{ 1.0f,  0.0f, -1.0f },
-};
+}; 
 
 //Cube Vertexes
 const Vector3 cubeVertexBuffer[] = {
@@ -49,14 +60,14 @@ const Vector3Int cubeIndexBuffer[] = {
 	{0, 2, 1},
 	{1, 3, 2},
 	// right
-	{1, 3, 4},
-	{4, 5, 1},
+	{1, 5, 3},
+	{3, 4, 5},
 	// back
 	{5, 4, 6},
-	{6, 7, 5},
+	{6, 5, 7},
 	// left
-	{7, 6, 0},
-	{0, 2, 6},
+	{7, 6, 2},
+	{2, 0, 7},
 	// bottom
 	{0, 1, 7},
 	{7, 5, 1},

@@ -19,6 +19,7 @@ OnStart OnWall1Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall2Start(GameObject* gameObject)
@@ -33,6 +34,7 @@ OnStart OnWall2Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall3Start(GameObject* gameObject)
@@ -47,6 +49,7 @@ OnStart OnWall3Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall4Start(GameObject* gameObject)
@@ -61,6 +64,7 @@ OnStart OnWall4Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 88.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall5Start(GameObject* gameObject)
@@ -75,6 +79,7 @@ OnStart OnWall5Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall6Start(GameObject* gameObject)
@@ -89,6 +94,7 @@ OnStart OnWall6Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 40.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall7Start(GameObject* gameObject)
@@ -103,6 +109,7 @@ OnStart OnWall7Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall8Start(GameObject* gameObject)
@@ -117,6 +124,7 @@ OnStart OnWall8Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 60.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall9Start(GameObject* gameObject)
@@ -131,6 +139,7 @@ OnStart OnWall9Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall10Start(GameObject* gameObject)
@@ -145,6 +154,7 @@ OnStart OnWall10Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall11Start(GameObject* gameObject)
@@ -159,6 +169,7 @@ OnStart OnWall11Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall12Start(GameObject* gameObject)
@@ -173,6 +184,7 @@ OnStart OnWall12Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 5.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall13Start(GameObject* gameObject)
@@ -183,10 +195,11 @@ OnStart OnWall13Start(GameObject* gameObject)
 	gameObject->mesh.colors = wall4ColorBuffer;
 
 	gameObject->transform.position = (Vector3){ 102.0f, 20.0f, 0.0f };
-	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
+	gameObject->transform.rotation = (Vector3){ 0.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall14Start(GameObject* gameObject)
@@ -197,10 +210,11 @@ OnStart OnWall14Start(GameObject* gameObject)
 	gameObject->mesh.colors = wall4ColorBuffer;
 
 	gameObject->transform.position = (Vector3){ 88.0f, 20.0f, 0.0f };
-	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 90.0f };
+	gameObject->transform.rotation = (Vector3){ 0.0f, 0.0f, 90.0f };
 	gameObject->transform.scale = (Vector3){ 20.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall15Start(GameObject* gameObject)
@@ -214,7 +228,7 @@ OnStart OnWall15Start(GameObject* gameObject)
 	gameObject->transform.rotation = (Vector3){ 90.0f, 0.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
-
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall16Start(GameObject* gameObject)
@@ -229,6 +243,7 @@ OnStart OnWall16Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall17Start(GameObject* gameObject)
@@ -243,6 +258,7 @@ OnStart OnWall17Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }
 
 OnStart OnWall18Start(GameObject* gameObject)
@@ -257,4 +273,5 @@ OnStart OnWall18Start(GameObject* gameObject)
 	gameObject->transform.scale = (Vector3){ 7.0f, 1.0f, 20.0f };
 
 
+	gameObject->rigidBody.isStatic = true;
 }

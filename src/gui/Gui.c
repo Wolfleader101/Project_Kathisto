@@ -95,8 +95,12 @@ void RigidBodyWidget(RigidBody* rigidBody)
 {
 	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
+		igCheckbox("Bounding Box View", &rigidBody->debug);
+		igCheckbox("On Ground", &rigidBody->onGround);
 		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat3("Velocity", &rigidBody->velocity, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat("Mass", &rigidBody->mass, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 		igTreePop();
 		igSeparator();
 	}
@@ -105,6 +109,7 @@ void MeshWidget(Mesh* mesh)
 {
 	if (igCollapsingHeader_TreeNodeFlags("Mesh", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
+		igCheckbox("Disable Mesh", &mesh->disableMesh);
 		igCheckbox("Debug Mesh", &mesh->debug);
 		igTreePop();
 		igSeparator();

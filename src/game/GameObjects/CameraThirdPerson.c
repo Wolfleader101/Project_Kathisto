@@ -35,7 +35,7 @@ Vector3 camRightFlat = { 1.0f, 0.0f, 0.0f }; //The camera's default right direct
 
 void SetCamAttributes(GameObjectManager* gameObjectManager) //Sets the objects and variables used by the camera at the start - CALLED ONCE
 {
-	playerObject = GameObjectManagerFind(gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
+	 playerObject = GameObjectManagerFind(gameObjectManager, 2); //Sets the 'playerObject' to the Player in the Game Object Manager
 
 	if(playerObject == NULL) //Checks to see if the object has been set
 	{

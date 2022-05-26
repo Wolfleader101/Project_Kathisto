@@ -1,7 +1,6 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <math.h>
 
 typedef struct Vector2
@@ -50,6 +49,9 @@ Vector2 EmptyVec2();
 Vector3 EmptyVec3();
 Quaternion EmptyQuaternion();
 
+bool isVec2Empty(Vector2 vec);
+bool isVec3Empty(Vector3 vec);
+
 Vector2 ArrayToVec2(const float arr[2]);
 Vector3 ArrayToVec3(const float arr[3]);
 RGBA ArrayToRGBA(const float arr[4]);
@@ -71,11 +73,17 @@ Vector3 Vec3ScalarMultiply(Vector3 vec, float scalar);
 Vector2 Vec2ScalarAdd(Vector2 vec, float scalar);
 Vector3 Vec3ScalarAdd(Vector3 vec, float scalar);
 
+Vector2 Vec2ScalarSubtract(Vector2 vec, float scalar);
+Vector3 Vec3ScalarSubtract(Vector3 vec, float scalar);
+
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2);
 Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2);
 
 Vector2 Vec2Add(Vector2 vec1, Vector2 vec2);
 Vector3 Vec3Add(Vector3 vec1, Vector3 vec2);
+
+Vector2 Vec2Subtract(Vector2 vec1, Vector2 vec2);
+Vector3 Vec3Subtract(Vector3 vec1, Vector3 vec2);
 
 Vector2 Vec2Rotate(Vector2 vec, float angle);
 
