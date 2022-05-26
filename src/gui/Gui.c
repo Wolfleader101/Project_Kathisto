@@ -79,6 +79,7 @@ void GameObjectPanel(GameObject* gameObject)
 		RigidBodyWidget(&gameObject->rigidBody);
 		MeshWidget(&gameObject->mesh);
 		igSeparator();
+		igTreePop();
 	}
 
 }

@@ -14,16 +14,17 @@ void InitMesh(Mesh* mesh)
 
 void DrawMesh(Time time, Mesh* mesh)
 {
+
 	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
 	if (mesh->isUniformColor)
-		glColor4f(mesh->colors[0].r, mesh->colors[0].g, mesh->colors[0].b, mesh->colors[0].a);
+		glColor4fv(mesh->colors);
 	else
 		glColorPointer(4, GL_FLOAT, 4, mesh->colors);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, 0, mesh->points);
+	glVertexPointer(3, GL_FLOAT, sizeof(Vector3), mesh->points);
 
 	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
 

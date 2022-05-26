@@ -270,6 +270,22 @@ GameObject* BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameO
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
 		if (xCollision && yCollision && zCollision)
 		{
+			float max = 0.0f;
+			size_t best_match = 0u;
+			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
+			{
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->transform.position));
+				if (dot > max)
+				{
+					printf("collision dot: %.2f\n", dot);
+
+					max = dot;
+					best_match = i;
+				}
+			}
+
+			printf("best match: %d\n", best_match);
+
 			return gameObjectManager->gameObjects[i];
 		}
 	}
@@ -281,7 +297,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, GameObject* col
 {
 	Vector3 normal;
 	// assuming that a vector of 0,0,0 is the floor...
-	if (isVec3Empty(collidingObject->transform.position) || collidingObject->rigidBody.isFloor)
+	if (isVec3Empty(collidingObject->transform.position))
 	{
 		normal = (Vector3){ 0.0f, 1.0f, 0.0f };
 		gameObject->rigidBody.onGround = true;
