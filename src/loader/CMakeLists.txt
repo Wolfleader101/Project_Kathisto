@@ -1,6 +1,6 @@
 set(LOADER
-   src/model/objLoader/objLoader.h
-   src/model/objLoader/objLoader.c
-   src/model/objLoader/objStructure.h
+   src/loader/model/objLoader.h
+   src/loader/model/objLoader.c
+   src/loader/model/objStructure.h
 
     PARENT_SCOPE)
