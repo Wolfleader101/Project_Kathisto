@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
-//	VECTOR C IMPLEMENTATION
+//	VECTOR3 VECTOR IMPLEMENTATION
 //
-//  An implementation for C++-like vectors in C
+//  An implementation for C++-like vectors in C for Vector3 elements
 //
 //  Created by Darcy Lyndon Cukrov Wilson - 26/05/2022
 //////////////////////////////////////////////////////////////////////
