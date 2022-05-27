@@ -1,27 +1,34 @@
 //////////////////////////////////////////////////////////////////////
-////    OBJ FILE STRUCTURE
-////
-////    Data Structures used to hold OBJ data
-////
-////    Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
+//   OBJ FILE STRUCTURE
+//
+//  Data Structures used to hold OBJ data
+//
+//  Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
 //////////////////////////////////////////////////////////////////////
 
 #include "math/Vector.h"
 
+typedef struct objGroups
+{
+    unsigned nFaces;                    //Number of faces in the group
+
+    Vector3Int* vertexPosIndicies;
+    Vector3Int* normalIndicies;
+    Vector3Int* textureCoordIndicies;
+} objGroups;
+
 typedef struct objModel
 {
-    int nVert;                          //Number of vertices in the model
-    int nUV;                            //Number of UVs in the model
-    int nNormal;                        //Number of normals in the model
-    int nFaces;                         //Number of faces in the model
+    unsigned nVerst;                    //Number of vertices in the model
+    unsigned nUVs;                      //Number of UVs in the model
+    unsigned nNormals;                  //Number of normals in the model
+    unsigned nFaces;                    //Number of faces in the model
 
     Vector3* vertPosition;              //Stores the position of a vertex (v)
     Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt)
     Vector3* normalData;                //Stores the normals of each vertex (vn)
 
-    Vector3Int* vertexPosIndicies;
-    Vector3Int* normalIndicies;
-    Vector3Int* textureCoordIndicies;
+    objGroups* objGroup;                //Groups within an OBJ File (Used to store the Face Indicies)
 } objModel;
 
 /////////////////////////////////////////////////
