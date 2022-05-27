@@ -2,36 +2,29 @@
 #include <stdio.h>
 
 #include "window/Window.h"
+#include "math/Vector.h"
 #include "utilities/vectorUtil.h"
 
 int main(int argc, char** argv)
 {
 	//InitialiseWindow(&argc, argv, "Project Kathisto");
 
-    vector v;
-    Initialise_Vector(&v);
+    list v;
+    InitialiseVector(&v);
 
-    Add_To_Vector(&v, "Bonjour");
-    Add_To_Vector(&v, "tout");
-    Add_To_Vector(&v, "le");
-    Add_To_Vector(&v, "monde");
+    Vector3 *test = malloc(sizeof(Vector3) + 1);
 
-    for (unsigned i = 0; i < Number_Of_Elements(&v); i++)
-        printf("%s ", (char*)Get_From_Vector_Index(&v, i));
+    test->x = 27.0;
+    test->y = 12.0;
+    test->z = 76.0;
+
+    AddToVector(&v, test);
+
+    for (unsigned i = 0; i < v.vecTotalElements; i++)
+        printf("%f ", (Vector3*)GetFromVectorIndex(&v, i));
     printf("\n");
 
-    Delete_Vector_Element(&v, 3);
-    Delete_Vector_Element(&v, 2);
-    Delete_Vector_Element(&v, 1);
-
-    Set_At_Vector_Index(&v, 0, "Hello");
-    Add_To_Vector(&v, "World");
-
-    for (unsigned i = 0; i < Number_Of_Elements(&v); i++)
-        printf("%s ", (char*)Get_From_Vector_Index(&v, i));
-    printf("\n");
-
-    Free_Vector_Memory(&v);
+    FreeVectorMemory(&v);
 
 	return 1;
 }

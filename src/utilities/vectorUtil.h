@@ -1,30 +1,34 @@
 //////////////////////////////////////////////////////////////////////
-//	VECTOR3 VECTOR IMPLEMENTATION
+//	VECTOR C IMPLEMENTATION
 //
-//  An implementation for C++-like vectors in C for Vector3 elements
+//  An implementation for C++-like vectors in C (Called lists here to not
+//  confuse ourselves with our other vectors)
+// 
+//  NOTE: Only works for types such as ints, char pointers, floats, etc.
+//  Does not appear to work for custom structs like our Vectors
 //
 //  Created by Darcy Lyndon Cukrov Wilson - 26/05/2022
 //////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #define VECTOR_INITIAL_SIZE 1 //A Macro which defines the intial size of a Vector
 
-typedef struct vector 
+typedef struct list 
 {
     void** vecItems; //The items within the Vector
     int vecSize; //The current size of the Vector
     int vecTotalElements; //The total number of elements within the Vector
-} vector;
+} list;
 
-void Initialise_Vector(vector * inputVec); //Initialises the vector to be used
-int Number_Of_Elements(vector * inputVec); //Returns the number of elements within the Vector
-void Resize_Vector(vector * inputVec, int vecSize); //Resizes the Vector if the number of elements reaches the size limit
-void Add_To_Vector(vector * inputVec, void* element); //Adds an item to the Vector
-void Set_At_Vector_Index(vector * inputVec, int index, void * element); //Sets an item to the vector at a specific index within the current array of elements
-void* Get_From_Vector_Index(vector * inputVec, int index); //Gets an item from the vector at a specific index
-void Delete_Vector_Element(vector * inputVec, int index); //Deletes an Element from the vector at a specific index
-void Free_Vector_Memory(vector * inputVec); //Frees the memory of the vector
+void InitialiseVector(list* inputVec); //Initialises the vector to be used
+void ResizeVector(list* inputVec, unsigned vecSize); //Resizes the Vector if the number of elements reaches the size limit
+void AddToVector(list* inputVec, void* element); //Adds an item to the Vector
+void SetAtVectorIndex(list* inputVec, unsigned index, void * element); //Sets an item to the vector at a specific index within the current array of elements
+void* GetFromVectorIndex(list* inputVec, unsigned index); //Gets an item from the vector at a specific index
+void DeleteVectorElement(list* inputVec, unsigned index); //Deletes an Element from the vector at a specific index
+void FreeVectorMemory(list* inputVec); //Frees the memory of the vector
 
 /////////////////////////////////////////////////
 //  REFERENCES

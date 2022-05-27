@@ -1,20 +1,15 @@
 #include "vectorUtil.h"
 
-void Initialise_Vector(vector * inputVec) //Initialises the vector to be used
+void InitialiseVector(list* inputVec) //Initialises the vector to be used
 {
 	inputVec->vecSize = VECTOR_INITIAL_SIZE; //Sets the intial size of the Vector to the defined Macro
 
 	inputVec->vecTotalElements = 0; //Sets the number of elements within the Vector to 0
 
-	inputVec->vecItems = malloc(sizeof(void*) * VECTOR_INITIAL_SIZE); //Allocates the memory for the Vector
+	inputVec->vecItems = malloc(sizeof(void*) * inputVec->vecSize); //Allocates the memory for the Vector
 }
 
-int Number_Of_Elements(vector * inputVec) //Returns the number of elements within the Vector
-{
-	return inputVec->vecTotalElements; //Returns the total number of elements within the vector
-}
-
-void Resize_Vector(vector * inputVec, int vecSize) //Resizes the Vector if the number of elements reaches the size limit
+void ResizeVector(list* inputVec, unsigned vecSize) //Resizes the Vector if the number of elements reaches the size limit
 {
 	void** items = realloc(inputVec->vecItems, sizeof(void*) * vecSize); //Creates a new temporary 2D Array to replace the old vector and allocates the memory
 
@@ -26,17 +21,17 @@ void Resize_Vector(vector * inputVec, int vecSize) //Resizes the Vector if the n
 	}
 }
 
-void Add_To_Vector(vector * inputVec, void * element) //Adds an item to the Vector
+void AddToVector(list* inputVec, void * element) //Adds an item to the Vector
 {
 	if (inputVec->vecSize == inputVec->vecTotalElements) //If the amount of elelemts within the vector is equal to the vector's size
 	{
-		Resize_Vector(inputVec, inputVec->vecSize * 2); //Resize the element with double it's current size
+		ResizeVector(inputVec, inputVec->vecSize * 2); //Resize the element with double it's current size
 	}
 
 	inputVec->vecItems[inputVec->vecTotalElements++] = element; //Add the new element to the vector, and increase the element count
 }
 
-void Set_At_Vector_Index(vector * inputVec, int index, void* element) //Sets an item to the vector at a specific index within the current array of elements
+void SetAtVectorIndex(list* inputVec, unsigned index, void* element) //Sets an item to the vector at a specific index within the current array of elements
 {
 	if (index >= 0 && index < inputVec->vecTotalElements) //If the index is greater than or equal to 0, and it's within the limit of already set elements
 	{
@@ -44,15 +39,17 @@ void Set_At_Vector_Index(vector * inputVec, int index, void* element) //Sets an 
 	}
 }
 
-void * Get_From_Vector_Index(vector * inputVec, int index) //Gets an item from the vector at a specific index
+void * GetFromVectorIndex(list* inputVec, unsigned index) //Gets an item from the vector at a specific index
 {
 	if (index >= 0 && index < inputVec->vecTotalElements) //If the index is greater than or equal to 0, and it's within the limit of already set elements
 	{
 		return inputVec->vecItems[index]; //Returns the element from the Vector
 	}
+	else
+		return NULL;
 }
 
-void Delete_Vector_Element(vector * inputVec, int index) //Deletes an Element from the vector at a specific index
+void DeleteVectorElement(list* inputVec, unsigned index) //Deletes an Element from the vector at a specific index
 {
 	if (index >= 0 && index < inputVec->vecTotalElements) //If the index is greater than or equal to 0, and it's within the limit of already set elements
 	{
@@ -69,14 +66,9 @@ void Delete_Vector_Element(vector * inputVec, int index) //Deletes an Element fr
 	}
 
 	inputVec->vecTotalElements--; //Removes one element from the element count
-
-	if((inputVec->vecTotalElements > 0) && (inputVec->vecTotalElements == (inputVec->vecSize / 4))) //If the amount of elements is greater than 0 and the number of elements is equal to the vector size divided by 4
-	{
-		Resize_Vector(inputVec, inputVec->vecSize / 2); //Half the size of the vector
-	}
 }
 
-void Free_Vector_Memory(vector * inputVec) //Frees the memory of the vector
+void FreeVectorMemory(list* inputVec) //Frees the memory of the vector
 {
 	free(inputVec->vecItems); //Frees the memory from the Vector
 }
