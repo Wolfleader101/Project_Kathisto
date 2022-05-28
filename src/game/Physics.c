@@ -273,21 +273,23 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
 		if (xCollision && yCollision && zCollision)
 		{
-			float max = -2.0f;
-			size_t best_match = 0u;
-			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
+			float max = - 2.0f;
+			float maxArr[3] = { 0.0f };
+			size_t best_match[3] = {0};
+			size_t z = 0u;
+			for (size_t i = 0; z < 3 && i < VECTOR_DIRECTIONS_LENGTH; i++)
 			{
 				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
-				if (dot > max)
+				if (fabs(dot) > max)
 				{
-					printf("collision dot: %.2f\n", dot);
-
 					max = dot;
-					best_match = i;
+					maxArr[z] = max;
+					best_match[z] = i;
+					z++;
 				}
 			}
 
-			return (CollisionData) {.collidingFace = best_match, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			return (CollisionData) {.collidingFace = best_match[0], .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 
@@ -296,20 +298,7 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	// assuming that a vector of 0,0,0 is the floor...
-	//if (isVec3Empty(collidingObject->transform.position))
-	//{
-	//	normal = (Vector3){ 0.0f, 1.0f, 0.0f };
-	//	gameObject->rigidBody.onGround = true;
-	//}
-	//else
-	//{
-	//	normal = Vec3Normalize(collidingObject->transform.position);
-	//	gameObject->rigidBody.onGround = false;
-
-	//}
-
-	if (collisionData.collidingGameObject->rigidBody.isFloor)
+	if (collisionData.collidingFace == DOWN && collisionData.collidingGameObject->rigidBody.isFloor)
 		gameObject->rigidBody.onGround = true;
 	else
 		gameObject->rigidBody.onGround = false;
