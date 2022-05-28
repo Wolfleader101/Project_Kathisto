@@ -198,3 +198,30 @@ void ReshapeWindow(int width, int height)
 	// set the matrix mode back to model view
 	glMatrixMode(GL_MODELVIEW);
 }
+
+void DisplayGroupPhoto(char* imgName, unsigned imgWidth, unsigned imgHeight, unsigned numOfChannels) //Displays the group photo when exiting the program
+{
+	unsigned char* groupPhoto; //The image to be loaded
+
+	if ((numOfChannels == 3) || (numOfChannels == 4)) //Checks to see if the channels are RGB or RGBA
+	{
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, 1, &numOfChannels); //Loads the photo (With input channels value)
+	}
+	else //If neither, default to RGB
+	{
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, 1, 3); //Loads the photo (With default channels value)
+	}
+
+	if (groupPhoto == NULL) //Checks to see if the image hasn't loaded
+	{
+		printf("ERROR: Image '%s' could not be found!\n", imgName);
+		
+		return;
+	}
+	else
+	{
+		glRasterPos2i(40, 40); //Set raster position for displaying image in graphics image buffer
+
+		glDrawPixels(imgWidth, imgHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, groupPhoto);
+	}
+}

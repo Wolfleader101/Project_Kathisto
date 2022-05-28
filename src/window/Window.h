@@ -43,3 +43,6 @@ void FixedUpdate(int val);
 
 // initialise the window with a name
 void InitialiseWindow(int* argc, char** argv, char* windowName);
+
+//Displays the group photo when exiting the program
+void DisplayGroupPhoto(char* imgName, unsigned imgWidth, unsigned imgHeight, unsigned numOfChannels);
