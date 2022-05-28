@@ -205,7 +205,7 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 
 	if ((numOfDesiredChannels == 3) || (numOfDesiredChannels == 4)) //Checks to see if the channels are RGB or RGBA
 	{
-		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, &channelsInFile, &numOfDesiredChannels); //Loads the photo (With input channels value)
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, &channelsInFile, numOfDesiredChannels); //Loads the photo (With input channels value)
 	}
 	else //If neither, default to RGB
 	{
@@ -218,13 +218,15 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 		
 		return;
 	}
-	else
+	else //If the image is loaded
 	{
 		printf("SUCCESS: Image '%s' found! Displaying...\n", imgName);
 		
 		glRasterPos2i(	(int)(WINDOW_WIDTH / 2) - (int)(imgWidth / 2), 
 						(int)(WINDOW_HEIGHT / 2) - (int)(imgHeight / 2)); //Set raster position for displaying image in graphics image buffer
 
-		glDrawPixels(imgWidth, imgHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, groupPhoto);
+		glDrawPixels(imgWidth, imgHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen
 	}
+
+	free(groupPhoto); //Free's the data of the image
 }
