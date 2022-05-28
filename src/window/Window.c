@@ -199,28 +199,31 @@ void ReshapeWindow(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void DisplayGroupPhoto(char* imgName, unsigned imgWidth, unsigned imgHeight, unsigned numOfChannels) //Displays the group photo when exiting the program
+void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels) //Displays the group photo when exiting the program
 {
 	unsigned char* groupPhoto; //The image to be loaded
 
-	if ((numOfChannels == 3) || (numOfChannels == 4)) //Checks to see if the channels are RGB or RGBA
+	if ((numOfDesiredChannels == 3) || (numOfDesiredChannels == 4)) //Checks to see if the channels are RGB or RGBA
 	{
-		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, 1, &numOfChannels); //Loads the photo (With input channels value)
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, &channelsInFile, &numOfDesiredChannels); //Loads the photo (With input channels value)
 	}
 	else //If neither, default to RGB
 	{
-		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, 1, 3); //Loads the photo (With default channels value)
+		groupPhoto = stbi_load(imgName, & imgWidth, & imgHeight, 3, 3); //Loads the photo (With default channels value)
 	}
 
-	if (groupPhoto == NULL) //Checks to see if the image hasn't loaded
+	if (!groupPhoto) //Checks to see if the image hasn't loaded
 	{
-		printf("ERROR: Image '%s' could not be found!\n", imgName);
+		printf("ERROR: Could not load '%s', Reason: %s\n", imgName, stbi_failure_reason());
 		
 		return;
 	}
 	else
 	{
-		glRasterPos2i(40, 40); //Set raster position for displaying image in graphics image buffer
+		printf("SUCCESS: Image '%s' found! Displaying...\n", imgName);
+		
+		glRasterPos2i(	(int)(WINDOW_WIDTH / 2) - (int)(imgWidth / 2), 
+						(int)(WINDOW_HEIGHT / 2) - (int)(imgHeight / 2)); //Set raster position for displaying image in graphics image buffer
 
 		glDrawPixels(imgWidth, imgHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, groupPhoto);
 	}

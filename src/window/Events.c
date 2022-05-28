@@ -52,7 +52,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 		cameraMoveDir.y = -1.0f;
 		break;
 	case 27:
-		DisplayGroupPhoto("Test Image.jpg", 512, 512, 3);
+		DisplayGroupPhoto("images/Test Image.jpg", 640, 622, 3, 3);
 		
 		exit(0);
 
