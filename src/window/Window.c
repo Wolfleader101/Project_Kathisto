@@ -215,8 +215,6 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 	if (!groupPhoto) //Checks to see if the image hasn't loaded
 	{
 		printf("ERROR: Could not load '%s', Reason: %s\n", imgName, stbi_failure_reason());
-		
-		return;
 	}
 	else //If the image is loaded
 	{
