@@ -57,7 +57,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 		if (EXIT_PROGRAM == false)
 		{
 			EXIT_PROGRAM = true;
-			
+
 			DisplayGroupPhoto("assets/images/image.jpg", 640, 622, 3, 3); //Display the group photo before exiting the program
 
 			glutTimerFunc(3000, exit, 0); //Exits program after 3 seconds

@@ -116,32 +116,34 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 void WindowRender(void)
 {
+	if (!EXIT_PROGRAM) //Displays everything if the program is not exiting
+	{
+		// calculate delta time (time since last frame)
+		CalculateTime();
 
-	// calculate delta time (time since last frame)
-	CalculateTime();
+		GuiUpdate(&gameObjectManager);
 
-	GuiUpdate(&gameObjectManager);
+		// clear the color and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// clear the color and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// resets transformations
+		glLoadIdentity();
 
-	// resets transformations
-	glLoadIdentity();
+		// CAMERA RENDER
+		//CameraRender(time.deltaTime);
+		ThirdPersonCamRender(time);
 
-	// CAMERA RENDER
-	//CameraRender(time.deltaTime);
-	ThirdPersonCamRender(time);
+		// ======= GAME OBJECTS RENDER  ======= \\
+		
+		UpdateGameObjects(time, &gameObjectManager);
 
-	// ======= GAME OBJECTS RENDER  ======= \\
-	
-	UpdateGameObjects(time, &gameObjectManager);
+		// ======================================= \\
 
-	// ======================================= \\
+		GuiRender();
 
-	GuiRender();
-
-	// swap the buffers
-	glutSwapBuffers();
+		// swap the buffers
+		glutSwapBuffers();
+	}
 }
 
 void FixedUpdate(int val)
@@ -206,10 +208,14 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 
 	if ((numOfDesiredChannels == 3) || (numOfDesiredChannels == 4)) //Checks to see if the channels are RGB or RGBA
 	{
+		stbi_set_flip_vertically_on_load(true); //Flips the image to the correct vertical orientation
+		
 		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, &channelsInFile, numOfDesiredChannels); //Loads the photo (With input channels value)
 	}
 	else //If neither, default to RGB
 	{
+		stbi_set_flip_vertically_on_load(true); //Flips the image to the correct vertical orientation
+		
 		groupPhoto = stbi_load(imgName, & imgWidth, & imgHeight, 3, 3); //Loads the photo (With default channels value)
 	}
 
@@ -220,22 +226,22 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 	else //If the image is loaded
 	{
 		printf("SUCCESS: Image '%s' found! Displaying...\n", imgName);
-		
-		glRasterPos2i(0, 0); //Set raster position for displaying image in graphics image buffer
 
 		glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &validRasterPosition); //Checks to make sure the position of the image is valid
 
 		if(validRasterPosition) //If the raster position is valid
 		{
 			printf("SUCCESS: Raster position is valid!\n");
+
+			glDisable(GL_DEPTH_TEST);
 			
-			glDrawPixels(imgWidth, imgHeight, GL_RGB, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen 
+			glDrawPixels(imgWidth, imgHeight - 1, GL_RGB, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen (-1 to get the image into the bottom left corner)
+
+			free(groupPhoto); //Free's the data of the image
 
 			glutSwapBuffers();
 		}
 		else
 			printf("ERROR: Raster position is not valid!");
 	}
-
-	//free(groupPhoto); //Free's the data of the image
 }

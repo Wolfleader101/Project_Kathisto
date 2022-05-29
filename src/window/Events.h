@@ -18,6 +18,8 @@ extern bool PLAYERBACKWARD_TOGGLE;
 extern bool PLAYERLEFT_TOGGLE;
 extern bool PLAYERRIGHT_TOGGLE;
 
+extern bool EXIT_PROGRAM;
+
 Vector2 mouseInputs; //Stores Mouse Inputs
 
 void OnKeyDown(unsigned char key, int x, int y); // on key down
