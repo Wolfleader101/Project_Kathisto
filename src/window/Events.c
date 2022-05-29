@@ -11,6 +11,8 @@ bool PLAYERBACKWARD_TOGGLE = false;
 bool PLAYERLEFT_TOGGLE = false;
 bool PLAYERRIGHT_TOGGLE = false;
 
+bool EXIT_PROGRAM = false;
+
 Vector2 mouseInputs = {0.0f, 0.0f}; //Stores Mouse Inputs
 
 void OnKeyDown(unsigned char key, int x, int y)
@@ -52,11 +54,16 @@ void OnKeyDown(unsigned char key, int x, int y)
 		cameraMoveDir.y = -1.0f;
 		break;
 	case 27:
-		DisplayGroupPhoto("/assets/image/image.jpg", 640, 622, 3, 3);
-		
-		exit(0);
+		if (EXIT_PROGRAM == false)
+		{
+			EXIT_PROGRAM = true;
+			
+			DisplayGroupPhoto("assets/images/image.jpg", 640, 622, 3, 3); //Display the group photo before exiting the program
 
-		break;
+			glutTimerFunc(3000, exit, 0); //Exits program after 3 seconds
+
+			break;
+		}
 	}
 }
 

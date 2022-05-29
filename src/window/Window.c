@@ -220,11 +220,12 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 	{
 		printf("SUCCESS: Image '%s' found! Displaying...\n", imgName);
 		
-		glRasterPos2i(	(int)(WINDOW_WIDTH / 2) - (int)(imgWidth / 2), 
-						(int)(WINDOW_HEIGHT / 2) - (int)(imgHeight / 2)); //Set raster position for displaying image in graphics image buffer
+		glRasterPos2i(0, 0); //Set raster position for displaying image in graphics image buffer
 
-		glDrawPixels(imgWidth, imgHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen
+		glDrawPixels(imgWidth, imgHeight, GL_RGB, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen
+
+		glFlush();
 	}
 
-	free(groupPhoto); //Free's the data of the image
+	//free(groupPhoto); //Free's the data of the image
 }
