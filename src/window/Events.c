@@ -175,3 +175,48 @@ void OnMouseMove(int x, int y)
 	mouseInputs.x = mouseDeltaPos.x;
 	mouseInputs.y = mouseDeltaPos.y;
 }
+
+void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels) //Displays the group photo when exiting the program
+{
+	unsigned char* groupPhoto; //The image to be loaded
+	bool validRasterPosition = false; //A valid position for the image to display on
+
+	if ((numOfDesiredChannels == 3) || (numOfDesiredChannels == 4)) //Checks to see if the channels are RGB or RGBA
+	{
+		stbi_set_flip_vertically_on_load(true); //Flips the image to the correct vertical orientation
+
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, &channelsInFile, numOfDesiredChannels); //Loads the photo (With input channels value)
+	}
+	else //If neither, default to RGB
+	{
+		stbi_set_flip_vertically_on_load(true); //Flips the image to the correct vertical orientation
+
+		groupPhoto = stbi_load(imgName, &imgWidth, &imgHeight, 3, 3); //Loads the photo (With default channels value)
+	}
+
+	if (!groupPhoto) //Checks to see if the image hasn't loaded
+	{
+		printf("ERROR: Could not load '%s', Reason: %s\n", imgName, stbi_failure_reason());
+	}
+	else //If the image is loaded
+	{
+		printf("SUCCESS: Image '%s' found! Displaying...\n", imgName);
+
+		glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &validRasterPosition); //Checks to make sure the position of the image is valid
+
+		if (validRasterPosition) //If the raster position is valid
+		{
+			printf("SUCCESS: Raster position is valid!\n");
+
+			glDisable(GL_DEPTH_TEST);
+
+			glDrawPixels(imgWidth, imgHeight - 1, GL_RGB, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen (-1 to get the image into the bottom left corner)
+
+			free(groupPhoto); //Free's the data of the image
+
+			glutSwapBuffers();
+		}
+		else
+			printf("ERROR: Raster position is not valid!");
+	}
+}

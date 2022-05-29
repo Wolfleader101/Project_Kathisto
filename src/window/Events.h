@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <GL/freeglut.h>
+#include <stb_image.h>
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
@@ -31,3 +32,4 @@ void OnSpecialKeyUp(int key, int x, int y); // on special key up
 void OnMouseButton(int button, int state, int x, int y); // on mouse buttons
 void OnMouseMove(int x, int y); // on mouse move
 
+void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels); //Displays the group photo when exiting the program

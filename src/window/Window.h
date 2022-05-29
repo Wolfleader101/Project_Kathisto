@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/freeglut.h>
-#include <stb_image.h>
 
 #include "game/Game.h"
 
@@ -44,6 +43,3 @@ void FixedUpdate(int val);
 
 // initialise the window with a name
 void InitialiseWindow(int* argc, char** argv, char* windowName);
-
-//Displays the group photo when exiting the program
-void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels);
