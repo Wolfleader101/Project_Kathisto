@@ -274,22 +274,18 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 		if (xCollision && yCollision && zCollision)
 		{
 			float max = - 2.0f;
-			float maxArr[3] = { 0.0f };
-			size_t best_match[3] = {0};
-			size_t z = 0u;
-			for (size_t i = 0; z < 3 && i < VECTOR_DIRECTIONS_LENGTH; i++)
+			size_t best_match = 0u;
+			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
 			{
 				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
 				if (fabs(dot) > max)
 				{
 					max = dot;
-					maxArr[z] = max;
-					best_match[z] = i;
-					z++;
+					best_match = i;
 				}
 			}
 
-			return (CollisionData) {.collidingFace = best_match[0], .collidingGameObject = gameObjectManager->gameObjects[i] };
+			return (CollisionData) {.collidingFace = best_match, .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 

@@ -120,7 +120,7 @@ void CalculateCamPosition() //Calculates the cameras new position
 void CalculateCamVectors() //Calculates the new vectors for the camera
 {
 	//FORWARD VECTOR
-	camForwardDir = ForwardVec3(camFocusPoint, camPos); //Initial calculation of the Forward Vector (Cross product of the focus point and camera position)
+	camForwardDir = Vec3Subtract(camFocusPoint, camPos); //Initial calculation of the Forward Vector (Cross product of the focus point and camera position)
 	camForwardDir = Vec3Normalize(camForwardDir); //Normalizes the vector
 
 	//RIGHT VECTOR
