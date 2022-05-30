@@ -106,7 +106,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 	RigidBody* rigidBody = &gameObject->rigidBody;
 
 	// ground friction
-	if (rigidBody->onGround && collisionData.collidingGameObject != NULL)
+	if (rigidBody->onGround && collisionData.collidingGameObject != NULL && collisionData.collidingGameObject->rigidBody.isFloor)
 	{
 		//https://sciencing.com/calculate-force-friction-6454395.html
 		//https://www.omnicalculator.com/physics/friction
@@ -114,7 +114,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 		float normalForce = rigidBody->mass * G_ACCELERATION * cos(collisionData.collidingGameObject->transform.rotation.z);
 		// static coefficent of wood is 0.6 but wood sliding is .32
 		float uSlide = 0.32f;
-		float force = uSlide * normalForce;
+		float force = (uSlide * normalForce) * 0.25f;
 
 
 		if(rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
@@ -146,8 +146,8 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 	float cubeHeight = rigidBody->boundingBox.maxPos.y - rigidBody->boundingBox.minPos.y;
 	float area = cubeWidth * cubeHeight;
 
-	float xdrag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
-	float zdrag = 0.5f * AIR_DENSITY * gameObject->rigidBody.velocity.z * area * coefficentDrag;
+	float xdrag = 0.25f * AIR_DENSITY * gameObject->rigidBody.velocity.x * area * coefficentDrag;
+	float zdrag = 0.25f * AIR_DENSITY * gameObject->rigidBody.velocity.z * area * coefficentDrag;
 
 
 	if (rigidBody->velocity.x == 0.0f)
@@ -298,7 +298,7 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	if (collisionData.collidingFace == DOWN && collisionData.collidingGameObject->rigidBody.isFloor)
+	if (collisionData.collidingFace == UP && collisionData.collidingGameObject->rigidBody.isFloor)
 		gameObject->rigidBody.onGround = true;
 	else
 		gameObject->rigidBody.onGround = false;
