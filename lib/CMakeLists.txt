@@ -26,6 +26,7 @@ add_compile_options(
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     freeglut/include
     imgui/include
+    stbimage/include
     #${cimgui}
     #${cimgui}/imgui
     #${imgui_impl}

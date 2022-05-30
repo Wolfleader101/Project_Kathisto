@@ -116,32 +116,36 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 void WindowRender(void)
 {
+	if (!EXIT_PROGRAM) //Displays everything if the program is not exiting
+	{
+		// calculate delta time (time since last frame)
+		CalculateTime();
 
-	// calculate delta time (time since last frame)
-	CalculateTime();
+		GuiUpdate(&gameObjectManager);
 
-	GuiUpdate(&gameObjectManager);
+		// clear the color and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// clear the color and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// resets transformations
+		glLoadIdentity();
 
-	// resets transformations
-	glLoadIdentity();
+		// CAMERA RENDER
+		//CameraRender(time.deltaTime);
+		ThirdPersonCamRender(time);
 
-	// CAMERA RENDER
-	//CameraRender(time.deltaTime);
-	ThirdPersonCamRender(time);
+		// ======= GAME OBJECTS RENDER  ======= \\
+		
+		UpdateGameObjects(time, &gameObjectManager);
 
-	// ======= GAME OBJECTS RENDER  ======= \\
-	
-	UpdateGameObjects(time, &gameObjectManager);
+		// ======================================= \\
 
-	// ======================================= \\
+		GuiRender();
 
-	GuiRender();
-
-	// swap the buffers
-	glutSwapBuffers();
+		// swap the buffers
+		glutSwapBuffers();
+	}
+	else
+		return;
 }
 
 void FixedUpdate(int val)
