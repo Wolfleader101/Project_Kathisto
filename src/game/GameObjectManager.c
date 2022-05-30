@@ -18,7 +18,6 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	}
 }
 
-// TODO FIX THIS METHOD??
 void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 {
 	const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
@@ -39,11 +38,6 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 	}
 }
 
-/*
-When a GameObject is added:
-	add the game object to the end of the game object list at index of count using realloc
-	increase count by 1
- */
 void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	if (gameObjectManager->freeSpace == 0)
@@ -75,22 +69,16 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 	gameObjectManager->lastIndex++;
 }
 
-/*
-When a GameObject is removed:
-	remove the gameobject from the game object list by setting by freeing it
-	for all gameobjects where index > deleted index
-	copy the gameobject over to gameobject[i - 1]
-	take 1 from count
-	freespace add 1
-	lastIndex take 1
- */
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
-	FreeGameObject(gameObjectManager->gameObjects[id]);
 	if (gameObjectManager->gameObjects[id] == NULL) return;
-	for (size_t i = id + 1; i < gameObjectManager->count; i++)
+
+	FreeGameObject(gameObjectManager->gameObjects[id]);
+
+	for (size_t i = id + 1; i < gameObjectManager->lastIndex; i++)
 	{
 		// move the game object pointers
+		// this is just copying the pointer -- need to do a deep copy!!!!
 		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
 		gameObjectManager->gameObjects[i - 1]->id = i - 1;
 
@@ -100,11 +88,16 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 		gameObjectManager->boundingBoxes[i - 1]->gameObjectId = i - 1;
 
 		// free the last object
-		if (i == gameObjectManager->count - 1)
-			FreeGameObject(gameObjectManager->gameObjects[i]);
+		if (i == gameObjectManager->lastIndex - 1)
+		{
+			gameObjectManager->gameObjects[i] = NULL;
+			gameObjectManager->boundingBoxes[i] = NULL;
+		}
 	}
 
-	gameObjectManager->count--;
+	gameObjectManager->boundingBoxes[id] = NULL;
+
+	//gameObjectManager->count--;
 	gameObjectManager->freeSpace++;
 	gameObjectManager->lastIndex--;
 }

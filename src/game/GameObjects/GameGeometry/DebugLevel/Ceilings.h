@@ -1,12 +1,9 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "game/GameIncludes.h"
+#include "game/GameTypes.h"
 
 #include "game/GameConstants.h"
-
-#include "math/Vector.h"
-#include "game/Game.h"
 #include "math/mathUtils.h"
 
 OnStart OnCeiling1Start(GameObject* gameObject);

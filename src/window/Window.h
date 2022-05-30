@@ -28,18 +28,32 @@ extern Time deltaTime;
 
 extern GameObjectManager gameObjectManager;
 
-// calculate the delta time
+/**
+ * @brief calculate the update time
+*/
 void CalculateTime(); 
+
+/**
+ * @brief calculate the fixed time
+*/
 void CalculateFixedTime(); 
 
-// called when window gets resized
+/**
+ * @brief called when window gets resized
+*/
 void ReshapeWindow(int width, int height); 
 
-// called every frame
+/**
+ * @brief called every frame
+*/
 void WindowRender(void); 
 
-// fixed update called every fixed update step, set in gameConstants
+/**
+ * @brief fixed update called every fixed update step, set in gameConstants
+*/
 void FixedUpdate(int val);
 
-// initialise the window with a name
+/**
+ * @brief initialise the window with a name
+*/
 void InitialiseWindow(int* argc, char** argv, char* windowName);
