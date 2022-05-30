@@ -1,10 +1,6 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <GL/freeglut.h>
-
-#include "math/Vector.h"
+#include "game/GameIncludes.h"
 #include "game/GameConstants.h"
 
 

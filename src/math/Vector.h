@@ -299,7 +299,7 @@ Vector3 Vec3RotateY(Vector3 vec, float angle);
  * @param angle in radians to rotate around
  * @return a rotated vector3
 */
-Vector3 Vec3RotateZ(Vector3 vecz, float angle);
+Vector3 Vec3RotateZ(Vector3 vec, float angle);
 
 /**
  * @brief cross product 2 vector3's

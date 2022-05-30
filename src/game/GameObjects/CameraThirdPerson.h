@@ -1,8 +1,8 @@
 #pragma once
 
 #include "game/GameIncludes.h"
+#include "game/GameTypes.h"
 #include "game/GameObjectManager.h"
-#include "game/Game.h" //Includes the Game Object struct so I can access the player object
 
 #include "window/Events.h" //Includes Mouse Movements
 

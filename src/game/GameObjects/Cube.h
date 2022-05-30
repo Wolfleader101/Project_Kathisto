@@ -1,12 +1,11 @@
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "game/GameIncludes.h"
+#include "game/GameTypes.h"
 
-#include "math/Vector.h"
-#include "game/Game.h"
 #include "math/mathUtils.h"
 #include "game/GameConstants.h"
+
 
 OnStart OnCubeStart(GameObject* gameObject);
 
