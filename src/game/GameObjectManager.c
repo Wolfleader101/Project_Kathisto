@@ -18,7 +18,6 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	}
 }
 
-// TODO FIX THIS METHOD??
 void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 {
 	const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
@@ -39,11 +38,6 @@ void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 	}
 }
 
-/*
-When a GameObject is added:
-	add the game object to the end of the game object list at index of count using realloc
-	increase count by 1
- */
 void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	if (gameObjectManager->freeSpace == 0)
@@ -75,15 +69,6 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 	gameObjectManager->lastIndex++;
 }
 
-/*
-When a GameObject is removed:
-	remove the gameobject from the game object list by setting by freeing it
-	for all gameobjects where index > deleted index
-	copy the gameobject over to gameobject[i - 1]
-	take 1 from count
-	freespace add 1
-	lastIndex take 1
- */
 void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
 	if (gameObjectManager->gameObjects[id] == NULL) return;
