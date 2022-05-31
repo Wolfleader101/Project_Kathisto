@@ -20,12 +20,13 @@ void InitTransform(Transform* transform)
 	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 }
 
-void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate)
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate, OnCollision OnCollision)
 {
 	gameObject->OnStart = OnStart;
 	gameObject->OnUpdate = OnUpdate;
 	gameObject->OnLateUpdate = OnLateUpdate;
 	gameObject->OnFixedUpdate = OnFixedUpdate;
+	gameObject->OnCollision = OnCollision;
 }
 
 void FreeGameObject(GameObject* gameObject)

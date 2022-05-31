@@ -23,8 +23,9 @@ void InitTransform(Transform* transform);
  * @param OnUpdate callback to add
  * @param OnLateUpdate callback to add
  * @param OnFixedUpdate callback to add
+ * @param OnCollision callback to add
 */
-void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate);
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnLateUpdate OnLateUpdate, OnFixedUpdate OnFixedUpdate, OnCollision OnCollision);
 
 /**
  * @brief free the game object
