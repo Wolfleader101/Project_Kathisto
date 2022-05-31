@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include "window/Window.h"
-#include "math/Vector.h"
 
 int main(int argc, char** argv)
 {
