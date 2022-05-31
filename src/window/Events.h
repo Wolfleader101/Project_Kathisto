@@ -21,6 +21,8 @@ extern bool PLAYERRIGHT_TOGGLE;
 
 extern bool EXIT_PROGRAM;
 
+extern bool FREE_CAM;
+
 Vector2 mouseInputs; //Stores Mouse Inputs
 
 /**
