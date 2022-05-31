@@ -12,7 +12,6 @@ void InitGameObject(GameObject* gameObject)
 	gameObject->OnUpdate = NULL;
 	gameObject->OnFixedUpdate = NULL;
 	gameObject->OnCollision = NULL;
-	gameObject->rigidBody.isTrigger = false;
 }
 
 void InitTransform(Transform* transform)

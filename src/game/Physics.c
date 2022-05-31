@@ -7,6 +7,7 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->onGround = false;
 	rigidBody->useGravity = false;
 	rigidBody->debug = false;
+	rigidBody->isTrigger = false;
 	rigidBody->mass = 50.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
