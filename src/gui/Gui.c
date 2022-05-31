@@ -35,10 +35,13 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	igText("F3 - Toggle between ingame/settings cursor");
 	igText("F4 - Toggle debug menu");
+	igText("F5 - Toggle Freecam/Thirdperson");
+
+	igCheckbox("Toggle Freecam", &FREE_CAM);
 
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		if (gameObjectManager->gameObjects[i]->name != NULL)
+		if (gameObjectManager->gameObjects[i] != NULL && gameObjectManager->gameObjects[i]->name != NULL)
 		{
 			GameObjectPanel(gameObjectManager->gameObjects[i]);
 		}
@@ -62,6 +65,7 @@ void GuiRender()
 
 void GameObjectPanel(GameObject* gameObject)
 {
+	if (gameObject == NULL) return;
 	if (igCollapsingHeader_TreeNodeFlags(gameObject->name, ImGuiTreeNodeFlags_CollapsingHeader))
 	{
 		igPushStyleColor_Vec4(ImGuiCol_Button, (ImVec4) { 0.45f, 0.0f, 0.0f, 1.0f });
@@ -70,6 +74,7 @@ void GameObjectPanel(GameObject* gameObject)
 		if (igButton("Delete", (ImVec2) { 60.0f, 20.0f }))
 		{
 			GameObjectManagerRemove(&gameObjectManager, gameObject->id);
+			return;
 		}
 		igPopStyleColor(3);
 		igCheckbox("Debug", &gameObject->debug);
@@ -77,6 +82,7 @@ void GameObjectPanel(GameObject* gameObject)
 		RigidBodyWidget(&gameObject->rigidBody);
 		MeshWidget(&gameObject->mesh);
 		igSeparator();
+		igTreePop();
 	}
 
 }

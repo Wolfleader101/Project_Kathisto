@@ -1,9 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
+#pragma once
 
-#include "game/Game.h"
-
-#include "math/Vector.h"
+#include "game/GameIncludes.h"
+#include "game/GameTypes.h"
 
 /////////////////////////////////////////
 ////	LEVEL GEOMETRY HEADERS

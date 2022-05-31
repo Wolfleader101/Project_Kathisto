@@ -3,6 +3,8 @@ set(GAME
    src/game/GameTypes.h
    src/game/GameObjectManager.h
    src/game/GameObjectManager.c
+   src/game/GameObject.h
+   src/game/GameObject.c
    src/game/Game.h
    src/game/Game.c
    src/game/GameConstants.h

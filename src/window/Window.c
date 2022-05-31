@@ -102,9 +102,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
-  //Sets the objects needed for the camera
+	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
-  
+
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
@@ -116,6 +116,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 void WindowRender(void)
 {
+	if (EXIT_PROGRAM) return;
 
 	// calculate delta time (time since last frame)
 	CalculateTime();
@@ -129,11 +130,15 @@ void WindowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	//CameraRender(time.deltaTime);
-	ThirdPersonCamRender(time);
+	if (FREE_CAM == false)
+	{
+		ThirdPersonCamRender(time);
+	}
+	else
+		CameraRender(time.deltaTime);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
-	
+		
 	UpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
@@ -146,6 +151,8 @@ void WindowRender(void)
 
 void FixedUpdate(int val)
 {
+	if (EXIT_PROGRAM) return;
+
 	// setup the next tick
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
 

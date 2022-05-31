@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <GL/freeglut.h>
+#include <stb_image.h>
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
@@ -18,14 +19,58 @@ extern bool PLAYERBACKWARD_TOGGLE;
 extern bool PLAYERLEFT_TOGGLE;
 extern bool PLAYERRIGHT_TOGGLE;
 
+extern bool EXIT_PROGRAM;
+
+extern bool FREE_CAM;
+
 Vector2 mouseInputs; //Stores Mouse Inputs
 
-void OnKeyDown(unsigned char key, int x, int y); // on key down
-void OnKeyUp(unsigned char key, int x, int y); // on key up
+/**
+ * @brief On key down event
+ * @param key that was pressed
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnKeyDown(unsigned char key, int x, int y);
 
-void OnSpecialKeyDown(int key, int x, int y); // on special key up
-void OnSpecialKeyUp(int key, int x, int y); // on special key up
+/**
+ * @brief on key up event
+ * @param key that was released
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnKeyUp(unsigned char key, int x, int y);
 
-void OnMouseButton(int button, int state, int x, int y); // on mouse buttons
-void OnMouseMove(int x, int y); // on mouse move
+/**
+ * @brief on special key down (function keys) event
+ * @param key that was pressed
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnSpecialKeyDown(int key, int x, int y);
 
+/**
+ * @brief on special key up (function keys) event
+ * @param key that was released
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnSpecialKeyUp(int key, int x, int y);
+
+/**
+ * @brief on mouse move event
+ * @param button that was clicked
+ * @param state of the click
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnMouseButton(int button, int state, int x, int y);
+
+/**
+ * @brief on mouse move event
+ * @param x position of mouse
+ * @param y position of mouse
+*/
+void OnMouseMove(int x, int y);
+
+void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels); //Displays the group photo when exiting the program
