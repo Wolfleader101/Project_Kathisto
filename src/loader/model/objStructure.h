@@ -1,34 +1,27 @@
 //////////////////////////////////////////////////////////////////////
-//   OBJ FILE STRUCTURE
+//  OBJ FILE STRUCTURE
 //
-//  Data Structures used to hold OBJ data
+//  Data Structures used to hold OBJ data (BASIC REPRESENTATION)
 //
 //  Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
 //////////////////////////////////////////////////////////////////////
 
-#include "math/Vector.h"
-
-typedef struct objGroups
-{
-    unsigned nFaces;                    //Number of faces in the group
-
-    Vector3Int* vertexPosIndicies;
-    Vector3Int* normalIndicies;
-    Vector3Int* textureCoordIndicies;
-} objGroups;
+#include "utilities/vectorUtil.h"
 
 typedef struct objModel
 {
-    unsigned nVerst;                    //Number of vertices in the model
+    unsigned nVerts;                    //Number of vertices in the model
     unsigned nUVs;                      //Number of UVs in the model
     unsigned nNormals;                  //Number of normals in the model
     unsigned nFaces;                    //Number of faces in the model
 
-    Vector3* vertPosition;              //Stores the position of a vertex (v)
-    Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt)
-    Vector3* normalData;                //Stores the normals of each vertex (vn)
+    listVec3 vertPosition;              //Stores the position of a vertex (v)
+    listVec2 textureCoord;              //Stores the texture coordinate of each vertex (vt)
+    listVec3 normalData;                //Stores the normals of each vertex (vn)
 
-    objGroups* objGroup;                //Groups within an OBJ File (Used to store the Face Indicies)
+    listVec3Int vertexPosIndicies;      //Face indicies which represent the vertexes
+    listVec3Int normalIndicies;         //Face indicies which represent the vertex normals
+    listVec3Int textureCoordIndicies;   //Face indicies which represent the texture coordinares
 } objModel;
 
 /////////////////////////////////////////////////
