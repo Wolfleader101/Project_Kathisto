@@ -28,10 +28,14 @@ GameObjectManager gameObjectManager;
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
+	//Load Model Files (OBJ)
+	objModel objData;
+
+	objData = LoadOBJFile();
+	
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
-
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
