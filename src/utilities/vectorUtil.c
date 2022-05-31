@@ -21,7 +21,7 @@ void ResizeVector(list* inputVec, unsigned vecSize) //Resizes the Vector if the 
 	}
 }
 
-void AddToVector(list* inputVec, void * element) //Adds an item to the Vector
+void AddToVector(list* inputVec, Vector3 element) //Adds an item to the Vector
 {
 	if (inputVec->vecSize == inputVec->vecTotalElements) //If the amount of elelemts within the vector is equal to the vector's size
 	{
@@ -31,7 +31,7 @@ void AddToVector(list* inputVec, void * element) //Adds an item to the Vector
 	inputVec->vecItems[inputVec->vecTotalElements++] = element; //Add the new element to the vector, and increase the element count
 }
 
-void SetAtVectorIndex(list* inputVec, unsigned index, void* element) //Sets an item to the vector at a specific index within the current array of elements
+void SetAtVectorIndex(list* inputVec, unsigned index, Vector3 element) //Sets an item to the vector at a specific index within the current array of elements
 {
 	if (index >= 0 && index < inputVec->vecTotalElements) //If the index is greater than or equal to 0, and it's within the limit of already set elements
 	{
@@ -39,14 +39,14 @@ void SetAtVectorIndex(list* inputVec, unsigned index, void* element) //Sets an i
 	}
 }
 
-void * GetFromVectorIndex(list* inputVec, unsigned index) //Gets an item from the vector at a specific index
+Vector3 GetFromVectorIndex(list* inputVec, unsigned index) //Gets an item from the vector at a specific index
 {
 	if (index >= 0 && index < inputVec->vecTotalElements) //If the index is greater than or equal to 0, and it's within the limit of already set elements
 	{
 		return inputVec->vecItems[index]; //Returns the element from the Vector
 	}
 	else
-		return NULL;
+		printf("ERROR: Index %d is outside of the bounds of the Vector!", index);
 }
 
 void DeleteVectorElement(list* inputVec, unsigned index) //Deletes an Element from the vector at a specific index
