@@ -31,10 +31,6 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 
 	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
 
-	
-	// @Charlie On Collision should be here
-	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
-	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
 	if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
 	if (collisionData.collidingGameObject != NULL && gameObject->OnCollision && collisionData.collidingGameObject->OnCollision) gameObject->OnCollision(fixedTime, gameObject, collisionData.collidingGameObject);
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
@@ -341,7 +337,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);*/
 
 	// if colliding game object is static or on ground, do not move it
-	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)
+	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.onGround)
 	{
 		// transfer a % of the decay to the gameobject
 		// .25( decay) * mass / 2 = veloicty
