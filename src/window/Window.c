@@ -104,7 +104,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
-  
+
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
@@ -116,44 +116,43 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 void WindowRender(void)
 {
-	if (!EXIT_PROGRAM) //Displays everything if the program is not exiting
+	if (EXIT_PROGRAM) return;
+
+	// calculate delta time (time since last frame)
+	CalculateTime();
+
+	GuiUpdate(&gameObjectManager);
+
+	// clear the color and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// resets transformations
+	glLoadIdentity();
+
+	// CAMERA RENDER
+	if (FREE_CAM == false)
 	{
-		// calculate delta time (time since last frame)
-		CalculateTime();
-
-		GuiUpdate(&gameObjectManager);
-
-		// clear the color and depth buffer
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// resets transformations
-		glLoadIdentity();
-
-		// CAMERA RENDER
-		if (FREE_CAM == false)
-		{
-			ThirdPersonCamRender(time);
-		}
-		else
-			CameraRender(time.deltaTime);
-
-		// ======= GAME OBJECTS RENDER  ======= \\
-		
-		UpdateGameObjects(time, &gameObjectManager);
-
-		// ======================================= \\
-
-		GuiRender();
-
-		// swap the buffers
-		glutSwapBuffers();
+		ThirdPersonCamRender(time);
 	}
 	else
-		return;
+		CameraRender(time.deltaTime);
+
+	// ======= GAME OBJECTS RENDER  ======= \\
+		
+	UpdateGameObjects(time, &gameObjectManager);
+
+	// ======================================= \\
+
+	GuiRender();
+
+	// swap the buffers
+	glutSwapBuffers();
 }
 
 void FixedUpdate(int val)
 {
+	if (EXIT_PROGRAM) return;
+
 	// setup the next tick
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
 

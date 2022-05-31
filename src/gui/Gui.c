@@ -35,6 +35,9 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	igText("F3 - Toggle between ingame/settings cursor");
 	igText("F4 - Toggle debug menu");
+	igText("F5 - Toggle Freecam/Thirdperson");
+
+	igCheckbox("Toggle Freecam", &FREE_CAM);
 
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
