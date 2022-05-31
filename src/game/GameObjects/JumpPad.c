@@ -30,7 +30,7 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 		//collidingObject->transform.position.y += 100.0f * time.deltaTime;
 		if (cooldown <= 0)
 		{
-			cooldown = 5.0f;
+			cooldown = 1.25f;
 			isReady = true;
 			collidingObject = NULL;
 		}
