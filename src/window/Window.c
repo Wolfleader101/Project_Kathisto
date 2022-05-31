@@ -31,7 +31,8 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	//Load Model Files (OBJ)
 	objModel objData;
 
-	objData = LoadOBJFile();
+	objData = LoadOBJFile("assets/models/objs/gameEnvironment/stairs8_step8.obj");
+	PrintOBJData(objData);
 	
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
