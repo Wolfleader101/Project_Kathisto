@@ -8,7 +8,6 @@ Vector3 cameraMoveDir = { 0.0f, 0.0f, 0.0f };
 Vector2 mousePos = { 0.0f, 0.0f };
 Vector2 mouseDeltaPos = { 0.0f, 0.0f };
 
-
 void ComputeCameraPos(float deltaTime)
 {
 	// REMEMBER: multiplying by delta time helps create smooth movement

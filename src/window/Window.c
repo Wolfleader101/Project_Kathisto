@@ -102,7 +102,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
 
-  //Sets the objects needed for the camera
+	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
   
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
@@ -130,8 +130,12 @@ void WindowRender(void)
 		glLoadIdentity();
 
 		// CAMERA RENDER
-		//CameraRender(time.deltaTime);
-		ThirdPersonCamRender(time);
+		if (FREE_CAM == false)
+		{
+			ThirdPersonCamRender(time);
+		}
+		else
+			CameraRender(time.deltaTime);
 
 		// ======= GAME OBJECTS RENDER  ======= \\
 		
