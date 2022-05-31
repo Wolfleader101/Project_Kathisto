@@ -37,7 +37,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
 	// apply friction and drag
-	PhysicsTransform(fixedTime, gameObject, collisionData);
+	//PhysicsTransform(fixedTime, gameObject, collisionData);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -277,8 +277,9 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 			size_t best_match = 0u;
 			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
 			{
-				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
-				if (fabs(dot) > max)
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(
+						Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
+				if (dot > max)
 				{
 					max = dot;
 					best_match = i;
@@ -300,6 +301,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 		gameObject->rigidBody.onGround = false;
 
 	Vector3 normal = VECTOR_DIRECTIONS[collisionData.collidingFace];
+	printf("GameObject: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, normal.x, normal.y, normal.z);
 
 	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
 	Vector3 MulDotPlane = Vec3ScalarMultiply(normal, dotDirNormal);
@@ -314,8 +316,9 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	Vector3 normalNewDir = Vec3Normalize(newDir);
 
 	//look into on ground collision??
-	//float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
-	//if (normalNewDir.y == 1.0f) gameObject->transform.position.y = collidingObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
+	if (normalNewDir.y == 1.0f) 
+		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
 
 	// if colliding game object is static or on ground, do not move it
 	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)
