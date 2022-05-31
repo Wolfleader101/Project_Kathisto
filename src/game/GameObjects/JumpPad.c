@@ -27,7 +27,7 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 	if (!isReady)
 	{
 		cooldown -= time.deltaTime;
-
+		collidingObject->transform.position.y += 10.0f * time.deltaTime;
 		if (cooldown <= 0)
 		{
 			cooldown = 5.0f;
@@ -39,8 +39,6 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 
 OnFixedUpdate OnJumpPadFixedUpdate(Time time, GameObject* gameObject)
 {
-	if (!isReady)
-		collidingObject->rigidBody.velocity.y += 100.0f * time.deltaTime;
 
 }
 
@@ -49,7 +47,6 @@ OnCollision OnJumpPadCollision(Time time, GameObject* gameObject, GameObject* co
 	if (isReady)
 	{
 		collidingObject = collisionObject;
-		collidingObject->rigidBody.velocity.y = 10.0f;
 		isReady = false;
 	}
 }
