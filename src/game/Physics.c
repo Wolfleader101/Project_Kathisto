@@ -97,8 +97,10 @@ void GravityTransform(Time fixedTime, GameObject* gameObject)
 	float z = x / y;
 	float terminalVelocity = sqrt(z);
 
-	if (gameObject->rigidBody.velocity.y < -terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
-	//if (fabs(gameObject->rigidBody.velocity.y) > terminalVelocity) gameObject->rigidBody.velocity.y = -terminalVelocity;
+	if (gameObject->rigidBody.velocity.y < -terminalVelocity)
+		gameObject->rigidBody.velocity.y = -terminalVelocity;
+	else if (gameObject->rigidBody.velocity.y > terminalVelocity)
+		gameObject->rigidBody.velocity.y = terminalVelocity;
 }
 
 void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
