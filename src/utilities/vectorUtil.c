@@ -11,7 +11,7 @@ void InitialiseVector(list* inputVec) //Initialises the vector to be used
 
 void ResizeVector(list* inputVec, unsigned vecSize) //Resizes the Vector if the number of elements reaches the size limit
 {
-	void** items = realloc(inputVec->vecItems, sizeof(void*) * vecSize); //Creates a new temporary 2D Array to replace the old vector and allocates the memory
+	Vector3* items = realloc(inputVec->vecItems, sizeof(Vector3) * vecSize); //Creates a new temporary 2D Array to replace the old vector and allocates the memory
 
 	if(items) //If the array has been allocated successfully
 	{
