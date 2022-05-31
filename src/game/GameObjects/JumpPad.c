@@ -2,7 +2,7 @@
 
 //isReady performs 'cooldown' for player being moved by cube collision - Remove this later
 bool isReady = true;
-float cooldown = 5.0f;
+float cooldown = 1.25f;
 GameObject* collidingObject = NULL;
 
 
@@ -27,7 +27,7 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 	if (!isReady)
 	{
 		cooldown -= time.deltaTime;
-		collidingObject->transform.position.y += 10.0f * time.deltaTime;
+		//collidingObject->transform.position.y += 100.0f * time.deltaTime;
 		if (cooldown <= 0)
 		{
 			cooldown = 5.0f;
@@ -39,6 +39,8 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 
 OnFixedUpdate OnJumpPadFixedUpdate(Time time, GameObject* gameObject)
 {
+	if(!isReady)
+		collidingObject->rigidBody.velocity.y += 100.0f * time.deltaTime;
 
 }
 
@@ -47,6 +49,7 @@ OnCollision OnJumpPadCollision(Time time, GameObject* gameObject, GameObject* co
 	if (isReady)
 	{
 		collidingObject = collisionObject;
+		collidingObject->transform.position.y += 1.0f;
 		isReady = false;
 	}
 }
