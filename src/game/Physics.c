@@ -273,12 +273,14 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
 		if (xCollision && yCollision && zCollision)
 		{
-			float max = - 2.0f;
+			float max = -2.0f;
 			size_t best_match = 0u;
+
 			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
 			{
-				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(
-						Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
+				//if (i == 0 && gameObject->rigidBody.onGround) continue;
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
+
 				if (dot > max)
 				{
 					max = dot;
@@ -286,7 +288,13 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 				}
 			}
 
-			return (CollisionData) {.collidingFace = best_match, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
+			if (gameObject->rigidBody.onGround)
+			{
+				collidingFace = Vec3Add((Vector3) { 0.0f, 1.0f, 0.0f }, collidingFace);
+			}
+
+			return (CollisionData) {.collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 
@@ -295,12 +303,12 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	if (collisionData.collidingFace == UP && collisionData.collidingGameObject->rigidBody.isFloor)
+	if (collisionData.collidingFace.y == 1.0f && collisionData.collidingGameObject->rigidBody.isFloor)
 		gameObject->rigidBody.onGround = true;
 	else
 		gameObject->rigidBody.onGround = false;
 
-	Vector3 normal = VECTOR_DIRECTIONS[collisionData.collidingFace];
+	Vector3 normal = collisionData.collidingFace;
 	printf("GameObject: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, normal.x, normal.y, normal.z);
 
 	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
@@ -316,9 +324,18 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	Vector3 normalNewDir = Vec3Normalize(newDir);
 
 	//look into on ground collision??
+	/*
 	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
 	if (normalNewDir.y == 1.0f) 
 		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+
+	float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
+	if (normalNewDir.x == 1.0f)
+		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.x + (rightAmount / 2);
+
+	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
+	if (normalNewDir.z == 1.0f)
+		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);*/
 
 	// if colliding game object is static or on ground, do not move it
 	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)

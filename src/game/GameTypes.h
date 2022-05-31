@@ -310,5 +310,6 @@ typedef struct CollisionData
 	/**
 	 * @brief the colliding faces
 	*/
-	CollisionDir collidingFace;
+	Vector3 collidingFace;
+	//CollisionDir collidingFace;
 } CollisionData;

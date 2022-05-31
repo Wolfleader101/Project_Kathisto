@@ -54,6 +54,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 		cameraMoveDir.y = -1.0f;
 		break;
 	case 27:
+		exit(0);
 		if (EXIT_PROGRAM == false)
 		{
 			EXIT_PROGRAM = true;
