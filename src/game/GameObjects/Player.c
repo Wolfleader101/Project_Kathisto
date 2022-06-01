@@ -122,9 +122,6 @@ OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates e
 	MovePlayer(time, gameObject);
 }
 
-//isReady performs 'cooldown' for player being moved by cube collision - Remove this later
-bool isReady = true;
-float cooldown = 5.0f;
 
 //This can be seen as test for jump pad - May want to move this over so code is run from jump pad object
 OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject) //Updates every frame

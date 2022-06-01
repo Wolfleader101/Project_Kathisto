@@ -103,12 +103,12 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// on reshape
 	glutReshapeFunc(ReshapeWindow);
 
+	// fixed update
+	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
+
 	// rendering callbacks
 	glutDisplayFunc(WindowRender);
 	glutIdleFunc(WindowRender);
-
-	// fixed update
-	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
 
 	// keyboard and mouse input
 	glutKeyboardFunc(OnKeyDown); // on key down

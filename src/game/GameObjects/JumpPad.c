@@ -49,7 +49,6 @@ OnCollision OnJumpPadCollision(Time time, GameObject* gameObject, GameObject* co
 	if (isReady)
 	{
 		collidingObject = collisionObject;
-		collidingObject->transform.position.y += 2.0f;
 		collidingObject->rigidBody.velocity.y += 200.0f;
 		isReady = false;
 	}
