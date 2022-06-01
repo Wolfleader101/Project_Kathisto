@@ -2,6 +2,12 @@
 
 #include "game/GameObjects/Cube.h"
 #include "game/GameObjects/CubeG.h"
+#include "game/GameObjects/JumpPad.h"
+
+#include "game/GameObjects/GameGeometry/DebugGeo.h" //In Charge of building the Debug Geometry 
+#include "game/GameObjects/Camera.h"
+#include "game/GameObjects/CameraThirdPerson.h" //Includes the Third Person Camera
+#include "game/GameObjects/Player.h" //Includes access to the player object
 
 int WINDOW_WIDTH = 1750;
 int WINDOW_HEIGHT = 980;
@@ -97,12 +103,12 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// on reshape
 	glutReshapeFunc(ReshapeWindow);
 
+	// fixed update
+	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
+
 	// rendering callbacks
 	glutDisplayFunc(WindowRender);
 	glutIdleFunc(WindowRender);
-
-	// fixed update
-	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
 
 	// keyboard and mouse input
 	glutKeyboardFunc(OnKeyDown); // on key down
@@ -133,20 +139,24 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* cubeG = malloc(sizeof(GameObject));
 	GameObject* playerObject = malloc(sizeof(GameObject));
+	GameObject* jumpPad = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
 	InitGameObject(playerObject);
+	InitGameObject(jumpPad);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
 	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
 	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
+	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
 	GameObjectManagerAdd(&gameObjectManager, playerObject);
+	GameObjectManagerAdd(&gameObjectManager, jumpPad);
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);

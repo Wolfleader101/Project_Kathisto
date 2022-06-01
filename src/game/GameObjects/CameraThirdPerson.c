@@ -80,9 +80,9 @@ void ManualCamRotation(Time time) //Calculates the camera's current rotation bas
 
 	ConstrainCamAngles();
 
-	camForwardDir.x = cos((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
-	camForwardDir.y = -sin((camOrbitAngles.x / 180) * PI_CONST);
-	camForwardDir.z = sin((camOrbitAngles.y / 180) * PI_CONST) * cos((camOrbitAngles.x / 180) * PI_CONST);
+	camForwardDir.x = cos((camOrbitAngles.y / 180) * M_PI) * cos((camOrbitAngles.x / 180) * M_PI);
+	camForwardDir.y = -sin((camOrbitAngles.x / 180) * M_PI);
+	camForwardDir.z = sin((camOrbitAngles.y / 180) * M_PI) * cos((camOrbitAngles.x / 180) * M_PI);
 
 	camForwardDir = Vec3Normalize(camForwardDir); //Normalizes the vector
 

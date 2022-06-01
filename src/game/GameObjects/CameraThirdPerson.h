@@ -3,6 +3,7 @@
 #include "game/GameIncludes.h"
 #include "game/GameTypes.h"
 #include "game/GameObjectManager.h"
+#include "game/GameConstants.h"
 
 #include "window/Events.h" //Includes Mouse Movements
 
