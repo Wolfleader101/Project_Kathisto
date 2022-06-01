@@ -13,7 +13,6 @@ extern float maxSpeed; //The maximum speed that the player can move at
 extern float maxAcceleration; //The maximum acceleration that the player can achieve
 
 extern Vector3 desiredPlayerVel; //The desired velocity of the player object
-extern Vector3 playerVel; //The current velocity of the player object
 
 extern float rotSmoothSpeed; //The speed at which the player character will rotate
 
@@ -25,10 +24,8 @@ extern Vector2 playerInput; //The player movement inputs from the keyboard (Left
 
 OnStart OnPlayerStart(GameObject* gameObject); //Sets the starting variables of the player object
 
-void CalculatePlayerVelcoity(Time time); //Calculates the velocity of the player each frame
+void MovePlayer(Time time, GameObject* gameObject); //Function to move the player relative to the camera object
 
-void MovePlayer(); //Function to move the player relative to the camera object
-
-OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject); //Updates every frame
+OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject); //Updates every frame
 
 OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject);

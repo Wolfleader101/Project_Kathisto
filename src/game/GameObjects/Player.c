@@ -6,15 +6,11 @@
 
 //Setting the variables to default values
 
-float maxSpeed = 4.0f; //The maximum speed that the player can move at
-float maxAcceleration = 10.0f; //The maximum acceleration that the player can achieve
-
 Vector3 desiredPlayerVel = { 0.0f, 0.0f, 0.0f }; //The desired velocity of the player object
-Vector3 playerVel = { 0.0f, 0.0f, 0.0f }; //The current velocity of the player object
 
 float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
 
-Vector2 playerInput = {0.0f, 0.0f}; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
+Vector2 playerInput = { 0.0f, 0.0f }; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
 
 //Stores the verticies for the player object
 const Vector3 playerVertexBuffer[] = {
@@ -87,80 +83,48 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->mesh = playerMesh; //Sets object mesh
 	CalculateBoundingBox(&gameObject->mesh); //Calculates the boudning box (AABB) around the mesh
 
-	gameObject->transform.position = (Vector3){0.0f, 10.0f, 0.0f}; //Sets initial position (Transform) of mesh
-	gameObject->transform.scale = (Vector3){1.0f, 1.0f, 1.0f}; //Sets initial scale of mesh
+	gameObject->transform.position = (Vector3){ 0.0f, 10.0f, 0.0f }; //Sets initial position (Transform) of mesh
+	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f }; //Sets initial scale of mesh
 
 	gameObject->rigidBody.useGravity = true;
 }
 
-void CalculatePlayerVelcoity(Time time) //Calculates the velocity of the player each frame
-{
-	float maxSpeedChange = maxAcceleration * time.deltaTime;
 
-	MovePlayer();
-
-	if (playerVel.x < desiredPlayerVel.x)
-	{
-		playerVel.x += maxSpeedChange;
-	}
-	else
-		if (playerVel.x > desiredPlayerVel.x)
-		{
-			playerVel.x -= maxSpeedChange;
-		}
-
-	if (playerVel.z < desiredPlayerVel.z)
-	{
-		playerVel.z += maxSpeedChange;
-	}
-	else
-		if (playerVel.z > desiredPlayerVel.z)
-		{
-			playerVel.z -= maxSpeedChange;
-		}
-}
-
-void MovePlayer() //Function to move the player relative to the camera object
+void MovePlayer(Time time, GameObject* gameObject) //Function to move the player relative to the camera object
 {
 	if (PLAYERFORWARD_TOGGLE == true) //Moves character forward
 	{
-		desiredPlayerVel.x = camForwardDirFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = camForwardDirFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERBACKWARD_TOGGLE == true) //Moves character backward
 	{
-		desiredPlayerVel.x = -camForwardDirFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = -camForwardDirFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += -camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += -camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERLEFT_TOGGLE == true) //Moves character left
 	{
-		desiredPlayerVel.x = -camRightFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = -camRightFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += -camRightFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += -camRightFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERRIGHT_TOGGLE == true) //Moves character right
 	{
-		desiredPlayerVel.x = camRightFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = camRightFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += camRightFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += camRightFlat.z * WALK_SPEED * time.deltaTime;
 	}
 }
 
-
-OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
+OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates every fixed frame
 {
-	CalculatePlayerVelcoity(time);
-
-	Vector3 displacement = { //The displacement of the player from their original position
-		playerVel.x * time.deltaTime,
-		playerVel.y * time.deltaTime,
-		playerVel.z * time.deltaTime };
-	
-	gameObject->transform.position.x += displacement.x;
-	gameObject->transform.position.z += displacement.z;
+	MovePlayer(time, gameObject);
 }
 
+//isReady performs 'cooldown' for player being moved by cube collision - Remove this later
+bool isReady = true;
+float cooldown = 5.0f;
 
 //This can be seen as test for jump pad - May want to move this over so code is run from jump pad object
 OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject) //Updates every frame

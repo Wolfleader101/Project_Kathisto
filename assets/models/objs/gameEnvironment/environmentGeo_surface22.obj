@@ -1,0 +1,21 @@
+# This file uses centimeters as units for non-parametric coordinates.
+
+mtllib environmentGeo_surface22.mtl
+g default
+v -25.000000 -1.000000 -14.388371
+v -25.000000 -1.000000 -22.471695
+v -6.357422 -1.000000 -14.388372
+v -6.357422 -1.000000 -22.471695
+vt 0.000000 1.000000
+vt 0.000000 1.000000
+vt 0.000000 1.000000
+vt 0.000000 1.000000
+vn 0.000000 1.000000 0.000000
+vn 0.000000 1.000000 0.000000
+vn 0.000000 1.000000 0.000000
+vn 0.000000 1.000000 0.000000
+s 1
+g environmentGeo_surface22 environmentGEO geo2
+usemtl initialShadingGroup
+f 2/1/1 1/2/2 4/4/3
+f 4/4/3 1/2/2 3/3/4
