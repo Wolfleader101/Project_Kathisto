@@ -21,7 +21,7 @@ OnStart OnCubeGStart(GameObject* gameObject)
 
 	gameObject->mesh.colors = cubeGColorBuffer;
 
-	gameObject->rigidBody.useGravity = false;
+	gameObject->rigidBody.useGravity = true;
 
 	gameObject->transform.position = (Vector3){ 5.0f, 50.0f, -5.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };

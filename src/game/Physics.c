@@ -117,7 +117,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 		float force = (uSlide * normalForce) * 0.25f;
 
 
-		if(rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
+		if (rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
 		{
 			rigidBody->velocity.x = 0.0f;
 		}
@@ -276,34 +276,29 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 			float max = -2.0f;
 			size_t best_match = 0u;
 
-			/*if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
+			if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
 			{
 				return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
-			}*/
-			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
+			}
+			for (size_t j = 0; !gameObjectManager->gameObjects[i]->rigidBody.isFloor && j < VECTOR_DIRECTIONS_LENGTH; ++j)
 			{
-				if ((i == 0 || i == 1) && gameObject->rigidBody.onGround) continue;
-				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i],Vec3Normalize(
-						Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[j], Vec3Normalize(
+					Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
 
 				if (dot > max)
 				{
 					max = dot;
-					best_match = i;
+					best_match = j;
 				}
 			}
 
 			Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
-			if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
-			{
-				collidingFace = Vec3Add((Vector3) { 0.0f, -1.0f, 0.0f }, collidingFace);
-			}
 
-			return (CollisionData) {.collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 
-	return (CollisionData){.collidingFace  = 0, .collidingGameObject = NULL};
+	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };
 }
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
@@ -329,9 +324,9 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	Vector3 normalNewDir = Vec3Normalize(newDir);
 
 	//look into on ground collision??
-	
+
 	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
-	if (normalNewDir.y == 1.0f && collisionData.collidingGameObject->rigidBody.isFloor) 
+	if (normalNewDir.y == 1.0f && collisionData.collidingGameObject->rigidBody.isFloor)
 		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
 
 	float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
