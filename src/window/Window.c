@@ -35,15 +35,10 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	FILE* filePointer = NULL; //File pointer to Manifest file
 
 	char base_filePath[] = "assets/models/objs/gameEnvironment/";
-	char* manifest_filePath;
-	char* envModels_filePath;
+	char* manifest_filePath = "assets/models/objs/gameEnvironment/manifest.txt";;
+	char* envModels_filePath = "\0";
 	
 	objModel objData;
-
-	manifest_filePath = base_filePath;
-	strcat(manifest_filePath, "manifest.txt");
-
-	printf("%s", manifest_filePath);
 
 	filePointer = fopen(manifest_filePath, "r"); //Opens the file
 	if (filePointer == NULL) //Checks to see if the file has opened
@@ -52,6 +47,8 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 		exit(1);
 	}
+	else
+		printf("SUCCESS: Manifest file found! Loading models...\n");
 
 	while (1) //Loops while not equal to the End of File (EOF)
 	{
@@ -59,17 +56,20 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
 
-		envModels_filePath = NULL;
-		envModels_filePath = base_filePath;
-
 		if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
 		{
 			break; //Breaks from the loop of End of File (EOF) is reached
 		}
 
-		objData = LoadOBJFile(strcat(envModels_filePath, lineBuffer));
+		strcpy(envModels_filePath, base_filePath);
+
+		strcat(envModels_filePath, lineBuffer);
+
+		objData = LoadOBJFile(envModels_filePath);
 		PrintOBJData(objData);
 	}
+
+	fclose(filePointer);
 
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
