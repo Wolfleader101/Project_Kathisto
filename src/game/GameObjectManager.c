@@ -106,3 +106,14 @@ GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t i
 {
 	return gameObjectManager->gameObjects[id];
 }
+
+GameObject* GameObjectManagerFindByName(GameObjectManager* gameObjectManager, char* name)
+{
+	for (int i = 0; i < gameObjectManager->lastIndex; ++i)
+	{
+		if (strcmp(name, gameObjectManager->gameObjects[i]->name) == 0)
+			return gameObjectManager->gameObjects[i];
+
+	}
+	return NULL;
+}
