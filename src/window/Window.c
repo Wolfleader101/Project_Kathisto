@@ -28,11 +28,50 @@ GameObjectManager gameObjectManager;
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
-	//Load Model Files (OBJ)
+	/////////////////////////////////////////////////
+	//  LOAD OBJ FILES
+	/////////////////////////////////////////////////
+	
+	FILE* filePointer = NULL; //File pointer to Manifest file
+
+	char base_filePath[] = "assets/models/objs/gameEnvironment/";
+	char* manifest_filePath = NULL;
+	char* envModels_filePath = NULL;
+	
 	objModel objData;
 
-	objData = LoadOBJFile("assets/models/objs/gameEnvironment/stairs8_step8.obj");
-	PrintOBJData(objData);
+	manifest_filePath = strcat(base_filePath, "manifest.txt\0");
+
+	printf("%s", manifest_filePath);
+
+	filePointer = fopen(manifest_filePath, "r"); //Opens the file
+	if (filePointer == NULL) //Checks to see if the file has opened
+	{
+		perror("ERROR");
+
+		exit(1);
+	}
+
+	while (1) //Loops while not equal to the End of File (EOF)
+	{
+		char lineBuffer[128]; //Each line of the file is read into the buffer
+
+		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
+
+		envModels_filePath = base_filePath;
+
+		if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
+		{
+			break; //Breaks from the loop of End of File (EOF) is reached
+		}
+
+		objData = LoadOBJFile(strcat(envModels_filePath, lineBuffer));
+		PrintOBJData(objData);
+	}
+
+	/////////////////////////////////////////////////
+	//  INITIALISE GAME FUNCTIONS & VARIABLES
+	/////////////////////////////////////////////////
 	
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
