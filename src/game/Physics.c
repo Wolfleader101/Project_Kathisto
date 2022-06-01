@@ -32,15 +32,12 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
 
 	
-	// @Charlie On Collision should be here
-	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
-	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
 	if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
 	if (collisionData.collidingGameObject != NULL && gameObject->OnCollision && collisionData.collidingGameObject->OnCollision) gameObject->OnCollision(fixedTime, gameObject, collisionData.collidingGameObject);
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
 	// apply friction and drag
-	//PhysicsTransform(fixedTime, gameObject, collisionData);
+	PhysicsTransform(fixedTime, gameObject, collisionData);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -120,7 +117,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 		float force = (uSlide * normalForce) * 0.25f;
 
 
-		if(rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
+		if (rigidBody->velocity.x >= -0.1f && rigidBody->velocity.x <= 0.1f)
 		{
 			rigidBody->velocity.x = 0.0f;
 		}
@@ -279,29 +276,29 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 			float max = -2.0f;
 			size_t best_match = 0u;
 
-			for (size_t i = 0; i < VECTOR_DIRECTIONS_LENGTH; i++)
+			if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
 			{
-				//if (i == 0 && gameObject->rigidBody.onGround) continue;
-				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[i], Vec3Normalize(gameObject->rigidBody.velocity));
+				return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			}
+			for (size_t j = 0; !gameObjectManager->gameObjects[i]->rigidBody.isFloor && j < VECTOR_DIRECTIONS_LENGTH; ++j)
+			{
+				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[j], Vec3Normalize(
+					Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
 
 				if (dot > max)
 				{
 					max = dot;
-					best_match = i;
+					best_match = j;
 				}
 			}
 
 			Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
-			if (gameObject->rigidBody.onGround)
-			{
-				collidingFace = Vec3Add((Vector3) { 0.0f, 1.0f, 0.0f }, collidingFace);
-			}
 
-			return (CollisionData) {.collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
 		}
 	}
 
-	return (CollisionData){.collidingFace  = 0, .collidingGameObject = NULL};
+	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };
 }
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
@@ -312,7 +309,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 		gameObject->rigidBody.onGround = false;
 
 	Vector3 normal = collisionData.collidingFace;
-	printf("GameObject: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, normal.x, normal.y, normal.z);
+	//printf("GameObject: %s, Colliding Obj: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, collisionData.collidingGameObject->name, normal.x, normal.y, normal.z);
 
 	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
 	Vector3 MulDotPlane = Vec3ScalarMultiply(normal, dotDirNormal);
@@ -324,35 +321,39 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-	Vector3 normalNewDir = Vec3Normalize(newDir);
-
-	//look into on ground collision??
-	/*
 	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
-	if (normalNewDir.y == 1.0f) 
-		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
-
 	float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
-	if (normalNewDir.x == 1.0f)
-		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.x + (rightAmount / 2);
-
 	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
-	if (normalNewDir.z == 1.0f)
-		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);*/
+
+
+	if (normal.y == 1.0f)
+		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+	else if (normal.y == -1.0f)
+		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.y - (upAmount / 2);
+
+	if (normal.x == 1.0f)
+		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.x + (rightAmount / 2);
+	else if(normal.x == -1.0f)
+		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.x - (rightAmount / 2);
+
+	if (normal.z == 1.0f)
+		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
+	else if (normal.z == -1.0f)
+		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.z - (forwardAmount / 2);
 
 	// if colliding game object is static or on ground, do not move it
-	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)
-	{
+	//if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.onGround)
+	//{
 		// transfer a % of the decay to the gameobject
 		// .25( decay) * mass / 2 = veloicty
-		if (newDir.x == 0 && newDir.y == 0 && newDir.z == 0) return;
+		//if (newDir.x == 0 && newDir.y == 0 && newDir.z == 0) return;
 
-		Vector3 newVel = Vec3ScalarMultiply(Vec3ScalarMultiply(normalNewDir, (decay * collisionData.collidingGameObject->rigidBody.mass) / 2), -1.0f);
-		collisionData.collidingGameObject->rigidBody.velocity = newVel;
-	}
+		//Vector3 newVel = Vec3ScalarMultiply(Vec3ScalarMultiply(normal, (decay * collisionData.collidingGameObject->rigidBody.mass) / 2), -1.0f);
+		//collisionData.collidingGameObject->rigidBody.velocity = newVel;
+	//}
 
-	if (normalNewDir.x > 0.0f) gameObject->rigidBody.velocity.x *= decay;
-	if (normalNewDir.y > 0.0f) gameObject->rigidBody.velocity.y *= decay;
-	if (normalNewDir.z > 0.0f) gameObject->rigidBody.velocity.z *= decay;
+	if (fabs(normal.x) > 0.0f) gameObject->rigidBody.velocity.x *= decay;
+	if (fabs(normal.y) > 0.0f) gameObject->rigidBody.velocity.y *= decay;
+	if (fabs(normal.z) > 0.0f) gameObject->rigidBody.velocity.z *= decay;
 
 }

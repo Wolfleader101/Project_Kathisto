@@ -141,7 +141,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
 	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
-	SetupCallbacks(playerObject, OnPlayerStart, OnPlayerUpdate, NULL, NULL, OnPlayerCollision);
+	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
