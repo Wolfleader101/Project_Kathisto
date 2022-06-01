@@ -5,6 +5,7 @@
 
 extern const float MOUSE_SENS;
 extern const float WALK_SPEED;
+extern const float FLY_SPEED;
 extern const float UP_SPEED;
 extern const float G_ACCELERATION;
 extern const float AIR_DENSITY;

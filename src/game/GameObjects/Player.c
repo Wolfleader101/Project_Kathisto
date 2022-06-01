@@ -6,8 +6,6 @@
 
 //Setting the variables to default values
 
-float maxAcceleration = 500.0f; //The maximum acceleration that the player can achieve
-
 Vector3 desiredPlayerVel = { 0.0f, 0.0f, 0.0f }; //The desired velocity of the player object
 
 float rotSmoothSpeed = 4.0f; //The speed at which the player character will rotate
@@ -91,61 +89,37 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 	gameObject->rigidBody.useGravity = true;
 }
 
-void CalculatePlayerVelcoity(Time time, GameObject* gameObject) //Calculates the velocity of the player each frame
-{
-	float maxSpeedChange = maxAcceleration * time.deltaTime;
 
-	MovePlayer();
-
-	if (gameObject->rigidBody.velocity.x < desiredPlayerVel.x)
-	{
-		gameObject->rigidBody.velocity.x += maxSpeedChange;
-	}
-	else if (gameObject->rigidBody.velocity.x > desiredPlayerVel.x)
-	{
-		gameObject->rigidBody.velocity.x -= maxSpeedChange;
-	}
-
-	if (gameObject->rigidBody.velocity.z < desiredPlayerVel.z)
-	{
-		gameObject->rigidBody.velocity.z += maxSpeedChange;
-	}
-	else if (gameObject->rigidBody.velocity.z > desiredPlayerVel.z)
-	{
-		gameObject->rigidBody.velocity.z -= maxSpeedChange;
-	}
-}
-
-void MovePlayer() //Function to move the player relative to the camera object
+void MovePlayer(Time time, GameObject* gameObject) //Function to move the player relative to the camera object
 {
 	if (PLAYERFORWARD_TOGGLE == true) //Moves character forward
 	{
-		desiredPlayerVel.x = camForwardDirFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = camForwardDirFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERBACKWARD_TOGGLE == true) //Moves character backward
 	{
-		desiredPlayerVel.x = -camForwardDirFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = -camForwardDirFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += -camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += -camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERLEFT_TOGGLE == true) //Moves character left
 	{
-		desiredPlayerVel.x = -camRightFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = -camRightFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += -camRightFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += -camRightFlat.z * WALK_SPEED * time.deltaTime;
 	}
 
 	if (PLAYERRIGHT_TOGGLE == true) //Moves character right
 	{
-		desiredPlayerVel.x = camRightFlat.x * WALK_SPEED;
-		desiredPlayerVel.z = camRightFlat.z * WALK_SPEED;
+		gameObject->rigidBody.velocity.x += camRightFlat.x * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.z += camRightFlat.z * WALK_SPEED * time.deltaTime;
 	}
 }
 
 OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates every fixed frame
 {
-	CalculatePlayerVelcoity(time, gameObject);
+	MovePlayer(time, gameObject);
 }
 
 //isReady performs 'cooldown' for player being moved by cube collision - Remove this later

@@ -24,9 +24,7 @@ extern Vector2 playerInput; //The player movement inputs from the keyboard (Left
 
 OnStart OnPlayerStart(GameObject* gameObject); //Sets the starting variables of the player object
 
-void CalculatePlayerVelcoity(Time time, GameObject* gameObject); //Calculates the velocity of the player each frame
-
-void MovePlayer(); //Function to move the player relative to the camera object
+void MovePlayer(Time time, GameObject* gameObject); //Function to move the player relative to the camera object
 
 OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject); //Updates every frame
 
