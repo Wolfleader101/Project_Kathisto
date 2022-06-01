@@ -6,7 +6,7 @@
 
 //Setting the variables to default values
 
-float maxAcceleration = 100.0f; //The maximum acceleration that the player can achieve
+float maxAcceleration = 500.0f; //The maximum acceleration that the player can achieve
 
 Vector3 desiredPlayerVel = { 0.0f, 0.0f, 0.0f }; //The desired velocity of the player object
 
@@ -148,6 +148,4 @@ void MovePlayer() //Function to move the player relative to the camera object
 OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates every fixed frame
 {
 	CalculatePlayerVelcoity(time, gameObject);
-	//gameObject->transform.position.x += displacement.x;
-	//gameObject->transform.position.z += displacement.z;
 }

@@ -29,9 +29,6 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	}
 
 	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
-	// @Charlie On Collision should be here
-	//IF collidingObject != NULL && gameObject->rigidBody.isTrigger && gameObject->rigidBody.OnCollision != NULL)  gameObject->rigidBody.OnCollision(fixedTime, gameObject, collidingObject);
-	// also change below to (... && !gameObject->rigidBody.isTrigger) so that triggers dont move
 	if (collisionData.collidingGameObject != NULL) CollisionResolution(fixedTime, gameObject, collisionData);
 
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
@@ -351,8 +348,8 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 		collisionData.collidingGameObject->rigidBody.velocity = newVel;
 	}
 
-	if (normalNewDir.x > 0.0f) gameObject->rigidBody.velocity.x *= decay;
-	if (normalNewDir.y > 0.0f) gameObject->rigidBody.velocity.y *= decay;
-	if (normalNewDir.z > 0.0f) gameObject->rigidBody.velocity.z *= decay;
+	if (fabs(normal.x) > 0.0f) gameObject->rigidBody.velocity.x *= decay;
+	if (fabs(normal.y) > 0.0f) gameObject->rigidBody.velocity.y *= decay;
+	if (fabs(normal.z) > 0.0f) gameObject->rigidBody.velocity.z *= decay;
 
 }
