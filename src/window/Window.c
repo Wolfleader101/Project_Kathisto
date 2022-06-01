@@ -66,7 +66,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 		strcat(envModels_filePath, lineBuffer);
 
 		objData = LoadOBJFile(envModels_filePath);
-		PrintOBJData(objData);
+		//PrintOBJData(objData);
 	}
 
 	fclose(filePointer);
