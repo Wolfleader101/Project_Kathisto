@@ -34,6 +34,10 @@ set(GAME
    src/game/GameObjects/JumpPad.h
    src/game/GameObjects/JumpPad.c
 
+   src/game/GameObjects/Teleporters/Teleporters.h
+   src/game/GameObjects/Teleporters/Teleporters.c
+
+
    src/game/GameObjects/GameGeometry/DebugGeo.h
    src/game/GameObjects/GameGeometry/DebugGeo.c
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.h

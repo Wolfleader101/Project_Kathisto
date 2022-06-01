@@ -32,7 +32,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
 
 
-	if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
+	if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
 	if (collisionData.collidingGameObject != NULL && gameObject->OnCollision && collisionData.collidingGameObject->OnCollision) gameObject->OnCollision(fixedTime, gameObject, collisionData.collidingGameObject);
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
