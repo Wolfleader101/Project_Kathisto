@@ -147,3 +147,43 @@ OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates e
 {
 	CalculatePlayerVelcoity(time, gameObject);
 }
+
+//isReady performs 'cooldown' for player being moved by cube collision - Remove this later
+bool isReady = true;
+float cooldown = 5.0f;
+
+OnUpdate OnPlayerUpdate(Time time, GameObject* gameObject) //Updates every frame
+{
+	CalculatePlayerVelcoity(time);
+
+	Vector3 displacement = { //The displacement of the player from their original position
+		playerVel.x * time.deltaTime,
+		playerVel.y * time.deltaTime,
+		playerVel.z * time.deltaTime };
+	
+	gameObject->transform.position.x += displacement.x;
+	gameObject->transform.position.z += displacement.z;
+
+	if (!isReady)
+	{
+		cooldown -= time.deltaTime;
+		if (cooldown <= 0)
+		{
+			cooldown = 5.0f;
+			isReady = true;
+		}
+	}
+}
+
+
+//This can be seen as test for jump pad - May want to move this over so code is run from jump pad object
+OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject) //Updates every frame
+{
+	printf("TEST");
+
+	if (isReady) 
+	{
+		gameObject->transform.position.y += 30;
+		isReady = false;
+	}
+}

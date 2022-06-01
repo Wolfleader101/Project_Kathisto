@@ -54,3 +54,8 @@ OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 OnFixedUpdate OnCubeFixedUpdate(Time time, GameObject* gameObject)
 {
 }
+
+OnCollision OnCubeCollision(Time time, GameObject* gameObject, GameObject* collisionObject) 
+{
+
+}

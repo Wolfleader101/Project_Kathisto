@@ -29,3 +29,5 @@ void CalculatePlayerVelcoity(Time time, GameObject* gameObject); //Calculates th
 void MovePlayer(); //Function to move the player relative to the camera object
 
 OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject); //Updates every frame
+
+OnCollision OnPlayerCollision(Time time, GameObject* gameObject, GameObject* collisionObject);
