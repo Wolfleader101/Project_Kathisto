@@ -35,12 +35,13 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	FILE* filePointer = NULL; //File pointer to Manifest file
 
 	char base_filePath[] = "assets/models/objs/gameEnvironment/";
-	char* manifest_filePath = NULL;
-	char* envModels_filePath = NULL;
+	char* manifest_filePath;
+	char* envModels_filePath;
 	
 	objModel objData;
 
-	manifest_filePath = strcat(base_filePath, "manifest.txt\0");
+	manifest_filePath = base_filePath;
+	strcat(manifest_filePath, "manifest.txt");
 
 	printf("%s", manifest_filePath);
 
@@ -58,6 +59,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
 
+		envModels_filePath = NULL;
 		envModels_filePath = base_filePath;
 
 		if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
