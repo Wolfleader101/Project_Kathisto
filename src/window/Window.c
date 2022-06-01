@@ -28,10 +28,56 @@ GameObjectManager gameObjectManager;
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
+	/////////////////////////////////////////////////
+	//  LOAD OBJ FILES
+	/////////////////////////////////////////////////
+	
+	FILE* filePointer = NULL; //File pointer to Manifest file
+
+	char base_filePath[] = "assets/models/objs/gameEnvironment/";
+	char* manifest_filePath = "assets/models/objs/gameEnvironment/manifest.txt";;
+	char* envModels_filePath = "\0";
+	
+	objModel objData;
+
+	filePointer = fopen(manifest_filePath, "r"); //Opens the file
+	if (filePointer == NULL) //Checks to see if the file has opened
+	{
+		perror("ERROR");
+
+		exit(1);
+	}
+	else
+		printf("SUCCESS: Manifest file found! Loading models...\n");
+
+	while (1) //Loops while not equal to the End of File (EOF)
+	{
+		char lineBuffer[128]; //Each line of the file is read into the buffer
+
+		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
+
+		if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
+		{
+			break; //Breaks from the loop of End of File (EOF) is reached
+		}
+
+		strcpy(envModels_filePath, base_filePath);
+
+		strcat(envModels_filePath, lineBuffer);
+
+		objData = LoadOBJFile(envModels_filePath);
+		PrintOBJData(objData);
+	}
+
+	fclose(filePointer);
+
+	/////////////////////////////////////////////////
+	//  INITIALISE GAME FUNCTIONS & VARIABLES
+	/////////////////////////////////////////////////
+	
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
-
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

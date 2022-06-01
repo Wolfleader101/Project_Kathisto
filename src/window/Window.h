@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <GL/freeglut.h>
 
 #include "game/Game.h"
@@ -13,6 +13,8 @@
 #include "game/GameObjects/CameraThirdPerson.h" //Includes the Third Person Camera
 #include "game/GameObjects/Player.h" //Includes access to the player object
 #include "math/Vector.h"
+#include "loader/model/objLoader.h" //Enables the ability to load basic obj files
+#include <string.h> //Used for strcat()
 
 #include "game/GameObjects/GameGeometry/DebugGeo.h" //In Charge of building the Debug Geometry 
 
