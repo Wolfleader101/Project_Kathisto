@@ -37,7 +37,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
 
 	// apply friction and drag
-	//PhysicsTransform(fixedTime, gameObject, collisionData);
+	PhysicsTransform(fixedTime, gameObject, collisionData);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -309,19 +309,22 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 		gameObject->rigidBody.onGround = false;
 
 	Vector3 normal = collisionData.collidingFace;
-	printf("GameObject: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, normal.x, normal.y, normal.z);
+	//printf("GameObject: %s, Colliding Obj: %s, Normal: %.2f %.2f %.2f\n", gameObject->name, collisionData.collidingGameObject->name, normal.x, normal.y, normal.z);
 
 	float dotDirNormal = Vec3DotProduct(gameObject->rigidBody.velocity, normal);
 	Vector3 MulDotPlane = Vec3ScalarMultiply(normal, dotDirNormal);
 	Vector3 ScalarByTwo = Vec3ScalarMultiply(MulDotPlane, 2);
 	Vector3 newDir = Vec3Subtract(gameObject->rigidBody.velocity, ScalarByTwo);
 
+	printf("Velocity: %.2f %.2f %.2f\n", gameObject->rigidBody.velocity.x, gameObject->rigidBody.velocity.y, gameObject->rigidBody.velocity.z);
 	gameObject->rigidBody.velocity = newDir;
+	printf("GameObject: %s, Colliding Obj: %s, Velocity: %.2f %.2f %.2f\n", gameObject->name, collisionData.collidingGameObject->name, newDir.x, newDir.y, newDir.z);
 
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
 	Vector3 normalNewDir = Vec3Normalize(newDir);
+
 
 	//look into on ground collision??
 
