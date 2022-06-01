@@ -101,21 +101,19 @@ void CalculatePlayerVelcoity(Time time, GameObject* gameObject) //Calculates the
 	{
 		gameObject->rigidBody.velocity.x += maxSpeedChange;
 	}
-	else
-		if (gameObject->rigidBody.velocity.x > desiredPlayerVel.x)
-		{
-			gameObject->rigidBody.velocity.x -= maxSpeedChange;
-		}
+	else if (gameObject->rigidBody.velocity.x > desiredPlayerVel.x)
+	{
+		gameObject->rigidBody.velocity.x -= maxSpeedChange;
+	}
 
 	if (gameObject->rigidBody.velocity.z < desiredPlayerVel.z)
 	{
 		gameObject->rigidBody.velocity.z += maxSpeedChange;
 	}
-	else
-		if (gameObject->rigidBody.velocity.z > desiredPlayerVel.z)
-		{
-			gameObject->rigidBody.velocity.z -= maxSpeedChange;
-		}
+	else if (gameObject->rigidBody.velocity.z > desiredPlayerVel.z)
+	{
+		gameObject->rigidBody.velocity.z -= maxSpeedChange;
+	}
 }
 
 void MovePlayer() //Function to move the player relative to the camera object
