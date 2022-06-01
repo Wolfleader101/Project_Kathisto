@@ -37,5 +37,15 @@ void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
  * @brief find a gameobject by id
  * @param gameObjectManager to find in
  * @param id of gameobject to find
+ * @return the gameobject if found, else NULL
 */
 GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
+
+
+/**
+ * @brief find a gameobject by name
+ * @param gameObjectManager to find gameobject in
+ * @param name to search for
+ * @return the gameobject if found, else NULL
+*/
+GameObject* GameObjectManagerFindByName(GameObjectManager* gameObjectManager, char* name);
