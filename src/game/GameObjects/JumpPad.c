@@ -39,8 +39,8 @@ OnUpdate OnJumpPadUpdate(Time time, GameObject* gameObject)
 
 OnFixedUpdate OnJumpPadFixedUpdate(Time time, GameObject* gameObject)
 {
-	if(!isReady)
-		collidingObject->rigidBody.velocity.y += 100.0f * time.deltaTime;
+	//if(!isReady)
+		//collidingObject->rigidBody.velocity.y += 100.0f * time.deltaTime;
 
 }
 
@@ -49,7 +49,8 @@ OnCollision OnJumpPadCollision(Time time, GameObject* gameObject, GameObject* co
 	if (isReady)
 	{
 		collidingObject = collisionObject;
-		collidingObject->transform.position.y += 1.0f;
+		collidingObject->transform.position.y += 2.0f;
+		collidingObject->rigidBody.velocity.y += 200.0f;
 		isReady = false;
 	}
 }
