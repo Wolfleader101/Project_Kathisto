@@ -10,6 +10,8 @@
 
 typedef struct objGroup
 {
+    char* groupName;                    //The name of the model group
+    
     unsigned nVerts;                    //Number of vertices in the model (FOR AN INDIVIDUAL GROUP)
     unsigned nUVs;                      //Number of UVs in the model (FOR AN INDIVIDUAL GROUP)
     unsigned nNormals;                  //Number of normals in the model (FOR AN INDIVIDUAL GROUP)

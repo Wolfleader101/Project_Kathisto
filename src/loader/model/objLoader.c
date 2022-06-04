@@ -4,6 +4,12 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 {
 	FILE* filePointer = NULL; //File pointer to OBJ File
 	int lineResult; //Checks the results of an fscanf of a line
+
+	unsigned vertIndex = 0; //The counter which adds data to vertex position array
+	unsigned texCoordIndex = 0; //The counter which adds data to the texture coordinate array
+	unsigned normalIndex = 0; //The counter which adds data to the vertex normal array
+
+	unsigned faceIndex = 0; //The counter which adds data to the face index arrays
 	
 	objModel objData = InitialiseData(); //Data to be passed back (Initialise first)
 
@@ -23,9 +29,11 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 	if(objData.nGroups == 0) //If there are no groups, run through the file as though it is one object
 	{
+		objData.modelGroups = NULL;
+
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
-			char lineBuffer[128]; //Each line of the file is read into the buffer
+			char lineBuffer[128] = NULL; //Each line of the file is read into the buffer
 
 			int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
 
@@ -38,28 +46,34 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
-				Vec3_AddToList(&objData.vertPosition, vec3_tmpData1); //Adds to the list
+				objData.vertPosition[vertIndex] = vec3_tmpData1; //Adds to the array
+
+				vertIndex++;
 			}
 
 			if (strcmp(lineBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
 			{
 				fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
 
-				Vec2_AddToList(&objData.textureCoord, vec2_tmpData1); //Adds to the list
+				objData.textureCoord[texCoordIndex] = vec2_tmpData1; //Adds to the array
+
+				texCoordIndex++;
 			}
 
 			if (strcmp(lineBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
-				Vec3_AddToList(&objData.normalData, vec3_tmpData1); //Adds to the list
+				objData.normalData[normalIndex] = vec3_tmpData1; //Adds to the array
+
+				normalIndex++;
 			}
 
 			if (strcmp(lineBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
 			{
-				int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
-					&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
-					&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
+				int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n",	&vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
+																						&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
+																						&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
 
 				vertsInFace /= 3; //Converts it into the number of vertexes (3 = Triangles, 4 = Quads, etc.)
 
@@ -70,15 +84,94 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 					exit(0);
 				}
 
-				Vec3Int_AddToList(&objData.vertexPosIndicies, vec3Int_tmpData1); //Adds to the list
-				Vec3Int_AddToList(&objData.textureCoordIndicies, vec3Int_tmpData2); //Adds to the list
-				Vec3Int_AddToList(&objData.normalIndicies, vec3Int_tmpData3); //Adds to the list
+				objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
+				objData.normalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
+				objData.textureCoordIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
+
+				faceIndex++;
 			}
 		}
 	}
 	else
 	{
+		char* previousBuffer = NULL; //The bufefr from the prvious line
+		unsigned groupCounter = 0; //The counter which adds data to the next group
 
+		vertIndex = 0; //The counter which adds data to vertex position array
+		texCoordIndex = 0; //The counter which adds data to the texture coordinate array
+		normalIndex = 0; //The counter which adds data to the vertex normal array
+
+		faceIndex = 0; //The counter which adds data to the face index arrays
+		
+		while (1) //Loops while not equal to the End of File (EOF)
+		{
+			char currentBuffer[128] = NULL; //Each line of the file is read into the buffer
+
+			int lineResult = fscanf(filePointer, "%s", currentBuffer); //Reads the first word of the line
+
+			if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
+			{
+				break; //Breaks from the loop of End of File (EOF) is reached
+			}
+
+			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			{
+				groupCounter++;
+			}
+
+			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+			{
+				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
+
+				objData.modelGroups[groupCounter].vertPosition[vertIndex] = vec3_tmpData1; //Adds to the array
+
+				vertIndex++;
+			}
+
+			if (strcmp(currentBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
+			{
+				fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
+
+				objData.modelGroups[groupCounter].textureCoord[texCoordIndex] = vec2_tmpData1; //Adds to the array
+
+				texCoordIndex++;
+			}
+
+			if (strcmp(currentBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
+			{
+				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
+
+				Vec3_AddToList(&objData.normalData, vec3_tmpData1); //Adds to the list
+
+				objData.modelGroups[groupCounter].normalData[normalIndex] = vec3_tmpData1; //Adds to the array
+
+				normalIndex++;
+			}
+
+			if (strcmp(currentBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
+			{
+				int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n",	&vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
+																						&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
+																						&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
+
+				vertsInFace /= 3; //Converts it into the number of vertexes (3 = Triangles, 4 = Quads, etc.)
+
+				if (vertsInFace != 3) //Checks to see if the file is triangulated
+				{
+					printf("ERROR: File is not triangulated! Please edit the file and triangulate all faces!\n");
+
+					exit(0);
+				}
+
+				objData.modelGroups[groupCounter].grpVertexIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
+				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
+				objData.modelGroups[groupCounter].grpUVIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
+
+				faceIndex++;
+			}
+
+			previousBuffer = currentBuffer;
+		}
 	}
 
 	fclose(filePointer); //Closes the file
