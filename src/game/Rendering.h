@@ -4,11 +4,26 @@
 #include "game/GameTypes.h"
 #include "game/GameConstants.h"
 
+#include "includes.h"
+
 /**
  * @brief initialise a mesh component
  * @param mesh to initialise
 */
 void InitMesh(Mesh* mesh);
+
+/**
+ * @brief initialise a texture
+ * @param texture texture to initialise
+*/
+void InitTexture(Texture* texture);
+
+/**
+ * @brief load in a texture to a texture object
+ * @param file of texture
+ * @param texture to load data into
+*/
+void LoadTexture(char* file, Texture* tex);
 
 /**
  * @brief draw a mesh in openGL

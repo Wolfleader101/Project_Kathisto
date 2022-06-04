@@ -10,17 +10,76 @@ void InitMesh(Mesh* mesh)
 	mesh->isUniformColor = false;
 	mesh->debug = false;
 	mesh->disableMesh = false;
+
+	InitTexture(&mesh->texture);
+}
+
+void InitTexture(Texture* texture)
+{
+	texture->texture = 0u;
+	texture->textureCoords = (Vector2*){ 0 };
+	texture->width = 0;
+	texture->height = 0;
+	texture->channelsIn = 0;
+	texture->desiredChannel = 0;
+}
+
+void LoadTexture(char* file, Texture* tex)
+{
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &tex->texture);
+
+	glBindTexture(GL_TEXTURE_2D, tex->texture);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  // (Actually, this one is the default)
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// might need to create this into texture
+	unsigned char* data = stbi_load("assets/textures/container.jpg", &tex->width, &tex->height, &tex->channelsIn, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, tex->width, tex->height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
+	glDisable(GL_TEXTURE_2D);
+
+	Vector2 texCoords[] =
+	{
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{1.0f, 1.0f},
+		{0.0f, 1.0f},
+	};
+
+	tex->textureCoords = texCoords;
 }
 
 void DrawMesh(Time time, Mesh* mesh)
 {
+	if (mesh->hasTexture)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_COORD_ARRAY);
 
-	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
+		glColor4ub(255, 255, 255, 255);
+		glBindTexture(GL_TEXTURE_2D, mesh->texture.texture);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(Vector2), mesh->texture.textureCoords);
 
-	if (mesh->isUniformColor)
-		glColor4fv(mesh->colors);
-	else
-		glColorPointer(4, GL_FLOAT, 4, mesh->colors);
+	}
+	else {
+		if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
+
+		if (mesh->isUniformColor)
+			glColor4fv(mesh->colors);
+		else
+			glColorPointer(4, GL_FLOAT, 4, mesh->colors);
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -29,7 +88,17 @@ void DrawMesh(Time time, Mesh* mesh)
 	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+
+	if (mesh->hasTexture)
+	{
+		glDisable(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	else
+	{
+		if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+	}
 }
 
 void DrawGizmos(Time time, Vector3 maxSize)

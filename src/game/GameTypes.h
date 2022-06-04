@@ -47,6 +47,18 @@ typedef struct Transform
 
 } Transform;
 
+typedef struct Texture
+{
+	unsigned int texture;
+
+	Vector2* textureCoords;
+
+	int width;
+	int height;
+	int channelsIn;
+	int desiredChannel;
+} Texture;
+
 /**
  * @struct Mesh
  * @brief the mesh component used for drawing a gameobject
@@ -82,6 +94,16 @@ typedef struct Mesh
 	 * @brief if its a uniform (single) color
 	 */
 	bool isUniformColor;
+
+	/**
+	 * @brief texture of the mesh
+	*/
+	Texture texture;
+
+	/**
+	 * @brief if the mesh has a texture
+	*/
+	bool hasTexture;
 
 	/**
 	 * @brief debug mesh to draw with lines

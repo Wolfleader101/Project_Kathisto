@@ -8,6 +8,7 @@ add_subdirectory(gui)
 
 set(SOURCES
     src/main.c
+    src/includes.h
     ${MATH}
     ${GAME}
     ${LOADER}

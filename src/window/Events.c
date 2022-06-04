@@ -1,7 +1,5 @@
 #include "Events.h"
 
-#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-#include "cimgui.h"
 
 bool USE_MENU_CURSOR = false;
 bool TOGGLE_MENU = true;

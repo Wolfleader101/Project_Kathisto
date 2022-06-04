@@ -1,4 +1,4 @@
-﻿#define STB_IMAGE_IMPLEMENTATION //Needed in main.c for the stb_image library to function
+﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include <stdlib.h>
 #include <stdio.h>

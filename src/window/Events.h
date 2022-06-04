@@ -1,10 +1,11 @@
 #pragma once
 
+#include "includes.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <GL/freeglut.h>
-#include <stb_image.h>
 
 #include "Window.h"
 #include "game/GameObjects/Camera.h"
