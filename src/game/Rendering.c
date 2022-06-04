@@ -36,28 +36,32 @@ void LoadTexture(char* file, Texture* tex)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  // (Actually, this one is the default)
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	// might need to create this into texture
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load("assets/textures/container.jpg", &tex->width, &tex->height, &tex->channelsIn, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, tex->width, tex->height, GL_RGB, GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
-	glDisable(GL_TEXTURE_2D);
 
 	Vector2 texCoords[] =
 	{
 		{0.0f, 0.0f},
 		{1.0f, 0.0f},
-		{1.0f, 1.0f},
 		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
 	};
 
 	tex->textureCoords = texCoords;
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 void DrawMesh(Time time, Mesh* mesh)
@@ -65,12 +69,12 @@ void DrawMesh(Time time, Mesh* mesh)
 	if (mesh->hasTexture)
 	{
 		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_TEXTURE_COORD_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glColor4ub(255, 255, 255, 255);
+		glColor3f(1.0f, 1.0f, 1.0f);
+
 		glBindTexture(GL_TEXTURE_2D, mesh->texture.texture);
 		glTexCoordPointer(2, GL_FLOAT, sizeof(Vector2), mesh->texture.textureCoords);
-
 	}
 	else {
 		if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
@@ -91,14 +95,11 @@ void DrawMesh(Time time, Mesh* mesh)
 
 	if (mesh->hasTexture)
 	{
-		glDisable(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	else
-	{
-		if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
-	}
+	else if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void DrawGizmos(Time time, Vector3 maxSize)
