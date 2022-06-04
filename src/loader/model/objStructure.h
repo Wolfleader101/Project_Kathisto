@@ -6,22 +6,43 @@
 //  Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
 //////////////////////////////////////////////////////////////////////
 
-#include "utilities/vectorUtil.h"
+#include "math/Vector.h"
+
+typedef struct objGroup
+{
+    unsigned nVerts;                    //Number of vertices in the model (FOR AN INDIVIDUAL GROUP)
+    unsigned nUVs;                      //Number of UVs in the model (FOR AN INDIVIDUAL GROUP)
+    unsigned nNormals;                  //Number of normals in the model (FOR AN INDIVIDUAL GROUP)
+    unsigned nFaces;                    //Number of faces in the model (FOR AN INDIVIDUAL GROUP)
+
+    Vector3* vertPosition;              //Stores the position of a vertex (v) (FOR AN INDIVIDUAL GROUP)
+    Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt) (FOR AN INDIVIDUAL GROUP)
+    Vector3* normalData;                //Stores the normals of each vertex (vn) (FOR AN INDIVIDUAL GROUP)
+
+    Vector3Int* grpVertexIndicies;      //Face indicies which represent the vertexes (FOR AN INDIVIDUAL GROUP)
+    Vector3Int* grpNormalIndicies;      //Face indicies which represent the vertex normals (FOR AN INDIVIDUAL GROUP)
+    Vector3Int* grpUVIndicies;          //Face indicies which represent the texture coordinares (FOR AN INDIVIDUAL GROUP)
+} objGroup;
 
 typedef struct objModel
 {
+    char* modelName;                    //The name of the model
+
     unsigned nVerts;                    //Number of vertices in the model
     unsigned nUVs;                      //Number of UVs in the model
     unsigned nNormals;                  //Number of normals in the model
     unsigned nFaces;                    //Number of faces in the model
+    unsigned nGroups;                   //Number of groups in the model (Increased ONLY if there are groups present)
 
-    listVec3 vertPosition;              //Stores the position of a vertex (v)
-    listVec2 textureCoord;              //Stores the texture coordinate of each vertex (vt)
-    listVec3 normalData;                //Stores the normals of each vertex (vn)
+    Vector3* vertPosition;              //Stores the position of a vertex (v)
+    Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt)
+    Vector3* normalData;                //Stores the normals of each vertex (vn)
 
-    listVec3Int vertexPosIndicies;      //Face indicies which represent the vertexes
-    listVec3Int normalIndicies;         //Face indicies which represent the vertex normals
-    listVec3Int textureCoordIndicies;   //Face indicies which represent the texture coordinares
+    Vector3Int* vertexPosIndicies;      //Face indicies which represent the vertexes
+    Vector3Int* normalIndicies;         //Face indicies which represent the vertex normals
+    Vector3Int* textureCoordIndicies;   //Face indicies which represent the texture coordinares
+
+    objGroup* modelGroups;              //The individual groups within a model (Only used if nGroups is geater than 0, otherwise, must be set to NULL)
 } objModel;
 
 /////////////////////////////////////////////////
