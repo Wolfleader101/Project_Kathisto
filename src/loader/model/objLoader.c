@@ -119,7 +119,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
@@ -222,7 +222,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 			break; //Breaks from the loop of End of File (EOF) is reached
 		}
 
-		if (strcmp(lineBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+		if (strcmp(lineBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
 		{
 			memoryAllocated.nVerts++; //Adds one count to the number of verticies
 		}
