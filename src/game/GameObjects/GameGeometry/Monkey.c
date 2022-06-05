@@ -1,4 +1,4 @@
-#include "Monkey.h"
+/*#include "Monkey.h"
 
 OnStart OnMonkeyStart(GameObject* gameObject)
 {
@@ -32,4 +32,4 @@ Mesh objToMesh(objModel model)
 
 	return mesh;
 
-}
+}*/

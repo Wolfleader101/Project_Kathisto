@@ -33,7 +33,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
-			char lineBuffer[128] = NULL; //Each line of the file is read into the buffer
+			char lineBuffer[128]; //Each line of the file is read into the buffer
 
 			int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
 
@@ -105,7 +105,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
-			char currentBuffer[128] = NULL; //Each line of the file is read into the buffer
+			char currentBuffer[128]; //Each line of the file is read into the buffer
 
 			int lineResult = fscanf(filePointer, "%s", currentBuffer); //Reads the first word of the line
 
@@ -114,7 +114,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
@@ -163,6 +163,12 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 					exit(0);
 				}
 
+				//ADDS DATA TO ENTIRE OBJ FILE
+				objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
+				objData.normalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
+				objData.textureCoordIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
+
+				//ADDS DATA TO GROUP
 				objData.modelGroups[groupCounter].grpVertexIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
 				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
 				objData.modelGroups[groupCounter].grpUVIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
@@ -253,6 +259,67 @@ objModel AllocateModelMemory(FILE* inputPointer)
 		rewind(inputPointer); //Resets the reading to the beggining of the file
 		
 		memoryAllocated.modelGroups = malloc(sizeof(objGroup) * memoryAllocated.nGroups); //Allocates the memory for the array
+
+		for(unsigned i = 0; i < memoryAllocated.nGroups; i++) //Initialise the number of variables
+		{
+			memoryAllocated.modelGroups[i].nVerts = 0;
+			memoryAllocated.modelGroups[i].nUVs = 0;
+			memoryAllocated.modelGroups[i].nNormals = 0;
+			memoryAllocated.modelGroups[i].nFaces = 0;
+		}
+
+		char* previousBuffer = NULL; //The bufefr from the prvious line
+		unsigned groupCounter = 0; //The counter which adds data to the next group
+
+		while (1) //Loops while not equal to the End of File (EOF)
+		{
+			char currentBuffer[128]; //Each line of the file is read into the buffer
+
+			int lineResult = fscanf(inputPointer, "%s", currentBuffer); //Reads the first word of the line
+
+			if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
+			{
+				break; //Breaks from the loop of End of File (EOF) is reached
+			}
+
+			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			{
+				groupCounter++;
+			}
+
+			if (strcmp(currentBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
+			{
+				memoryAllocated.modelGroups[groupCounter].nVerts++;
+			}
+
+			if (strcmp(currentBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
+			{
+				memoryAllocated.modelGroups[groupCounter].nUVs++;
+			}
+
+			if (strcmp(currentBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
+			{
+				memoryAllocated.modelGroups[groupCounter].nNormals++;
+			}
+
+			if (strcmp(currentBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
+			{
+				memoryAllocated.modelGroups[groupCounter].nFaces++;
+			}
+
+			previousBuffer = currentBuffer;
+		}
+
+		for (unsigned i = 0; i < memoryAllocated.nGroups; i++) //Initialise the number of variables
+		{
+			memoryAllocated.modelGroups[i].vertPosition = malloc(sizeof(Vector3) * memoryAllocated.modelGroups[i].nVerts); //Allocates the memory for the array
+			memoryAllocated.modelGroups[i].textureCoord = malloc(sizeof(Vector2) * memoryAllocated.modelGroups[i].nUVs); //Allocates the memory for the array
+			memoryAllocated.modelGroups[i].normalData = malloc(sizeof(Vector3) * memoryAllocated.modelGroups[i].nNormals); //Allocates the memory for the array
+
+			memoryAllocated.modelGroups[i].grpVertexIndicies = malloc(sizeof(Vector3Int) * memoryAllocated.modelGroups[i].nFaces); //Allocates the memory for the array
+			memoryAllocated.modelGroups[i].grpNormalIndicies = malloc(sizeof(Vector3Int) * memoryAllocated.modelGroups[i].nFaces); //Allocates the memory for the array
+			memoryAllocated.modelGroups[i].grpUVIndicies = malloc(sizeof(Vector3Int) * memoryAllocated.modelGroups[i].nFaces); //Allocates the memory for the array
+		}
 	}
 
 	//ALLOCATES MEMORY FOR THE MODELS ARRAYS

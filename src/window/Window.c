@@ -42,6 +42,12 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	//  LOAD OBJ FILES
 	/////////////////////////////////////////////////
 
+	objModel objData;
+
+	objData = InitialiseData("assets/models/objs/finalGeo_GRP.obj");
+	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+	PrintOBJData(objData);
+
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
 	/////////////////////////////////////////////////
@@ -107,7 +113,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* jumpPad = malloc(sizeof(GameObject));
 	GameObject* Teleporter1 = malloc(sizeof(GameObject));
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
-	GameObject* monkey = malloc(sizeof(GameObject));
+	//GameObject* monkey = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
@@ -115,7 +121,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	InitGameObject(jumpPad);
 	InitGameObject(Teleporter1);
 	InitGameObject(Teleporter2);
-	InitGameObject(monkey);
+	//InitGameObject(monkey);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
@@ -125,7 +131,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
 	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
 	
-	SetupCallbacks(monkey, OnMonkeyStart, NULL, NULL, NULL, NULL);
+	//SetupCallbacks(monkey, OnMonkeyStart, NULL, NULL, NULL, NULL);
 
 
 	// add them to the game object manager where start will be called
@@ -137,7 +143,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
 
 
-	GameObjectManagerAdd(&gameObjectManager, monkey);
+	//GameObjectManagerAdd(&gameObjectManager, monkey);
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
