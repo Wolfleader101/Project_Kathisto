@@ -25,7 +25,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		exit(1);
 	}
 
-	objData = AllocateModelMemory(filePointer);
+	AllocateModelMemory(filePointer, objData);
 
 	if(objData.nGroups == 0) //If there are no groups, run through the file as though it is one object
 	{
@@ -212,10 +212,8 @@ objModel InitialiseData() //Used to initialise the data within an OBJ Model
 	return(initialisedData); //Return initialised data
 }
 
-objModel AllocateModelMemory(FILE* inputPointer)
+void AllocateModelMemory(FILE* inputPointer, objModel memoryAllocated)
 {
-	objModel memoryAllocated; //Data to be passed back
-	
 	//FINDS THE AMOUNT OF ITEMS WITHIN THE MODEL
 	while (1) //Loops while not equal to the End of File (EOF)
 	{
@@ -346,8 +344,6 @@ objModel AllocateModelMemory(FILE* inputPointer)
 	}
 
 	rewind(inputPointer); //Resets the reading to the beggining of the file
-
-	return(memoryAllocated);
 }
 
 void PrintOBJData(objModel inputData) //Prints OBJ Data to screen to confirm the data
