@@ -29,7 +29,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 	while (1) //Loops while not equal to the End of File (EOF)
 	{
-		char lineBuffer[128]; //Each line of the file is read into the buffer
+		char lineBuffer[128] = ""; //Each line of the file is read into the buffer
 
 		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
 
@@ -99,10 +99,12 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		}
 	}
 
+	rewind(filePointer); //Resets the reading to the beggining of the file
+
 	if(objData.nGroups > 0)
 	{
-		char* previousBuffer = NULL; //The bufefr from the prvious line
-		unsigned groupCounter = 0; //The counter which adds data to the next group
+		char* previousBuffer = ""; //The bufefr from the prvious line
+		int groupCounter = -1; //The counter which adds data to the next group (Starts at -1 to clear the first set of comments)
 
 		vertIndex = 0; //The counter which adds data to vertex position array
 		texCoordIndex = 0; //The counter which adds data to the texture coordinate array
@@ -112,7 +114,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
-			char currentBuffer[128]; //Each line of the file is read into the buffer
+			char currentBuffer[128] = ""; //Each line of the file is read into the buffer
 
 			int lineResult = fscanf(filePointer, "%s", currentBuffer); //Reads the first word of the line
 
@@ -121,7 +123,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
@@ -181,11 +183,6 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				vec3Int_tmpData2.z -= 1;
 				vec3Int_tmpData3.z -= 1;
 
-				//ADDS DATA TO ENTIRE OBJ FILE
-				objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
-				objData.normalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
-				objData.textureCoordIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
-
 				//ADDS DATA TO GROUP
 				objData.modelGroups[groupCounter].grpVertexIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
 				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
@@ -194,7 +191,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				faceIndex++;
 			}
 
-			previousBuffer = currentBuffer;
+			strcpy(previousBuffer, currentBuffer);
 		}
 	}
 
@@ -237,7 +234,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 	//FINDS THE AMOUNT OF ITEMS WITHIN THE MODEL
 	while (1) //Loops while not equal to the End of File (EOF)
 	{
-		char lineBuffer[128]; //Each line of the file is read into the buffer
+		char lineBuffer[128] = ""; //Each line of the file is read into the buffer
 
 		int lineResult = fscanf(inputPointer, "%s", lineBuffer); //Reads the first word of the line
 
@@ -286,12 +283,12 @@ objModel AllocateModelMemory(FILE* inputPointer)
 			memoryAllocated.modelGroups[i].nFaces = 0;
 		}
 
-		char* previousBuffer = NULL; //The bufefr from the prvious line
+		char* previousBuffer = ""; //The bufefr from the prvious line
 		unsigned groupCounter = 0; //The counter which adds data to the next group
 
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
-			char currentBuffer[128]; //Each line of the file is read into the buffer
+			char currentBuffer[128] = ""; //Each line of the file is read into the buffer
 
 			int lineResult = fscanf(inputPointer, "%s", currentBuffer); //Reads the first word of the line
 
@@ -300,7 +297,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
@@ -325,7 +322,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				memoryAllocated.modelGroups[groupCounter].nFaces++;
 			}
 
-			previousBuffer = currentBuffer;
+			strcpy(previousBuffer, currentBuffer);
 		}
 
 		for (unsigned i = 0; i < memoryAllocated.nGroups; i++) //Initialise the number of variables
@@ -457,9 +454,9 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			//Print Vertex data to the screen
 			for (unsigned z = 0; z < inputData.modelGroups->nVerts; z++)
 			{
-				printf("%f, %f, %f\n", inputData.modelGroups->vertPosition[z].x,
-					inputData.modelGroups->vertPosition[z].y,
-					inputData.modelGroups->vertPosition[z].z);
+				printf("%f, %f, %f\n",	inputData.modelGroups[i].vertPosition[z].x,
+										inputData.modelGroups[i].vertPosition[z].y,
+										inputData.modelGroups[i].vertPosition[z].z);
 			}
 
 			printf("\n");
@@ -473,8 +470,8 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			//Print UV data to the screen
 			for (unsigned z = 0; z < inputData.modelGroups->nUVs; z++)
 			{
-				printf("%f, %f\n", inputData.modelGroups->textureCoord[z].x,
-					inputData.modelGroups->textureCoord[z].y);
+				printf("%f, %f\n",	inputData.modelGroups[i].textureCoord[z].x,
+									inputData.modelGroups[i].textureCoord[z].y);
 			}
 
 			printf("\n");
@@ -488,9 +485,9 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			//Print Normal data to the screen
 			for (unsigned z = 0; z < inputData.modelGroups->nNormals; z++)
 			{
-				printf("%f, %f, %f\n", inputData.modelGroups->normalData[z].x,
-					inputData.modelGroups->normalData[z].y,
-					inputData.modelGroups->normalData[z].z);
+				printf("%f, %f, %f\n",	inputData.modelGroups[i].normalData[z].x,
+										inputData.modelGroups[i].normalData[z].y,
+										inputData.modelGroups[i].normalData[z].z);
 			}
 
 			printf("\n");
@@ -504,15 +501,15 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			//Print Face data to the screen
 			for (unsigned z = 0; z < inputData.modelGroups->nFaces; z++)
 			{
-				printf("%d/%d/%d %d/%d/%d %d/%d/%d\n", inputData.modelGroups->grpVertexIndicies[z].x,
-					inputData.modelGroups->grpUVIndicies[z].x,
-					inputData.modelGroups->grpNormalIndicies[z].x,
-					inputData.modelGroups->grpVertexIndicies[z].y,
-					inputData.modelGroups->grpUVIndicies[z].y,
-					inputData.modelGroups->grpNormalIndicies[z].y,
-					inputData.modelGroups->grpVertexIndicies[z].z,
-					inputData.modelGroups->grpUVIndicies[z].z,
-					inputData.modelGroups->grpNormalIndicies[z].z);
+				printf("%d/%d/%d %d/%d/%d %d/%d/%d\n",	inputData.modelGroups[i].grpVertexIndicies[z].x,
+														inputData.modelGroups[i].grpUVIndicies[z].x,
+														inputData.modelGroups[i].grpNormalIndicies[z].x,
+														inputData.modelGroups[i].grpVertexIndicies[z].y,
+														inputData.modelGroups[i].grpUVIndicies[z].y,
+														inputData.modelGroups[i].grpNormalIndicies[z].y,
+														inputData.modelGroups[i].grpVertexIndicies[z].z,
+														inputData.modelGroups[i].grpUVIndicies[z].z,
+														inputData.modelGroups[i].grpNormalIndicies[z].z);
 			}
 		}
 	}

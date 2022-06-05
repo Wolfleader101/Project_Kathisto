@@ -44,7 +44,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	objModel objData;
 
-	objData = InitialiseData("assets/models/objs/finalGeo_GRP.obj");
+	objData = InitialiseData();
 	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
 
 	//PrintOBJData(objData); //Prints the data of the entire model
