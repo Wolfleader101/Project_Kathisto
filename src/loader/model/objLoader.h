@@ -8,15 +8,17 @@
 //  Created by Darcy Lyndon Cukrov Wilson - 31/05/2022
 //////////////////////////////////////////////////////////////////////
 
-#include<stdio.h>
-#include<string.h> //Included for strcmp()
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> //Included for strcmp()
 
 #include "objStructure.h"
 
 objModel LoadOBJFile(const char* filePath); //Load and return the data for an OBJ File
 objModel InitialiseData(); //Used to initialise the data within an OBJ Model
-void AllocateModelMemory(FILE* inputPointer, objModel memoryAllocated); //Allocates the memory needed for the model data
+objModel AllocateModelMemory(FILE* inputPointer); //Allocates the memory needed for the model data
 void PrintOBJData(objModel inputData); //Prints OBJ Data to screen to confirm the data
+void PrintOBJGroupData(objModel inputData); //Prints OBJ Group Data to screen to confirm the data
 
 /////////////////////////////////////////////////
 //  REFERENCES

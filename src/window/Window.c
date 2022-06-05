@@ -46,7 +46,10 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	objData = InitialiseData("assets/models/objs/finalGeo_GRP.obj");
 	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
-	PrintOBJData(objData);
+
+	//PrintOBJData(objData); //Prints the data of the entire model
+
+	PrintOBJGroupData(objData); //Prints the group data from the model
 
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES

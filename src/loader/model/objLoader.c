@@ -25,74 +25,81 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		exit(1);
 	}
 
-	AllocateModelMemory(filePointer, objData);
+	objData = AllocateModelMemory(filePointer);
 
-	if(objData.nGroups == 0) //If there are no groups, run through the file as though it is one object
+	while (1) //Loops while not equal to the End of File (EOF)
 	{
-		objData.modelGroups = NULL;
+		char lineBuffer[128]; //Each line of the file is read into the buffer
 
-		while (1) //Loops while not equal to the End of File (EOF)
+		int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
+
+		if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
 		{
-			char lineBuffer[128]; //Each line of the file is read into the buffer
+			break; //Breaks from the loop of End of File (EOF) is reached
+		}
 
-			int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
+		if (strcmp(lineBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+		{
+			fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
-			if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
+			objData.vertPosition[vertIndex] = vec3_tmpData1; //Adds to the array
+
+			vertIndex++;
+		}
+
+		if (strcmp(lineBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
+		{
+			fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
+
+			objData.textureCoord[texCoordIndex] = vec2_tmpData1; //Adds to the array
+
+			texCoordIndex++;
+		}
+
+		if (strcmp(lineBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
+		{
+			fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
+
+			objData.normalData[normalIndex] = vec3_tmpData1; //Adds to the array
+
+			normalIndex++;
+		}
+
+		if (strcmp(lineBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
+		{
+			int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n",	&vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
+																					&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
+																					&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
+
+			vertsInFace /= 3; //Converts it into the number of vertexes (3 = Triangles, 4 = Quads, etc.)
+
+			if (vertsInFace != 3) //Checks to see if the file is triangulated
 			{
-				break; //Breaks from the loop of End of File (EOF) is reached
+				printf("ERROR: File is not triangulated! Please edit the file and triangulate all faces!\n");
+
+				exit(0);
 			}
 
-			if (strcmp(lineBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
-			{
-				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
+			//REMOVES 1 FROM EACH FACE ELEMENT TO MAKE IT START AT 0
+			vec3Int_tmpData1.x -= 1;
+			vec3Int_tmpData2.x -= 1;
+			vec3Int_tmpData3.x -= 1;
+			vec3Int_tmpData1.y -= 1;
+			vec3Int_tmpData2.y -= 1;
+			vec3Int_tmpData3.y -= 1;
+			vec3Int_tmpData1.z -= 1;
+			vec3Int_tmpData2.z -= 1;
+			vec3Int_tmpData3.z -= 1;
 
-				objData.vertPosition[vertIndex] = vec3_tmpData1; //Adds to the array
+			objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
+			objData.normalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
+			objData.textureCoordIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
 
-				vertIndex++;
-			}
-
-			if (strcmp(lineBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
-			{
-				fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
-
-				objData.textureCoord[texCoordIndex] = vec2_tmpData1; //Adds to the array
-
-				texCoordIndex++;
-			}
-
-			if (strcmp(lineBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
-			{
-				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
-
-				objData.normalData[normalIndex] = vec3_tmpData1; //Adds to the array
-
-				normalIndex++;
-			}
-
-			if (strcmp(lineBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
-			{
-				int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n",	&vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
-																						&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
-																						&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
-
-				vertsInFace /= 3; //Converts it into the number of vertexes (3 = Triangles, 4 = Quads, etc.)
-
-				if (vertsInFace != 3) //Checks to see if the file is triangulated
-				{
-					printf("ERROR: File is not triangulated! Please edit the file and triangulate all faces!\n");
-
-					exit(0);
-				}
-
-				objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
-				objData.normalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
-				objData.textureCoordIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
-
-				faceIndex++;
-			}
+			faceIndex++;
 		}
 	}
-	else
+
+	if(objData.nGroups > 0)
 	{
 		char* previousBuffer = NULL; //The bufefr from the prvious line
 		unsigned groupCounter = 0; //The counter which adds data to the next group
@@ -114,12 +121,12 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "f") == 0)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
@@ -162,6 +169,17 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 					exit(0);
 				}
+
+				//REMOVES 1 FROM EACH FACE ELEMENT TO MAKE IT START AT 0
+				vec3Int_tmpData1.x -= 1;
+				vec3Int_tmpData2.x -= 1;
+				vec3Int_tmpData3.x -= 1;
+				vec3Int_tmpData1.y -= 1;
+				vec3Int_tmpData2.y -= 1;
+				vec3Int_tmpData3.y -= 1;
+				vec3Int_tmpData1.z -= 1;
+				vec3Int_tmpData2.z -= 1;
+				vec3Int_tmpData3.z -= 1;
 
 				//ADDS DATA TO ENTIRE OBJ FILE
 				objData.vertexPosIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
@@ -212,8 +230,10 @@ objModel InitialiseData() //Used to initialise the data within an OBJ Model
 	return(initialisedData); //Return initialised data
 }
 
-void AllocateModelMemory(FILE* inputPointer, objModel memoryAllocated)
+objModel AllocateModelMemory(FILE* inputPointer)
 {
+	objModel memoryAllocated = InitialiseData();
+	
 	//FINDS THE AMOUNT OF ITEMS WITHIN THE MODEL
 	while (1) //Loops while not equal to the End of File (EOF)
 	{
@@ -226,7 +246,7 @@ void AllocateModelMemory(FILE* inputPointer, objModel memoryAllocated)
 			break; //Breaks from the loop of End of File (EOF) is reached
 		}
 
-		if (strcmp(lineBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
+		if (strcmp(lineBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
 		{
 			memoryAllocated.nVerts++; //Adds one count to the number of verticies
 		}
@@ -344,6 +364,8 @@ void AllocateModelMemory(FILE* inputPointer, objModel memoryAllocated)
 	}
 
 	rewind(inputPointer); //Resets the reading to the beggining of the file
+
+	return(memoryAllocated);
 }
 
 void PrintOBJData(objModel inputData) //Prints OBJ Data to screen to confirm the data
@@ -414,4 +436,86 @@ void PrintOBJData(objModel inputData) //Prints OBJ Data to screen to confirm the
 												inputData.textureCoordIndicies[i].z,
 												inputData.normalIndicies[i].z);
 	}
+}
+
+void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to confirm the data
+{
+	if (inputData.nGroups > 0)
+	{
+		for (unsigned i = 0; i < inputData.nGroups; i++)
+		{
+			printf("--------------------------------------\n");
+			printf("OBJ GROUP %d\n", i + 1);
+			printf("--------------------------------------\n");
+
+			printf("--------------------------------------\n");
+			printf("OBJ VERTEX DATA\n");
+			printf("--------------------------------------\n");
+
+			printf("\n");
+
+			//Print Vertex data to the screen
+			for (unsigned z = 0; z < inputData.modelGroups->nVerts; z++)
+			{
+				printf("%f, %f, %f\n", inputData.modelGroups->vertPosition[z].x,
+					inputData.modelGroups->vertPosition[z].y,
+					inputData.modelGroups->vertPosition[z].z);
+			}
+
+			printf("\n");
+
+			printf("--------------------------------------\n");
+			printf("OBJ UV DATA\n");
+			printf("--------------------------------------\n");
+
+			printf("\n");
+
+			//Print UV data to the screen
+			for (unsigned z = 0; z < inputData.modelGroups->nUVs; z++)
+			{
+				printf("%f, %f\n", inputData.modelGroups->textureCoord[z].x,
+					inputData.modelGroups->textureCoord[z].y);
+			}
+
+			printf("\n");
+
+			printf("--------------------------------------\n");
+			printf("OBJ NORMAL DATA\n");
+			printf("--------------------------------------\n");
+
+			printf("\n");
+
+			//Print Normal data to the screen
+			for (unsigned z = 0; z < inputData.modelGroups->nNormals; z++)
+			{
+				printf("%f, %f, %f\n", inputData.modelGroups->normalData[z].x,
+					inputData.modelGroups->normalData[z].y,
+					inputData.modelGroups->normalData[z].z);
+			}
+
+			printf("\n");
+
+			printf("--------------------------------------\n");
+			printf("OBJ FACE DATA\n");
+			printf("--------------------------------------\n");
+
+			printf("\n");
+
+			//Print Face data to the screen
+			for (unsigned z = 0; z < inputData.modelGroups->nFaces; z++)
+			{
+				printf("%d/%d/%d %d/%d/%d %d/%d/%d\n", inputData.modelGroups->grpVertexIndicies[z].x,
+					inputData.modelGroups->grpUVIndicies[z].x,
+					inputData.modelGroups->grpNormalIndicies[z].x,
+					inputData.modelGroups->grpVertexIndicies[z].y,
+					inputData.modelGroups->grpUVIndicies[z].y,
+					inputData.modelGroups->grpNormalIndicies[z].y,
+					inputData.modelGroups->grpVertexIndicies[z].z,
+					inputData.modelGroups->grpUVIndicies[z].z,
+					inputData.modelGroups->grpNormalIndicies[z].z);
+			}
+		}
+	}
+	else
+		printf("ERROR: There are no groups to print from");
 }
