@@ -5,6 +5,7 @@
 #include "game/GameConstants.h"
 
 #include "includes.h"
+#include "loader/model/objStructure.h"
 
 /**
  * @brief initialise a mesh component
@@ -24,6 +25,13 @@ void InitTexture(Texture* texture);
  * @param texture to load data into
 */
 void LoadTexture(char* file, Texture* tex);
+
+/**
+ * @brief OBJ file to mesh component
+ * @param model to load in
+ * @param mesh to load data in to 
+*/
+void objToMesh(objModel model, Mesh* mesh);
 
 /**
  * @brief draw a mesh in openGL

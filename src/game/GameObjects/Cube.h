@@ -3,9 +3,14 @@
 #include "game/GameIncludes.h"
 #include "game/GameTypes.h"
 
+
+#include "loader/model/objLoader.h"
+#include "loader/model/objStructure.h"
+
 #include "math/mathUtils.h"
 #include "game/Rendering.h"
 #include "game/GameConstants.h"
+
 
 
 

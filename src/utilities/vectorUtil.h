@@ -1,14 +1,4 @@
-//////////////////////////////////////////////////////////////////////
-//	VECTOR (LIST) C IMPLEMENTATION
-//
-//  An implementation for C++-like vectors in C (Called lists here to not
-//  confuse ourselves with our other vectors)
-// 
-//  NOTE: Only works for types such as ints, char pointers, floats, etc.
-//  Does not appear to work for custom structs like our Vectors
-//
-//  Created by Darcy Lyndon Cukrov Wilson - 26/05/2022
-//////////////////////////////////////////////////////////////////////
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>

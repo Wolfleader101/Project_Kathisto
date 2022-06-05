@@ -1,10 +1,4 @@
-//////////////////////////////////////////////////////////////////////
-//  OBJ FILE STRUCTURE
-//
-//  Data Structures used to hold OBJ data (BASIC REPRESENTATION)
-//
-//  Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
-//////////////////////////////////////////////////////////////////////
+#pragma once
 
 #include "utilities/vectorUtil.h"
 
@@ -23,20 +17,3 @@ typedef struct objModel
     listVec3Int normalIndicies;         //Face indicies which represent the vertex normals
     listVec3Int textureCoordIndicies;   //Face indicies which represent the texture coordinares
 } objModel;
-
-/////////////////////////////////////////////////
-//  EXAMPLES
-//  
-//  f 1437/2412/4159 1433/2399/4158 1435/2402/4160
-//      - Triangulated Face = Vertex Point/Vertex Texture Coordinate/Vertex Normal
-//      - f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
-/////////////////////////////////////////////////
-
-/////////////////////////////////////////////////
-//  REFERENCES
-/////////////////////////////////////////////////
-
-// https://www.loc.gov/preservation/digital/formats/fdd/fdd000508.shtml
-//      - MTL File Format information
-// https://en.wikipedia.org/wiki/Wavefront_.obj_file
-//      - OBJ File Format information

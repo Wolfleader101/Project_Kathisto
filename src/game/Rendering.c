@@ -35,17 +35,29 @@ void LoadTexture(char* file, Texture* tex)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	//GL_LINEAR_MIPMAP_LINEAR
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	// might need to create this into texture
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("assets/textures/ground.jpg", &tex->width, &tex->height, &tex->channelsIn, 0);
+	unsigned char* data = stbi_load(file, &tex->width, &tex->height, &tex->channelsIn, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, tex->width, tex->height, GL_RGB, GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 
 	glEnable(GL_TEXTURE_2D);
+}
+
+void objToMesh(objModel model, Mesh* mesh)
+{
+	mesh->texture.textureCoords = model.textureCoord.vec2Items;
+	mesh->points = model.vertPosition.vec3Items;
+	mesh->indices = model.vertexPosIndicies.vec3IntItems;
+	mesh->pointSize = model.nVerts;
+	mesh->indexCount = (size_t)model.nFaces * 3;
+
+	return mesh;
 }
 
 void DrawMesh(Time time, Mesh* mesh)

@@ -17,9 +17,12 @@ OnStart OnCubeStart(GameObject* gameObject)
 {
 	gameObject->name = "Cube";
 
-	gameObject->mesh = cubeMeshCustColours;
 
-	LoadTexture("assets/textures/ground.jpg", &gameObject->mesh.texture);
+	objModel objData = LoadOBJFile("assets/models/objs/cube.obj");
+
+	LoadTexture("assets/textures/container.jpg", &gameObject->mesh.texture);
+
+	objToMesh(objData, &gameObject->mesh);
 
 
 	gameObject->mesh.hasTexture = true;
