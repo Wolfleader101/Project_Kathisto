@@ -172,17 +172,6 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 					exit(0);
 				}
 
-				//REMOVES 1 FROM EACH FACE ELEMENT TO MAKE IT START AT 0
-				vec3Int_tmpData1.x -= 1;
-				vec3Int_tmpData2.x -= 1;
-				vec3Int_tmpData3.x -= 1;
-				vec3Int_tmpData1.y -= 1;
-				vec3Int_tmpData2.y -= 1;
-				vec3Int_tmpData3.y -= 1;
-				vec3Int_tmpData1.z -= 1;
-				vec3Int_tmpData2.z -= 1;
-				vec3Int_tmpData3.z -= 1;
-
 				//ADDS DATA TO GROUP
 				objData.modelGroups[groupCounter].grpVertexIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
 				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
@@ -203,6 +192,8 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 objModel InitialiseData() //Used to initialise the data within an OBJ Model
 {
 	objModel initialisedData; //Data to be passed back
+
+	initialisedData.modelName = "";
 
 	//Initialises the amounts of faces, normals, uvs and verts to 0
 	initialisedData.nFaces = 0;
