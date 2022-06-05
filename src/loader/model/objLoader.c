@@ -123,7 +123,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 1) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
@@ -149,8 +149,6 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 			if (strcmp(currentBuffer, "vn") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
-
-				Vec3_AddToList(&objData.normalData, vec3_tmpData1); //Adds to the list
 
 				objData.modelGroups[groupCounter].normalData[normalIndex] = vec3_tmpData1; //Adds to the array
 
@@ -288,27 +286,27 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 1) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'v' (Vertex)
 			{
 				memoryAllocated.modelGroups[groupCounter].nVerts++;
 			}
 
-			if (strcmp(currentBuffer, "vt") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
+			if (strcmp(currentBuffer, "vt") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
 			{
 				memoryAllocated.modelGroups[groupCounter].nUVs++;
 			}
 
-			if (strcmp(currentBuffer, "vn") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
+			if (strcmp(currentBuffer, "vn") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				memoryAllocated.modelGroups[groupCounter].nNormals++;
 			}
 
-			if (strcmp(currentBuffer, "f") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'f' (Face)
+			if (strcmp(currentBuffer, "f") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'f' (Face)
 			{
 				memoryAllocated.modelGroups[groupCounter].nFaces++;
 			}
@@ -439,8 +437,6 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			printf("--------------------------------------\n");
 			printf("OBJ VERTEX DATA\n");
 			printf("--------------------------------------\n");
-
-			printf("\n");
 
 			//Print Vertex data to the screen
 			for (unsigned z = 0; z < inputData.modelGroups[i].nVerts; z++)

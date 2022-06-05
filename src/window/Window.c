@@ -11,8 +11,6 @@
 #include "game/GameObjects/CameraThirdPerson.h" //Includes the Third Person Camera
 #include "game/GameObjects/Player.h" //Includes access to the player object
 
-
-
 int WINDOW_WIDTH = 1750;
 int WINDOW_HEIGHT = 980;
 
@@ -116,7 +114,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* jumpPad = malloc(sizeof(GameObject));
 	GameObject* Teleporter1 = malloc(sizeof(GameObject));
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
-	//GameObject* monkey = malloc(sizeof(GameObject));
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
@@ -124,7 +121,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	InitGameObject(jumpPad);
 	InitGameObject(Teleporter1);
 	InitGameObject(Teleporter2);
-	//InitGameObject(monkey);
 
 	// setup their callbacks, start should never be NULL, however the others can be
 	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
@@ -133,9 +129,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
 	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
 	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
-	
-	//SetupCallbacks(monkey, OnMonkeyStart, NULL, NULL, NULL, NULL);
-
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
@@ -144,9 +137,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObjectManagerAdd(&gameObjectManager, jumpPad);
 	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
 	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
-
-
-	//GameObjectManagerAdd(&gameObjectManager, monkey);
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
