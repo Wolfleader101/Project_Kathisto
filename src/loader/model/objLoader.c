@@ -104,7 +104,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 	if(objData.nGroups > 0)
 	{
 		char* previousBuffer = ""; //The bufefr from the prvious line
-		int groupCounter = -1; //The counter which adds data to the next group (Starts at -1 to clear the first set of comments)
+		unsigned groupCounter = 0; //The counter which adds data to the next group
 
 		vertIndex = 0; //The counter which adds data to vertex position array
 		texCoordIndex = 0; //The counter which adds data to the texture coordinate array
@@ -128,7 +128,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'v' (Vertex)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
@@ -137,7 +137,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				vertIndex++;
 			}
 
-			if (strcmp(currentBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
+			if (strcmp(currentBuffer, "vt") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
 			{
 				fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
 
@@ -146,7 +146,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				texCoordIndex++;
 			}
 
-			if (strcmp(currentBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
+			if (strcmp(currentBuffer, "vn") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				fscanf(filePointer, "%f %f %f\n", &vec3_tmpData1.x, &vec3_tmpData1.y, &vec3_tmpData1.z); //Reads data into temporary container
 
@@ -157,7 +157,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				normalIndex++;
 			}
 
-			if (strcmp(currentBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
+			if (strcmp(currentBuffer, "f") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'f' (Face)
 			{
 				int vertsInFace = fscanf(filePointer, "%d/%d/%d %d/%d/%d %d/%d/%d\n",	&vec3Int_tmpData1.x, &vec3Int_tmpData2.x, &vec3Int_tmpData3.x,	//Vertex Index 1 | UV Index 1 | Normal Index 1
 																						&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
@@ -284,7 +284,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 		}
 
 		char* previousBuffer = ""; //The bufefr from the prvious line
-		int groupCounter = -1; //The counter which adds data to the next group (Starts at -1 to clear the first set of comments)
+		unsigned groupCounter = 0; //The counter which adds data to the next group
 
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
@@ -302,22 +302,22 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'v' (Vertex)
 			{
 				memoryAllocated.modelGroups[groupCounter].nVerts++;
 			}
 
-			if (strcmp(currentBuffer, "vt") == 0) //Checks to see if the line contains 'vt' (Vertex Texture)
+			if (strcmp(currentBuffer, "vt") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
 			{
 				memoryAllocated.modelGroups[groupCounter].nUVs++;
 			}
 
-			if (strcmp(currentBuffer, "vn") == 0) //Checks to see if the line contains 'vn' (Vertex Normal)
+			if (strcmp(currentBuffer, "vn") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				memoryAllocated.modelGroups[groupCounter].nNormals++;
 			}
 
-			if (strcmp(currentBuffer, "f") == 0) //Checks to see if the line contains 'f' (Face)
+			if (strcmp(currentBuffer, "f") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'f' (Face)
 			{
 				memoryAllocated.modelGroups[groupCounter].nFaces++;
 			}
