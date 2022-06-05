@@ -86,6 +86,9 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 																					&vec3Int_tmpData1.y, &vec3Int_tmpData2.y, &vec3Int_tmpData3.y,	//Vertex Index 2 | UV Index 2 | Normal Index 2
 																					&vec3Int_tmpData1.z, &vec3Int_tmpData2.z, &vec3Int_tmpData3.z);	//Vertex Index 3 | UV Index 3 | Normal Index 3
 
+			vec3Int_tmpData1.x -= 1;
+			vec3Int_tmpData1.y -= 1;
+			vec3Int_tmpData1.z -= 1;
 			vertsInFace /= 3; //Converts it into the number of vertexes (3 = Triangles, 4 = Quads, etc.)
 
 			if(vertsInFace != 3) //Checks to see if the file is triangulated

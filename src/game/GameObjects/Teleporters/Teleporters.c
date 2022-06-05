@@ -17,7 +17,7 @@ OnStart OnTeleporter1Start(GameObject* gameObject)
 	gameObject->mesh.colors = Teleporter1ColorBuffer;
 	gameObject->mesh.isUniformColor = true;
 
-	gameObject->transform.position = (Vector3){ 30.0f, .01f, 15.0f };
+	gameObject->transform.position = (Vector3){ 165.0f, .01f, 15.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 	gameObject->rigidBody.useGravity = false;
 	gameObject->rigidBody.isTrigger = true;
@@ -52,7 +52,7 @@ OnCollision OnTeleporter2Collision(Time time, GameObject* gameObject, GameObject
 {
 	if (areTeleportersReady)
 	{
-		collisionObject->transform.position = (Vector3){ 30.0f, collisionObject->transform.position.y, 15.0f };
+		collisionObject->transform.position = (Vector3){ 165.0f, collisionObject->transform.position.y, 15.0f };
 
 		areTeleportersReady = false;
 	}

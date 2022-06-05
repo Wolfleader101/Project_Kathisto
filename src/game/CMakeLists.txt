@@ -40,6 +40,11 @@ set(GAME
 
    src/game/GameObjects/GameGeometry/DebugGeo.h
    src/game/GameObjects/GameGeometry/DebugGeo.c
+  
+   
+   src/game/GameObjects/GameGeometry/Monkey.h
+   src/game/GameObjects/GameGeometry/Monkey.c
+
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.h
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.c
    src/game/GameObjects/GameGeometry/DebugLevel/Floors.h
