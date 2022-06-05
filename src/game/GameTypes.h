@@ -49,7 +49,7 @@ typedef struct Transform
 
 typedef struct Texture
 {
-	unsigned int texture;
+	unsigned int id;
 
 	Vector2* textureCoords;
 
