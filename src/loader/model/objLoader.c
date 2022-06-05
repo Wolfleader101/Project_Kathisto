@@ -284,7 +284,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 		}
 
 		char* previousBuffer = ""; //The bufefr from the prvious line
-		unsigned groupCounter = 0; //The counter which adds data to the next group
+		int groupCounter = -1; //The counter which adds data to the next group (Starts at -1 to clear the first set of comments)
 
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
@@ -297,12 +297,12 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v ") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 0) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
 			{
 				groupCounter++;
 			}
 
-			if (strcmp(currentBuffer, "v ") == 0) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 0) //Checks to see if the line contains 'v' (Vertex)
 			{
 				memoryAllocated.modelGroups[groupCounter].nVerts++;
 			}
@@ -452,7 +452,7 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			printf("\n");
 
 			//Print Vertex data to the screen
-			for (unsigned z = 0; z < inputData.modelGroups->nVerts; z++)
+			for (unsigned z = 0; z < inputData.modelGroups[i].nVerts; z++)
 			{
 				printf("%f, %f, %f\n",	inputData.modelGroups[i].vertPosition[z].x,
 										inputData.modelGroups[i].vertPosition[z].y,
@@ -468,7 +468,7 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			printf("\n");
 
 			//Print UV data to the screen
-			for (unsigned z = 0; z < inputData.modelGroups->nUVs; z++)
+			for (unsigned z = 0; z < inputData.modelGroups[i].nUVs; z++)
 			{
 				printf("%f, %f\n",	inputData.modelGroups[i].textureCoord[z].x,
 									inputData.modelGroups[i].textureCoord[z].y);
@@ -483,7 +483,7 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			printf("\n");
 
 			//Print Normal data to the screen
-			for (unsigned z = 0; z < inputData.modelGroups->nNormals; z++)
+			for (unsigned z = 0; z < inputData.modelGroups[i].nNormals; z++)
 			{
 				printf("%f, %f, %f\n",	inputData.modelGroups[i].normalData[z].x,
 										inputData.modelGroups[i].normalData[z].y,
@@ -499,7 +499,7 @@ void PrintOBJGroupData(objModel inputData) //Prints OBJ Group Data to screen to 
 			printf("\n");
 
 			//Print Face data to the screen
-			for (unsigned z = 0; z < inputData.modelGroups->nFaces; z++)
+			for (unsigned z = 0; z < inputData.modelGroups[i].nFaces; z++)
 			{
 				printf("%d/%d/%d %d/%d/%d %d/%d/%d\n",	inputData.modelGroups[i].grpVertexIndicies[z].x,
 														inputData.modelGroups[i].grpUVIndicies[z].x,
