@@ -105,6 +105,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 	{
 		char* previousBuffer = ""; //The bufefr from the prvious line
 		unsigned groupCounter = 0; //The counter which adds data to the next group
+		unsigned endOfGroup = 0; //0 = Not end of group, 1 = Nearing end of group
 
 		vertIndex = 0; //The counter which adds data to vertex position array
 		texCoordIndex = 0; //The counter which adds data to the texture coordinate array
@@ -123,9 +124,11 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 1) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 0) && (endOfGroup > 0)) //Checks to see if the reader has moved to the next group
 			{
 				groupCounter++;
+
+				endOfGroup = 0;
 			}
 
 			if (strcmp(currentBuffer, "v") == 0 && groupCounter < objData.nGroups) //Checks to see if the line contains 'v' (Vertex)
@@ -172,10 +175,12 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 				//ADDS DATA TO GROUP
 				objData.modelGroups[groupCounter].grpVertexIndicies[faceIndex] = vec3Int_tmpData1; //Adds to the array
-				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
-				objData.modelGroups[groupCounter].grpUVIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
+				objData.modelGroups[groupCounter].grpUVIndicies[faceIndex] = vec3Int_tmpData2; //Adds to the array
+				objData.modelGroups[groupCounter].grpNormalIndicies[faceIndex] = vec3Int_tmpData3; //Adds to the array
 
 				faceIndex++;
+
+				endOfGroup = 1;
 			}
 
 			strcpy(previousBuffer, currentBuffer);
@@ -274,6 +279,7 @@ objModel AllocateModelMemory(FILE* inputPointer)
 
 		char* previousBuffer = ""; //The bufefr from the prvious line
 		unsigned groupCounter = 0; //The counter which adds data to the next group
+		unsigned endOfGroup = 0; //0 = Not end of group, 1 = Nearing end of group
 
 		while (1) //Loops while not equal to the End of File (EOF)
 		{
@@ -286,29 +292,33 @@ objModel AllocateModelMemory(FILE* inputPointer)
 				break; //Breaks from the loop of End of File (EOF) is reached
 			}
 
-			if ((strcmp(currentBuffer, "v") == 1) && (strcmp(previousBuffer, "v") == -1)) //Checks to see if the reader has moved to the next grou[
+			if ((strcmp(currentBuffer, "v") == 0) && (endOfGroup > 0)) //Checks to see if the reader has moved to the next group
 			{
 				groupCounter++;
+
+				endOfGroup = 0;
 			}
 
-			if (strcmp(currentBuffer, "v") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'v' (Vertex)
+			if (strcmp(currentBuffer, "v") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'v' (Vertex)
 			{
 				memoryAllocated.modelGroups[groupCounter].nVerts++;
 			}
 
-			if (strcmp(currentBuffer, "vt") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
+			if (strcmp(currentBuffer, "vt") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vt' (Vertex Texture)
 			{
 				memoryAllocated.modelGroups[groupCounter].nUVs++;
 			}
 
-			if (strcmp(currentBuffer, "vn") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
+			if (strcmp(currentBuffer, "vn") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'vn' (Vertex Normal)
 			{
 				memoryAllocated.modelGroups[groupCounter].nNormals++;
 			}
 
-			if (strcmp(currentBuffer, "f") == 1 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'f' (Face)
+			if (strcmp(currentBuffer, "f") == 0 && groupCounter < memoryAllocated.nGroups) //Checks to see if the line contains 'f' (Face)
 			{
 				memoryAllocated.modelGroups[groupCounter].nFaces++;
+
+				endOfGroup = 1;
 			}
 
 			strcpy(previousBuffer, currentBuffer);
