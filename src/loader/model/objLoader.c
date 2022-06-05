@@ -34,6 +34,9 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 	Vector3Int vec3Int_tmpData1, vec3Int_tmpData2, vec3Int_tmpData3; //Temporary Vector3Int's used to store data to pass into the Lists
 	Vector2 vec2_tmpData1; //Temporary Vector2 used to store data to pass into the Lists
 
+	listVec2 tempTexCoords;
+	Vec3_InitialiseList(&tempTexCoords);
+
 	filePointer = fopen(filePath, "r"); //Opens the file
 	if(filePointer == NULL) //Checks to see if the file has opened
 	{
@@ -66,7 +69,7 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 		{
 			fscanf(filePointer, "%f %f\n", &vec2_tmpData1.x, &vec2_tmpData1.y); //Reads data into temporary container
 
-			Vec2_AddToList(&objData.textureCoord, vec2_tmpData1); //Adds to the list
+			Vec2_AddToList(&tempTexCoords, vec2_tmpData1); //Adds to the list
 
 			objData.nUVs++; //Adds one count to the number of UVs
 		}
@@ -113,6 +116,13 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 			objData.nFaces++; //Adds one count to the number of faces
 		}
+	}
+
+	for (size_t i = 0; i < objData.textureCoordIndicies.vecTotalElements; i++)
+	{
+		Vec2_AddToList(&objData.textureCoord, tempTexCoords.vec2Items[objData.textureCoordIndicies.vec3IntItems[i].x]);
+		Vec2_AddToList(&objData.textureCoord, tempTexCoords.vec2Items[objData.textureCoordIndicies.vec3IntItems[i].y]);
+		Vec2_AddToList(&objData.textureCoord, tempTexCoords.vec2Items[objData.textureCoordIndicies.vec3IntItems[i].z]);
 	}
 
 	fclose(filePointer); //Closes the file

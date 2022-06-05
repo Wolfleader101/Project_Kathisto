@@ -26,6 +26,8 @@ void InitTexture(Texture* texture)
 
 void LoadTexture(char* file, Texture* tex)
 {
+	glEnable(GL_TEXTURE_2D);
+
 	glGenTextures(1, &tex->id);
 
 	glBindTexture(GL_TEXTURE_2D, tex->id);
@@ -46,7 +48,7 @@ void LoadTexture(char* file, Texture* tex)
 
 	stbi_image_free(data);
 
-	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void objToMesh(objModel model, Mesh* mesh)
@@ -65,13 +67,10 @@ void DrawMesh(Time time, Mesh* mesh)
 	if (mesh->hasTexture)
 	{
 		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindTexture(GL_TEXTURE_2D, mesh->texture.id);
-
 		glColor3f(1.0f, 1.0f, 1.0f);
-
-
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glTexCoordPointer(2, GL_FLOAT, sizeof(Vector2), mesh->texture.textureCoords);
 
 	}
@@ -94,7 +93,7 @@ void DrawMesh(Time time, Mesh* mesh)
 
 	if (mesh->hasTexture)
 	{
-		//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
