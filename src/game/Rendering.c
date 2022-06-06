@@ -73,7 +73,6 @@ void DrawMesh(Time time, Mesh* mesh)
 		glBindTexture(GL_TEXTURE_2D, mesh->texture.id);
 		glColor3f(1.0f, 1.0f, 1.0f);
 		glTexCoordPointer(2, GL_FLOAT, 0, mesh->texture.textureCoords);
-
 	}
 	else {
 		if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
