@@ -51,7 +51,7 @@ const Vector3 cubeVertexBuffer[] = {
 
 //Plane Face Order
 const Vector3Int planeIndexBuffer[] = {
-	{0, 1, 2},
+	{0, 2, 1},
 	{2, 3, 0}
 };
 

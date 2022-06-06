@@ -36,11 +36,12 @@ void LoadTexture(char* file, Texture* tex)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// with lighting
+	glTexParameteri(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	//GL_LINEAR_MIPMAP_LINEAR
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	// might need to create this into texture
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(file, &tex->width, &tex->height, &tex->channelsIn, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -71,7 +72,7 @@ void DrawMesh(Time time, Mesh* mesh)
 
 		glBindTexture(GL_TEXTURE_2D, mesh->texture.id);
 		glColor3f(1.0f, 1.0f, 1.0f);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(Vector2), mesh->texture.textureCoords);
+		glTexCoordPointer(2, GL_FLOAT, 0, mesh->texture.textureCoords);
 
 	}
 	else {
@@ -85,7 +86,7 @@ void DrawMesh(Time time, Mesh* mesh)
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, sizeof(Vector3), mesh->points);
+	glVertexPointer(3, GL_FLOAT, 0, mesh->points);
 
 	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
 

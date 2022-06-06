@@ -131,6 +131,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
 
+
 	// SETUP GAME OBJECT MANAGER \\
 	// 
 	// setup game object manager
