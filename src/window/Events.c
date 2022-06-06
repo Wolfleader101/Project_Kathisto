@@ -10,6 +10,7 @@ bool PLAYERFORWARD_TOGGLE = false;
 bool PLAYERBACKWARD_TOGGLE = false;
 bool PLAYERLEFT_TOGGLE = false;
 bool PLAYERRIGHT_TOGGLE = false;
+bool PLAYERJUMP = false;
 
 bool EXIT_PROGRAM = false;
 
@@ -68,7 +69,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 	case ' ':
 		if (FREE_CAM == false)
 		{
-			return;
+			PLAYERJUMP = true;
 		}
 		else
 			cameraMoveDir.y = 1.0f;
