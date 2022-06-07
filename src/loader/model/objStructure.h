@@ -1,34 +1,8 @@
 #pragma once
 
-//////////////////////////////////////////////////////////////////////
-//  OBJ FILE STRUCTURE
-//
-//  Data Structures used to hold OBJ data (BASIC REPRESENTATION)
-//
-//  Created by Darcy Lyndon Cukrov Wilson - 13/04/2022
-//////////////////////////////////////////////////////////////////////
-
 #include "math/Vector.h"
 
-typedef struct objGroup
-{
-    char* groupName;                    //The name of the model group
-    
-    unsigned nVerts;                    //Number of vertices in the model (FOR AN INDIVIDUAL GROUP)
-    unsigned nUVs;                      //Number of UVs in the model (FOR AN INDIVIDUAL GROUP)
-    unsigned nNormals;                  //Number of normals in the model (FOR AN INDIVIDUAL GROUP)
-    unsigned nFaces;                    //Number of faces in the model (FOR AN INDIVIDUAL GROUP)
-
-    Vector3* vertPosition;              //Stores the position of a vertex (v) (FOR AN INDIVIDUAL GROUP)
-    Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt) (FOR AN INDIVIDUAL GROUP)
-    Vector3* normalData;                //Stores the normals of each vertex (vn) (FOR AN INDIVIDUAL GROUP)
-
-    Vector3Int* grpVertexIndicies;      //Face indicies which represent the vertexes (FOR AN INDIVIDUAL GROUP)
-    Vector3Int* grpNormalIndicies;      //Face indicies which represent the vertex normals (FOR AN INDIVIDUAL GROUP)
-    Vector3Int* grpUVIndicies;          //Face indicies which represent the texture coordinares (FOR AN INDIVIDUAL GROUP)
-} objGroup;
-
-typedef struct objModel
+typedef struct ObjModel
 {
     char* modelName;                    //The name of the model
 
@@ -36,7 +10,6 @@ typedef struct objModel
     unsigned nUVs;                      //Number of UVs in the model
     unsigned nNormals;                  //Number of normals in the model
     unsigned nFaces;                    //Number of faces in the model
-    unsigned nGroups;                   //Number of groups in the model (Increased ONLY if there are groups present)
 
     Vector3* vertPosition;              //Stores the position of a vertex (v)
     Vector2* textureCoord;              //Stores the texture coordinate of each vertex (vt)
@@ -46,8 +19,16 @@ typedef struct objModel
     Vector3Int* normalIndicies;         //Face indicies which represent the vertex normals
     Vector3Int* textureCoordIndicies;   //Face indicies which represent the texture coordinares
 
-    objGroup* modelGroups;              //The individual groups within a model (Only used if nGroups is geater than 0, otherwise, must be set to NULL)
-} objModel;
+} ObjModel;
+
+
+typedef struct ObjFile
+{
+    char* fileName;                    //The name of the model
+    unsigned nGroups;                   //Number of groups in the model
+    ObjModel* modelGroups;              //The individual models within a mode
+} ObjFile;
+
 
 /////////////////////////////////////////////////
 //  EXAMPLES
@@ -56,12 +37,3 @@ typedef struct objModel
 //      - Triangulated Face = Vertex Point/Vertex Texture Coordinate/Vertex Normal
 //      - f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
 /////////////////////////////////////////////////
-
-/////////////////////////////////////////////////
-//  REFERENCES
-/////////////////////////////////////////////////
-
-// https://www.loc.gov/preservation/digital/formats/fdd/fdd000508.shtml
-//      - MTL File Format information
-// https://en.wikipedia.org/wiki/Wavefront_.obj_file
-//      - OBJ File Format information

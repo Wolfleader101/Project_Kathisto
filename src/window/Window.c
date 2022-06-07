@@ -36,19 +36,6 @@ GameObjectManager gameObjectManager;
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
 	/////////////////////////////////////////////////
-	//  LOAD OBJ FILES
-	/////////////////////////////////////////////////
-
-	objModel objData;
-
-	objData = InitialiseData();
-	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
-
-	//PrintOBJData(objData); //Prints the data of the entire model
-
-	PrintOBJGroupData(objData); //Prints the group data from the model
-
-	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
 	/////////////////////////////////////////////////
 
@@ -113,6 +100,23 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* jumpPad = malloc(sizeof(GameObject));
 	GameObject* Teleporter1 = malloc(sizeof(GameObject));
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
+
+
+	ObjFile objData;
+
+	objData = InitialiseData();
+	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+
+	//PrintOBJData(objData); //Prints the group data from the model
+
+	GameObject* objObjects = calloc(objData.nGroups, sizeof(GameObject));
+
+	for (size_t i = 0; i < objData.nGroups && objObjects != NULL; i++)
+	{
+		objToMesh(objData.modelGroups[i], &objObjects[i].mesh);
+	}
+
+
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);

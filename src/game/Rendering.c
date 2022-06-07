@@ -12,6 +12,17 @@ void InitMesh(Mesh* mesh)
 	mesh->disableMesh = false;
 }
 
+void objToMesh(ObjModel model, Mesh* mesh)
+{
+	mesh->points = model.vertPosition;
+	mesh->indices = model.vertexPosIndicies;
+	mesh->pointSize = model.nVerts;
+	mesh->indexCount = (size_t)model.nFaces * 3;
+
+	return mesh;
+}
+
+
 void DrawMesh(Time time, Mesh* mesh)
 {
 
