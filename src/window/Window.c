@@ -45,9 +45,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	objData = InitialiseData();
 	objData = LoadOBJFile("assets/models/objs/groupTest.obj");
 
-	PrintOBJData(objData); //Prints the data of the entire model
+	//PrintOBJData(objData); //Prints the data of the entire model
 
-	//PrintOBJGroupData(objData); //Prints the group data from the model
+	PrintOBJGroupData(objData); //Prints the group data from the model
 
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
