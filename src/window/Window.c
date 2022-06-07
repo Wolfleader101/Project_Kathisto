@@ -6,7 +6,6 @@
 #include "game/GameObjects/Teleporters/Teleporters.h"
 
 #include "game/GameObjects/GameGeometry/DebugGeo.h" //In Charge of building the Debug Geometry 
-#include "game/GameObjects/GameGeometry/Monkey.h" 
 #include "game/GameObjects/Camera.h"
 #include "game/GameObjects/CameraThirdPerson.h" //Includes the Third Person Camera
 #include "game/GameObjects/Player.h" //Includes access to the player object
@@ -129,6 +128,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
 	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
 	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
+
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);

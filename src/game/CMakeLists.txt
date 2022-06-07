@@ -16,8 +16,6 @@ set(GAME
 
 
 
-
-
    src/game/GameObjects/Camera.h
    src/game/GameObjects/Camera.c
    src/game/GameObjects/CameraThirdPerson.h
@@ -41,10 +39,7 @@ set(GAME
    src/game/GameObjects/GameGeometry/DebugGeo.h
    src/game/GameObjects/GameGeometry/DebugGeo.c
   
-   
-   src/game/GameObjects/GameGeometry/Monkey.h
-   src/game/GameObjects/GameGeometry/Monkey.c
-
+  
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.h
    src/game/GameObjects/GameGeometry/DebugLevel/Ceilings.c
    src/game/GameObjects/GameGeometry/DebugLevel/Floors.h
