@@ -26,12 +26,16 @@ void objToMesh(ObjModel model, Mesh* mesh)
 void DrawMesh(Time time, Mesh* mesh)
 {
 
-	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
+	if (!mesh->isUniformColor && mesh->colors != NULL) glEnableClientState(GL_COLOR_ARRAY);
 
-	if (mesh->isUniformColor)
+	if (mesh->colors != NULL && mesh->isUniformColor)
 		glColor4fv(mesh->colors);
-	else
+	else if (mesh->colors != NULL)
 		glColorPointer(4, GL_FLOAT, 4, mesh->colors);
+	else
+	{
+		glColor4f(0.5f, 0.75f, 0.5f, 1.0f);
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -40,7 +44,7 @@ void DrawMesh(Time time, Mesh* mesh)
 	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+	if (!mesh->isUniformColor && mesh->colors != NULL) glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void DrawGizmos(Time time, Vector3 maxSize)

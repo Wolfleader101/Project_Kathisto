@@ -102,21 +102,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
 
 
-	ObjFile objData;
-
-	objData = InitialiseData();
-	objData = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
-
-	//PrintOBJData(objData); //Prints the group data from the model
-
-	GameObject* objObjects = calloc(objData.nGroups, sizeof(GameObject));
-
-	for (size_t i = 0; i < objData.nGroups && objObjects != NULL; i++)
-	{
-		objToMesh(objData.modelGroups[i], &objObjects[i].mesh);
-	}
-
-
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
@@ -145,7 +130,54 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
 
-	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
+	ObjFile objFile;
+
+	objFile = InitialiseObjFile();
+	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+
+	GameObject* objObjects = calloc(objFile.nGroups, sizeof(GameObject));
+
+	for (size_t i = 0; i < objFile.nGroups && objObjects != NULL; i++)
+	{
+		GameObject* go = calloc(1, sizeof(GameObject));
+
+		if (go == NULL) return;
+
+		InitGameObject(go);
+
+
+		objObjects[i] = *go;
+
+
+		char name[20] = "World Object ";
+		char buffer[5] = "";
+		itoa(i, buffer, 10);
+		strcat(name, buffer);
+		objObjects[i].name = calloc(25, sizeof(char));
+		if (objObjects[i].name != NULL)
+			strcpy(objObjects[i].name, name);
+
+		objToMesh(objFile.modelGroups[i], &objObjects[i].mesh);
+		objObjects[i].rigidBody.isStatic = true;
+		float r, g, b;
+		if ((i / 3) % 2 == 0)
+		{
+			r = g = b = 0.611;
+		}
+		else {
+			r = g = b = 0.360;
+		}
+
+		objObjects[i].mesh.colors = calloc(1, sizeof(RGBA));
+		if (objObjects[i].mesh.colors != NULL)
+			objObjects[i].mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
+		objObjects[i].mesh.isUniformColor = true;
+		objObjects->rigidBody.debug = true;
+
+		GameObjectManagerAdd(&gameObjectManager, &objObjects[i]);
+	}
+
+	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// enter loop
 	glutMainLoop();

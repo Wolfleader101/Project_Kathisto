@@ -44,8 +44,6 @@ ObjFile AllocateModelMemory(FILE* inputPointer)
 
 	objFile.nGroups++;
 	objFile.modelGroups = calloc(1, sizeof(ObjModel));
-	if (objFile.modelGroups != NULL)
-		objFile.modelGroups[0] = InitialiseObjModel();
 
 
 	char lineBuffer[1024] = ""; //Each line of the file is read into the buffer
@@ -63,10 +61,10 @@ ObjFile AllocateModelMemory(FILE* inputPointer)
 
 	objFile.modelGroups = calloc(objFile.nGroups, sizeof(ObjModel)); //Allocates the memory for the array
 
-	for (unsigned i = 0; i < objFile.nGroups; i++) //Initialise the number of variables
-	{
-		objFile.modelGroups[i] = InitialiseObjModel();
-	}
+	//for (unsigned i = 0; i < objFile.nGroups; i++) //Initialise the number of variables
+	//{
+		//objFile.modelGroups[i] = InitialiseObjModel();
+	//}
 
 	char* previousBuffer = ""; //The bufefr from the prvious line
 	unsigned groupCounter = 0; //The counter which adds data to the next group

@@ -58,8 +58,8 @@ void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject* game
 
 	// then call the on start method
 	// NOTE THE ONSTART SHOULD NEVER BE NULL, IF ITS NULL THEN YOU HAVE DONE SOMETHING WRONG, THATS WHY THE IF STATEMENT IS COMMENTED OUT
-	//if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
-	gameObjectManager->gameObjects[gameObjectManager->lastIndex]->OnStart(gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
+	if (gameObjectManager->gameObjects[gameObjectManager->lastIndex]->OnStart != NULL)
+		gameObjectManager->gameObjects[gameObjectManager->lastIndex]->OnStart(gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
 
 
 	// calculate bounding box
