@@ -135,9 +135,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	objFile = InitialiseObjFile();
 	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
 
-	GameObject* objObjects = calloc(objFile.nGroups, sizeof(GameObject));
-
-	for (size_t i = 0; i < objFile.nGroups && objObjects != NULL; i++)
+	for (size_t i = 0; i < objFile.nGroups; i++)
 	{
 		GameObject* go = calloc(1, sizeof(GameObject));
 
@@ -145,20 +143,18 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 		InitGameObject(go);
 
+		go->name = calloc(25, sizeof(char));
+		if (go->name != NULL)
+		{
+			strcpy(go->name, "Obj Object");
 
-		objObjects[i] = *go;
+			char buffer[5] = "";
+			itoa(i, buffer, 10);
+			strcat(go->name, buffer);
+		}
 
 
-		char name[20] = "World Object ";
-		char buffer[5] = "";
-		itoa(i, buffer, 10);
-		strcat(name, buffer);
-		objObjects[i].name = calloc(25, sizeof(char));
-		if (objObjects[i].name != NULL)
-			strcpy(objObjects[i].name, name);
-
-		objToMesh(objFile.modelGroups[i], &objObjects[i].mesh);
-		objObjects[i].rigidBody.isStatic = true;
+		objToMesh(objFile.modelGroups[i], &go->mesh);
 		float r, g, b;
 		if ((i / 3) % 2 == 0)
 		{
@@ -168,13 +164,14 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 			r = g = b = 0.360;
 		}
 
-		objObjects[i].mesh.colors = calloc(1, sizeof(RGBA));
-		if (objObjects[i].mesh.colors != NULL)
-			objObjects[i].mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
-		objObjects[i].mesh.isUniformColor = true;
-		objObjects->rigidBody.debug = true;
+		go->mesh.colors = calloc(1, sizeof(RGBA));
 
-		GameObjectManagerAdd(&gameObjectManager, &objObjects[i]);
+		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){r, g, b, 1.0f};
+		go->mesh.isUniformColor = true;
+		go->rigidBody.isStatic = true;
+
+
+		GameObjectManagerAdd(&gameObjectManager, go);
 	}
 
 	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
