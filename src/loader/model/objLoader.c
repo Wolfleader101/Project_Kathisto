@@ -189,6 +189,26 @@ objModel LoadOBJFile(const char* filePath) //Load and return the data for an OBJ
 
 			strcpy(previousBuffer, currentBuffer);
 		}
+
+		for(unsigned i = 0; i < objData.nGroups; i++) //Loops through each group contained within the model
+		{
+			Vector3Int IndexOffset = FindIndexOffset(objData.modelGroups[i]); //Finds the Index Offset of a given group
+
+			for(unsigned z = 0; z < objData.modelGroups[i].nFaces; z++) //Loops through all groups and their indexes, and applies the index offset to them
+			{
+				objData.modelGroups[i].grpVertexIndicies[z].x -= IndexOffset.x;
+				objData.modelGroups[i].grpVertexIndicies[z].y -= IndexOffset.x;
+				objData.modelGroups[i].grpVertexIndicies[z].z -= IndexOffset.x;
+
+				objData.modelGroups[i].grpUVIndicies[z].x -= IndexOffset.y;
+				objData.modelGroups[i].grpUVIndicies[z].y -= IndexOffset.y;
+				objData.modelGroups[i].grpUVIndicies[z].z -= IndexOffset.y;
+
+				objData.modelGroups[i].grpNormalIndicies[z].x -= IndexOffset.z;
+				objData.modelGroups[i].grpNormalIndicies[z].y -= IndexOffset.z;
+				objData.modelGroups[i].grpNormalIndicies[z].z -= IndexOffset.z;
+			}
+		}
 	}
 
 	fclose(filePointer); //Closes the file
@@ -366,6 +386,46 @@ objModel AllocateModelMemory(FILE* inputPointer)
 	rewind(inputPointer); //Resets the reading to the beggining of the file
 
 	return(memoryAllocated);
+}
+
+Vector3Int FindIndexOffset(objGroup inputData) //Finds the Index Offset of a given OBJ Group
+{
+	Vector3Int lowestIndex = inputData.grpNormalIndicies[0]; //Sets the lowest index to an initial value from the input data (Lowest Vertex | Lowest UV | Lowest Normal)
+	
+	for(unsigned i = 0; i < inputData.nFaces; i++)
+	{
+		//SCANNING THROUGH VERTEX INDEXES
+		if (inputData.grpVertexIndicies[i].x < lowestIndex.x)
+			lowestIndex.x = inputData.grpVertexIndicies[i].x;
+
+		if (inputData.grpVertexIndicies[i].y < lowestIndex.x)
+			lowestIndex.x = inputData.grpVertexIndicies[i].y;
+
+		if (inputData.grpVertexIndicies[i].z < lowestIndex.x)
+			lowestIndex.x = inputData.grpVertexIndicies[i].z;
+
+		//SCANNING THROUGH UV INDEXES
+		if (inputData.grpUVIndicies[i].x < lowestIndex.y)
+			lowestIndex.y = inputData.grpUVIndicies[i].x;
+
+		if (inputData.grpUVIndicies[i].y < lowestIndex.y)
+			lowestIndex.y = inputData.grpUVIndicies[i].y;
+
+		if (inputData.grpUVIndicies[i].z < lowestIndex.y)
+			lowestIndex.y = inputData.grpUVIndicies[i].z;
+
+		//SCANNING THROUGH NORMAL INDEXES
+		if (inputData.grpNormalIndicies[i].x < lowestIndex.z)
+			lowestIndex.z = inputData.grpNormalIndicies[i].x;
+
+		if (inputData.grpNormalIndicies[i].y < lowestIndex.z)
+			lowestIndex.z = inputData.grpNormalIndicies[i].y;
+
+		if (inputData.grpNormalIndicies[i].z < lowestIndex.z)
+			lowestIndex.z = inputData.grpNormalIndicies[i].z;
+	}
+
+	return(lowestIndex);
 }
 
 void PrintOBJData(objModel inputData) //Prints OBJ Data to screen to confirm the data
