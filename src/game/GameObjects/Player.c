@@ -12,6 +12,12 @@ float rotSmoothSpeed = 4.0f; //The speed at which the player character will rota
 
 Vector2 playerInput = { 0.0f, 0.0f }; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
 
+float jumpCooldown = 1.0f; //The cooldown before a player can jump again after jumping.
+
+const float MAXPVELOCITY = 10.0f; //Maximum speed at which the player can move along the X and Z axes.
+const float SDECAYMULTIPLIER = 0.95f; //Current speed will become this percent of itself every update - slows player when they are not conciously moving in a direction.
+float speedMP = 1.5f; //Speed multiplier will reduce to prevent excess speed when multiple keys are held down
+
 //Stores the verticies for the player object
 const Vector3 playerVertexBuffer[] = {
 	{ -0.5f, -0.9f, -0.5f },
@@ -92,34 +98,65 @@ OnStart OnPlayerStart(GameObject* gameObject) //Sets the starting variables of t
 
 void MovePlayer(Time time, GameObject* gameObject) //Function to move the player relative to the camera object
 {
+	gameObject->rigidBody.velocity.x *= SDECAYMULTIPLIER;
+	gameObject->rigidBody.velocity.z *= SDECAYMULTIPLIER;
+
+	//Set speedMP to 1.5. This value is reduced by 0.5 for every direction the player is trying to move in (unless directions conflict) this update
+	speedMP = 1.5;
+	if ((PLAYERFORWARD_TOGGLE && !PLAYERBACKWARD_TOGGLE) || (!PLAYERFORWARD_TOGGLE && PLAYERBACKWARD_TOGGLE)) speedMP -= 0.5;
+	if ((PLAYERLEFT_TOGGLE && !PLAYERRIGHT_TOGGLE) || (!PLAYERLEFT_TOGGLE && PLAYERRIGHT_TOGGLE)) speedMP -= 0.5;
+
 	if (PLAYERFORWARD_TOGGLE == true) //Moves character forward
 	{
-		gameObject->rigidBody.velocity.x += camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
-		gameObject->rigidBody.velocity.z += camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.x += camForwardDirFlat.x * WALK_SPEED * time.deltaTime * speedMP;
+		gameObject->rigidBody.velocity.z += camForwardDirFlat.z * WALK_SPEED * time.deltaTime * speedMP;
 	}
 
 	if (PLAYERBACKWARD_TOGGLE == true) //Moves character backward
 	{
-		gameObject->rigidBody.velocity.x += -camForwardDirFlat.x * WALK_SPEED * time.deltaTime;
-		gameObject->rigidBody.velocity.z += -camForwardDirFlat.z * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.x += -camForwardDirFlat.x * WALK_SPEED * time.deltaTime * speedMP;
+		gameObject->rigidBody.velocity.z += -camForwardDirFlat.z * WALK_SPEED * time.deltaTime * speedMP;
 	}
 
 	if (PLAYERLEFT_TOGGLE == true) //Moves character left
 	{
-		gameObject->rigidBody.velocity.x += -camRightFlat.x * WALK_SPEED * time.deltaTime;
-		gameObject->rigidBody.velocity.z += -camRightFlat.z * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.x += -camRightFlat.x * WALK_SPEED * time.deltaTime * speedMP;
+		gameObject->rigidBody.velocity.z += -camRightFlat.z * WALK_SPEED * time.deltaTime * speedMP;
 	}
 
 	if (PLAYERRIGHT_TOGGLE == true) //Moves character right
 	{
-		gameObject->rigidBody.velocity.x += camRightFlat.x * WALK_SPEED * time.deltaTime;
-		gameObject->rigidBody.velocity.z += camRightFlat.z * WALK_SPEED * time.deltaTime;
+		gameObject->rigidBody.velocity.x += camRightFlat.x * WALK_SPEED * time.deltaTime * speedMP;
+		gameObject->rigidBody.velocity.z += camRightFlat.z * WALK_SPEED * time.deltaTime * speedMP;
 	}
+
+	if (PLAYERJUMP == true && jumpCooldown <= 0 && gameObject->rigidBody.onGround) //Makes player jump
+	{
+		gameObject->rigidBody.velocity.y += 8.0f; //Adds vertical velocity
+		jumpCooldown = 2.3f; //Resets jump cooldown (this value seems good as it is slightly longer than up and down motion of jump - prevents infinite jump if collision issue)
+		PLAYERJUMP = false;
+	}
+	else if (PLAYERJUMP == true) //Reset PLAYERJUMP to off despite cooldown state - this is needed as PLAYERJUMP is not a toggle like other movement
+	{
+		PLAYERJUMP = false;
+	}
+
+
+	//Caps horizontal velocity to maximum after all movements are updated. Prevents sonic speed.
+	if (gameObject->rigidBody.velocity.x > MAXPVELOCITY) gameObject->rigidBody.velocity.x = MAXPVELOCITY;
+	else if (gameObject->rigidBody.velocity.x < (-1 * MAXPVELOCITY)) gameObject->rigidBody.velocity.x = (-1 * MAXPVELOCITY);
+	if (gameObject->rigidBody.velocity.z > MAXPVELOCITY) gameObject->rigidBody.velocity.z = MAXPVELOCITY;
+	else if (gameObject->rigidBody.velocity.z < (-1 * MAXPVELOCITY)) gameObject->rigidBody.velocity.z = (-1 * MAXPVELOCITY);
 }
 
 OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates every fixed frame
 {
 	MovePlayer(time, gameObject);
+
+	if (PLAYERJUMP == false && jumpCooldown > 0) //Decrease jumpCooldown to allow for player to jump again when cooldown is 0
+	{
+		jumpCooldown -= time.deltaTime;
+	}
 }
 
 

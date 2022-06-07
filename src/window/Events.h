@@ -18,6 +18,7 @@ extern bool PLAYERFORWARD_TOGGLE;
 extern bool PLAYERBACKWARD_TOGGLE;
 extern bool PLAYERLEFT_TOGGLE;
 extern bool PLAYERRIGHT_TOGGLE;
+extern bool PLAYERJUMP;
 
 extern bool EXIT_PROGRAM;
 
