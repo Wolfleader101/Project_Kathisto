@@ -1,11 +1,12 @@
 #include "GameConstants.h"
 
 const float MOUSE_SENS = 0.001f;
-const float WALK_SPEED = 50.0f;
+const float WALK_SPEED = 35.0f;
 const float FLY_SPEED = 15.0f;
 const float UP_SPEED = 10.0f;
+float AIR_DENSITY = 1.225f;
+
 const float G_ACCELERATION = 9.81f;
-const float AIR_DENSITY = 1.225f;
 const float PHYSICS_TIME_STEP = 20; // in ms
 
 const int VECTOR_DIRECTIONS_LENGTH = 6;

@@ -39,6 +39,8 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	igCheckbox("Toggle Freecam", &FREE_CAM);
 
+	igInputFloat("Air Density", &AIR_DENSITY, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
 		if (gameObjectManager->gameObjects[i] != NULL && gameObjectManager->gameObjects[i]->name != NULL)

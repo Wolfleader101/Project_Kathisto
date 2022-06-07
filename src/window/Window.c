@@ -36,52 +36,9 @@ GameObjectManager gameObjectManager;
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
 	/////////////////////////////////////////////////
-	//  LOAD OBJ FILES
-	/////////////////////////////////////////////////
-	
-	//FILE* filePointer = NULL; //File pointer to Manifest file
-
-	//char base_filePath[] = "assets/models/objs/gameEnvironment/";
-	//char* manifest_filePath = "assets/models/objs/gameEnvironment/manifest.txt";;
-	//char* envModels_filePath = "\0";
-	//
-	//objModel objData;
-
-	//filePointer = fopen(manifest_filePath, "r"); //Opens the file
-	//if (filePointer == NULL) //Checks to see if the file has opened
-	//{
-	//	perror("ERROR");
-
-	//	exit(1);
-	//}
-	//else
-	//	printf("SUCCESS: Manifest file found! Loading models...\n");
-
-	//while (1) //Loops while not equal to the End of File (EOF)
-	//{
-	//	char lineBuffer[128]; //Each line of the file is read into the buffer
-
-	//	int lineResult = fscanf(filePointer, "%s", lineBuffer); //Reads the first word of the line
-
-	//	if (lineResult == EOF) //Checks to see if the result of the line read is an End of File (EOF)
-	//	{
-	//		break; //Breaks from the loop of End of File (EOF) is reached
-	//	}
-
-	//	strcpy(envModels_filePath, base_filePath);
-
-	//	strcat(envModels_filePath, lineBuffer);
-
-	//	objData = LoadOBJFile(envModels_filePath);
-	//	//PrintOBJData(objData);
-	//}
-
-	//fclose(filePointer);
-
-	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
 	/////////////////////////////////////////////////
-	
+
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
@@ -144,6 +101,8 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	GameObject* Teleporter1 = malloc(sizeof(GameObject));
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
 
+
+
 	InitGameObject(cube);
 	InitGameObject(cubeG);
 	InitGameObject(playerObject);
@@ -159,6 +118,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
 	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
 
+
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
 	GameObjectManagerAdd(&gameObjectManager, cubeG);
@@ -170,10 +130,55 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
 
+	ObjFile objFile;
+
+	objFile = InitialiseObjFile();
+	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+
+	for (size_t i = 0; i < objFile.nGroups; i++)
+	{
+		GameObject* go = calloc(1, sizeof(GameObject));
+
+		if (go == NULL) return;
+
+		InitGameObject(go);
+
+		go->name = calloc(25, sizeof(char));
+		if (go->name != NULL)
+		{
+			strcpy(go->name, "Obj Object");
+
+			char buffer[5] = "";
+			itoa(i, buffer, 10);
+			strcat(go->name, buffer);
+		}
+
+
+		objToMesh(objFile.modelGroups[i], &go->mesh);
+		float r, g, b;
+		if ((i / 3) % 2 == 0)
+		{
+			r = g = b = 0.611;
+		}
+		else {
+			r = g = b = 0.360;
+		}
+
+		go->mesh.colors = calloc(1, sizeof(RGBA));
+
+		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){r, g, b, 1.0f};
+		go->mesh.isUniformColor = true;
+		go->rigidBody.isStatic = true;
+
+
+		GameObjectManagerAdd(&gameObjectManager, go);
+	}
+
+	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
-
+  
 	// enter loop
 	glutMainLoop();
 

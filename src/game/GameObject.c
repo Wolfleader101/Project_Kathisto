@@ -3,7 +3,7 @@
 void InitGameObject(GameObject* gameObject)
 {
 	gameObject->id = 0;
-	gameObject->name = NULL;
+	gameObject->name = "";
 	InitTransform(&gameObject->transform);
 	InitMesh(&gameObject->mesh);
 	InitRigidBody(&gameObject->rigidBody);

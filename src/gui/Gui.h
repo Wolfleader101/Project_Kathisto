@@ -9,6 +9,7 @@
 #include <window/Events.h>
 #include <math/Vector.h>
 #include <game/Game.h>
+#include "game/GameConstants.h"
 
 
 extern struct ImGuiContext* ctx; // IMGUI Context

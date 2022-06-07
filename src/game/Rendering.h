@@ -3,12 +3,22 @@
 #include "game/GameIncludes.h"
 #include "game/GameTypes.h"
 #include "game/GameConstants.h"
+#include "loader/model/objStructure.h"
+
 
 /**
  * @brief initialise a mesh component
  * @param mesh to initialise
 */
 void InitMesh(Mesh* mesh);
+
+/**
+ * @brief OBJ file to mesh component
+ * @param model to load in
+ * @param mesh to load data in to
+*/
+void objToMesh(ObjModel model, Mesh* mesh);
+
 
 /**
  * @brief draw a mesh in openGL

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> //Used for strcat()
 #include <GL/freeglut.h>
 
 #include "game/Game.h"
@@ -11,7 +12,6 @@
 #include "Events.h"
 #include "math/Vector.h"
 #include "loader/model/objLoader.h" //Enables the ability to load basic obj files
-#include <string.h> //Used for strcat()
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;

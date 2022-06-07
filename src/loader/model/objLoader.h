@@ -1,25 +1,45 @@
-//////////////////////////////////////////////////////////////////////
-//  OBJ FILE LOADER
-//
-//  OBJ Loader for loading data from OBJ Files
-//
-//  Created by Darcy Lyndon Cukrov Wilson - 31/05/2022
-//////////////////////////////////////////////////////////////////////
+#pragma once
 
-#include<stdio.h>
-#include<string.h> //Included for strcmp()
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "objStructure.h"
 
-objModel InitialiseData(); //Used to initialise the data within an OBJ Model
-objModel LoadOBJFile(const char* filePath); //Load and return the data for an OBJ File
-void PrintOBJData(objModel inputData); //Prints OBJ Data to screen to confirm the data
+/**
+ * @brief initialises a model in an obj file
+ * @return the initialised model
+*/
+ObjModel InitialiseObjModel();
 
-/////////////////////////////////////////////////
-//  REFERENCES
-/////////////////////////////////////////////////
+/**
+ * @brief Initialises the data of the OBJ to starting values
+ * @return the initilaised model
+*/
+ObjFile InitialiseObjFile();
 
-// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-7-model-loading/
-// https://www.braynzarsoft.net/viewtutorial/q16390-22-loading-static-3d-models-obj-format
-// http://netization.blogspot.com/2014/10/loading-obj-files-in-opengl.html
-//      - OBJ Loader Tutorials
+/**
+ * @brief Allocates the memory needed for the OBJ File data
+ * @param FILE* inputPointer - The file pointer for the OBJ File
+ * @return the initialised model
+*/
+ObjFile AllocateModelMemory(FILE* inputPointer);
+
+
+/**
+ * @brief Loads Data from an OBJ File
+ * @param const char* filePath - The filepath of the model
+*/
+ObjFile LoadOBJFile(const char* filePath);
+
+/**
+ * @brief Finds the Index Offset of an OBJ Group (The lowest index value for each group)
+ * @param ObjModel inputData - A group within an OBJ File
+*/
+Vector3Int FindIndexOffset(ObjModel inputData);
+
+/**
+ * @brief Prints the data of an OBJ File (No group data is printed)
+ * @param ObjFile inputData - The input OBJ File whose data is printed
+*/
+void PrintOBJData(ObjFile inputData);
