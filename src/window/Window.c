@@ -61,9 +61,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// on reshape
 	glutReshapeFunc(ReshapeWindow);
 
-	// fixed update
-	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
-
 	// rendering callbacks
 	glutDisplayFunc(WindowRender);
 	glutIdleFunc(WindowRender);
@@ -92,6 +89,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// 
 	// setup game object manager
 	InitGameObjectManager(&gameObjectManager);
+
+
+	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
@@ -176,6 +176,9 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
+	// fixed update
+	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
+  
 	// enter loop
 	glutMainLoop();
 
