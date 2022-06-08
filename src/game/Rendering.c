@@ -18,6 +18,12 @@ void InitMesh(Mesh* mesh)
 	mesh->colors = NULL;
 	mesh->isUniformColor = false;
 
+	mesh->hasMaterial = false;
+	mesh->meshDiffuse = (GLColour){0.0, 0.0, 0.0, 0.0};
+	mesh->meshAmbient = (GLColour){ 0.0, 0.0, 0.0, 0.0 };
+	mesh->meshSpecular = (GLColour){ 0.0, 0.0, 0.0, 0.0 };
+	mesh->meshShininess = (GLColour){ 0.0, 0.0, 0.0, 0.0 };
+
 	mesh->debug = false;
 	mesh->disableMesh = false;
 }
@@ -60,10 +66,20 @@ void DrawMesh(Time time, Mesh* mesh)
 		glNormalPointer(GL_FLOAT, sizeof(Vector3), mesh->normals);
 	}
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat[]) { 0.45882f, 0.45882f, 0.45882f, 1.0f });
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat[]) { 0.00392f, 0.0f, 0.01961f, 1.0f });
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat[]) { 0.4f, 0.6f, 1.0f, 1.0f });
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, (GLfloat[]) { 0.0f, 0.3f, 1.0f, 1.0f });
+	if(!mesh->hasMaterial)
+	{
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat[]) { 0.45882f, 0.45882f, 0.45882f, 1.0f });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat[]) { 0.00392f, 0.0f, 0.01961f, 1.0f });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat[]) { 0.5f, 0.2f, 1.0f, 1.0f });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, (GLfloat[]) { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	else
+	{
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat[]) { mesh->meshDiffuse.r, mesh->meshDiffuse.g, mesh->meshDiffuse.b, mesh->meshDiffuse.a });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat[]) { mesh->meshAmbient.r, mesh->meshAmbient.g, mesh->meshAmbient.b, mesh->meshAmbient.a });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat[]) { mesh->meshSpecular.r, mesh->meshSpecular.g, mesh->meshSpecular.b, mesh->meshSpecular.a });
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, (GLfloat[]) { mesh->meshShininess.r, mesh->meshShininess.g, mesh->meshShininess.b, mesh->meshShininess.a });
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 

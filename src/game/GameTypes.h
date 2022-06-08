@@ -47,6 +47,26 @@ typedef struct Transform
 
 } Transform;
 
+typedef struct GLColour
+{
+	/**
+	 * @brief Red Value
+	 */
+	GLfloat r;
+	/**
+	 * @brief Green Value
+	 */
+	GLfloat g;
+	/**
+	 * @brief Blue Value
+	 */
+	GLfloat b;
+	/**
+	 * @brief Alpha Value
+	 */
+	GLfloat a;
+} GLColour;
+
 /**
  * @struct Mesh
  * @brief the mesh component used for drawing a gameobject
@@ -112,6 +132,31 @@ typedef struct Mesh
 	 * @brief if its a uniform (single) color
 	 */
 	bool isUniformColor;
+
+	/**
+	 * @brief If the mesh has a material
+	 */
+	bool hasMaterial;
+
+	/**
+	 * @brief The diffuse values of the mesh
+	 */
+
+	GLColour meshDiffuse;
+	/**
+	 * @brief The ambient values of the mesh
+	 */
+
+	GLColour meshAmbient;
+	/**
+	 * @brief The specular values of the mesh
+	 */
+
+	GLColour meshSpecular;
+	/**
+	 * @brief The shininess values of the mesh
+	 */
+	GLColour meshShininess;
 
 	/**
 	 * @brief debug mesh to draw with lines
