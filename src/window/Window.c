@@ -32,6 +32,42 @@ Time fixedTime = {
 
 GameObjectManager gameObjectManager;
 
+void InitialiseGameObjects()
+{
+	// first you must initialise your gameobjects
+	GameObject* cube = malloc(sizeof(GameObject));
+	GameObject* cubeG = malloc(sizeof(GameObject));
+	GameObject* playerObject = malloc(sizeof(GameObject));
+	GameObject* jumpPad = malloc(sizeof(GameObject));
+	GameObject* Teleporter1 = malloc(sizeof(GameObject));
+	GameObject* Teleporter2 = malloc(sizeof(GameObject));
+
+
+
+	InitGameObject(cube);
+	InitGameObject(cubeG);
+	InitGameObject(playerObject);
+	InitGameObject(jumpPad);
+	InitGameObject(Teleporter1);
+	InitGameObject(Teleporter2);
+
+	// setup their callbacks, start should never be NULL, however the others can be
+	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
+	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
+	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
+	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
+	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
+	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
+
+
+	// add them to the game object manager where start will be called
+	GameObjectManagerAdd(&gameObjectManager, cube);
+	GameObjectManagerAdd(&gameObjectManager, cubeG);
+	GameObjectManagerAdd(&gameObjectManager, playerObject);
+	GameObjectManagerAdd(&gameObjectManager, jumpPad);
+	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
+	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
+}
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
@@ -93,39 +129,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
-	// first you must initialise your gameobjects
-	GameObject* cube = malloc(sizeof(GameObject));
-	GameObject* cubeG = malloc(sizeof(GameObject));
-	GameObject* playerObject = malloc(sizeof(GameObject));
-	GameObject* jumpPad = malloc(sizeof(GameObject));
-	GameObject* Teleporter1 = malloc(sizeof(GameObject));
-	GameObject* Teleporter2 = malloc(sizeof(GameObject));
-
-
-
-	InitGameObject(cube);
-	InitGameObject(cubeG);
-	InitGameObject(playerObject);
-	InitGameObject(jumpPad);
-	InitGameObject(Teleporter1);
-	InitGameObject(Teleporter2);
-
-	// setup their callbacks, start should never be NULL, however the others can be
-	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
-	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
-	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
-	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
-	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
-	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
-
-
-	// add them to the game object manager where start will be called
-	GameObjectManagerAdd(&gameObjectManager, cube);
-	GameObjectManagerAdd(&gameObjectManager, cubeG);
-	GameObjectManagerAdd(&gameObjectManager, playerObject);
-	GameObjectManagerAdd(&gameObjectManager, jumpPad);
-	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
-	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
+	InitialiseGameObjects();
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
