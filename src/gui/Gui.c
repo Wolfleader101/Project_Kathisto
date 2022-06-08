@@ -37,17 +37,41 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	igText("F4 - Toggle debug menu");
 	igText("F5 - Toggle Freecam/Thirdperson");
 
+	if (igCollapsingHeader_TreeNodeFlags("Player Settings", ImGuiTreeNodeFlags_CollapsingHeader)) 
+	{
+	}
+
+	if (igCollapsingHeader_TreeNodeFlags("Physics Settings", ImGuiTreeNodeFlags_CollapsingHeader))
+	{
+		const float MOUSE_SENS = 0.001f;
+		const float WALK_SPEED = 35.0f;
+		const float FLY_SPEED = 15.0f;
+		const float UP_SPEED = 10.0f;
+		float AIR_DENSITY = 1.225f;
+
+		const float G_ACCELERATION = 9.81f;
+		const float PHYSICS_TIME_STEP = 20; // in ms
+	}
+
 	igCheckbox("Toggle Freecam", &FREE_CAM);
 
 	igInputFloat("Air Density", &AIR_DENSITY, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 
-	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+
+	if (igCollapsingHeader_TreeNodeFlags("GameObject List", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-		if (gameObjectManager->gameObjects[i] != NULL && gameObjectManager->gameObjects[i]->name != NULL)
+		igIndent(20);
+
+		for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 		{
-			GameObjectPanel(gameObjectManager->gameObjects[i]);
+			if (gameObjectManager->gameObjects[i] != NULL && gameObjectManager->gameObjects[i]->name != NULL)
+			{
+				GameObjectPanel(gameObjectManager->gameObjects[i]);
+			}
 		}
+		igTreePop();
 	}
+
 	igEnd();
 }
 
@@ -57,6 +81,8 @@ void GuiUpdate(GameObjectManager* gameObjectManager)
 	ImGui_ImplGLUT_NewFrame(); // call imgui GLUT new frame
 
 	if (TOGGLE_MENU) DebugMenu(gameObjectManager); // draw debug menu
+	bool* isOpen = NULL;
+	igShowDemoWindow(isOpen);
 }
 
 void GuiRender()
@@ -68,8 +94,10 @@ void GuiRender()
 void GameObjectPanel(GameObject* gameObject)
 {
 	if (gameObject == NULL) return;
-	if (igCollapsingHeader_TreeNodeFlags(gameObject->name, ImGuiTreeNodeFlags_CollapsingHeader))
+
+	if (igCollapsingHeader_TreeNodeFlags(gameObject->name, ImGuiTreeNodeFlags_None))
 	{
+		igIndent(20);
 		igPushStyleColor_Vec4(ImGuiCol_Button, (ImVec4) { 0.45f, 0.0f, 0.0f, 1.0f });
 		igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, (ImVec4) { 0.6f, 0.0f, 0.0f, 1.0f });
 		igPushStyleColor_Vec4(ImGuiCol_ButtonActive, (ImVec4) { 1.0f, 0.0f, 0.0f, 1.0f });
@@ -83,25 +111,27 @@ void GameObjectPanel(GameObject* gameObject)
 		TransformWidget(&gameObject->transform);
 		RigidBodyWidget(&gameObject->rigidBody);
 		MeshWidget(&gameObject->mesh);
-		igSeparator();
-		igTreePop();
-	}
 
+		igTreePop();
+
+		//igSeparator();
+	}
 }
 void TransformWidget(Transform* transform)
 {
-	if (igCollapsingHeader_TreeNodeFlags("Transform", ImGuiTreeNodeFlags_CollapsingHeader))
+	if (igTreeNodeEx_Str("Transform", ImGuiTreeNodeFlags_None))
 	{
 		igInputFloat3("Position", &transform->position, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Rotation", &transform->rotation, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Scale", &transform->scale, "%.02f", ImGuiInputTextFlags_None);
+
 		igTreePop();
-		igSeparator();
+		//igSeparator();
 	}
 }
 void RigidBodyWidget(RigidBody* rigidBody)
 {
-	if (igCollapsingHeader_TreeNodeFlags("RigidBody", ImGuiTreeNodeFlags_CollapsingHeader))
+	if (igTreeNodeEx_Str("RigidBody", ImGuiTreeNodeFlags_None))
 	{
 		igCheckbox("Bounding Box View", &rigidBody->debug);
 		igCheckbox("On Ground", &rigidBody->onGround);
@@ -109,17 +139,19 @@ void RigidBodyWidget(RigidBody* rigidBody)
 		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat3("Velocity", &rigidBody->velocity, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat("Mass", &rigidBody->mass, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
 		igTreePop();
-		igSeparator();
+		//igSeparator();
 	}
 }
 void MeshWidget(Mesh* mesh)
 {
-	if (igCollapsingHeader_TreeNodeFlags("Mesh", ImGuiTreeNodeFlags_CollapsingHeader))
+	if (igTreeNodeEx_Str("Mesh", ImGuiTreeNodeFlags_None))
 	{
 		igCheckbox("Disable Mesh", &mesh->disableMesh);
 		igCheckbox("Debug Mesh", &mesh->debug);
+
 		igTreePop();
-		igSeparator();
+		//igSeparator();
 	}
 }
