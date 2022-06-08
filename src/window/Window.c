@@ -36,79 +36,8 @@ GLfloat ambient0[] = { 0.70392f, 0.723f, 0.71961f, 1.0f };
 
 GameObjectManager gameObjectManager;
 
-void InitialiseWindow(int* argc, char** argv, char* windowName)
+void InitialiseGameObjects()
 {
-	/////////////////////////////////////////////////
-	//  INITIALISE GAME FUNCTIONS & VARIABLES
-	/////////////////////////////////////////////////
-
-	// initialise GLUT, with debug logs
-	glutInit(argc, argv);
-	glutInitContextFlags(GLUT_DEBUG);
-
-	// set RGBA mode, double buffer window, and have a depth buffer
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-
-	// set the window starting position and size
-	glutInitWindowPosition(100, 0);
-	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	// set window name
-	glutCreateWindow(windowName);
-
-	// Initialise the GUI
-	GuiInit();
-
-	// callback functions
-
-	// on reshape
-	glutReshapeFunc(ReshapeWindow);
-
-	// rendering callbacks
-	glutDisplayFunc(WindowRender);
-	glutIdleFunc(WindowRender);
-
-	// keyboard and mouse input
-	glutKeyboardFunc(OnKeyDown); // on key down
-	glutKeyboardUpFunc(OnKeyUp); // on key up
-
-	glutSpecialFunc(OnSpecialKeyDown); // on special key down (function keys, ctrl etc)
-	glutSpecialUpFunc(OnSpecialKeyUp); // on special key up
-
-	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
-
-	glutMouseFunc(OnMouseButton); // on mouse click
-	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
-
-	//glutFullScreen();
-
-	// hide the cursor
-	glutSetCursor(GLUT_CURSOR_NONE);
-
-	/////////////////////////////////////////////////
-	//  INITIALISE LIGHTING TO DEFAULT VALUES
-	/////////////////////////////////////////////////
-
-	glEnable(GL_LIGHTING); //Enable Lighting
-
-	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
-
-	glEnable(GL_LIGHT0); //Enable light 0
-
-	// enable depth testing
-	glEnable(GL_DEPTH_TEST); //Enable Depth Testing
-
-	// SETUP GAME OBJECT MANAGER \\
-	// 
-	// setup game object manager
-	InitGameObjectManager(&gameObjectManager);
-
-	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
-
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* cubeG = malloc(sizeof(GameObject));
@@ -179,14 +108,87 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 		go->mesh.colors = calloc(1, sizeof(RGBA));
 
-		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){r, g, b, 1.0f};
+		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
 		go->mesh.isUniformColor = true;
 		go->rigidBody.isStatic = true;
 
 		GameObjectManagerAdd(&gameObjectManager, go);
 	}
+}
 
-	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
+void InitialiseWindow(int* argc, char** argv, char* windowName)
+{
+	/////////////////////////////////////////////////
+	//  INITIALISE GAME FUNCTIONS & VARIABLES
+	/////////////////////////////////////////////////
+
+	// initialise GLUT, with debug logs
+	glutInit(argc, argv);
+	glutInitContextFlags(GLUT_DEBUG);
+
+	// set RGBA mode, double buffer window, and have a depth buffer
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+
+	// set the window starting position and size
+	glutInitWindowPosition(100, 0);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	// set window name
+	glutCreateWindow(windowName);
+
+	// Initialise the GUI
+	GuiInit();
+
+	// callback functions
+
+	// on reshape
+	glutReshapeFunc(ReshapeWindow);
+
+	// rendering callbacks
+	glutDisplayFunc(WindowRender);
+	glutIdleFunc(WindowRender);
+
+	// keyboard and mouse input
+	glutKeyboardFunc(OnKeyDown); // on key down
+	glutKeyboardUpFunc(OnKeyUp); // on key up
+
+	glutSpecialFunc(OnSpecialKeyDown); // on special key down (function keys, ctrl etc)
+	glutSpecialUpFunc(OnSpecialKeyUp); // on special key up
+
+	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
+
+	glutMouseFunc(OnMouseButton); // on mouse click
+	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
+
+	//glutFullScreen();
+
+	// hide the cursor
+	glutSetCursor(GLUT_CURSOR_NONE);
+  
+  /////////////////////////////////////////////////
+	//  INITIALISE LIGHTING TO DEFAULT VALUES
+	/////////////////////////////////////////////////
+
+	glEnable(GL_LIGHTING); //Enable Lighting
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
+
+	glEnable(GL_LIGHT0); //Enable light 0
+
+	// enable depth testing
+	glEnable(GL_DEPTH_TEST);
+
+	// SETUP GAME OBJECT MANAGER \\
+	// 
+	// setup game object manager
+	InitGameObjectManager(&gameObjectManager);
+
+
+	InitialiseGameObjects();
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
