@@ -74,4 +74,12 @@ void OnMouseButton(int button, int state, int x, int y);
 */
 void OnMouseMove(int x, int y);
 
+/**
+ * @brief Displays the Group Photo upon exiting the program
+ * @param const char* imgName - The name of the Image File
+ * @param int imgWidth - Width of the image in pixels
+ * @param int imgHeight - Height of the image in pixels
+ * @param int channelsInFile - Number of colour channels in the file
+ * @param int numOfDesiredChannels - Desired number of colour channels
+*/
 void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int channelsInFile, int numOfDesiredChannels); //Displays the group photo when exiting the program

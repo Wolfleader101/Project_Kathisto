@@ -34,20 +34,48 @@ Vector3 camRightFlat; //The camera's default right direction (Vector) flattened 
 /////////	FUNCTIONS
 ///////////////////////////////////////////
 
+/**
+ * @brief Sets the initial attributes of the camera
+ * @param GameObjectManager* gameObjectManager - Input Game Object Manager to find the player object
+*/
 void SetCamAttributes(GameObjectManager* gameObjectManager); //CALLED ONCE
 
+/**
+ * @brief Function to call all of the calculation functions
+ * @param Time time - The current game time
+*/
 void ComputeCamPos(Time time); //LOOPED
 
+/**
+ * @brief Updates the focal point of the camera
+*/
 void UpdateCamFocus(); //LOOPED
 
+/**
+ * @brief The function which is in charge of rotating the camera
+ * @param Time time - The current game time
+*/
 void ManualCamRotation(Time time); //LOOPED
 
+/**
+ * @brief Constrains the angles of the camera
+*/
 void ConstrainCamAngles(); //LOOPED
 
+/**
+ * @brief Calculates new position for the camera based on its movements
+*/
 void CalculateCamPosition(); //LOOPED
 
+/**
+ * @brief Calculates new vectors for the camera based on its movements
+*/
 void CalculateCamVectors(); //LOOPED
 
+/**
+ * @brief The function which is called to render the camera movements
+ * @param Time time - The current game time
+*/
 void ThirdPersonCamRender(Time time); //LOOPED
 
 //////////////////////////////

@@ -7,7 +7,6 @@
 #include "game/Rendering.h"
 #include "game/GameObject.h"
 
-
 /**
  * @brief update all gameobjects in a game object manager
  * @param time to update smoothly

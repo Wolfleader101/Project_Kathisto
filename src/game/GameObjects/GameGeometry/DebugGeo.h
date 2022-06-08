@@ -20,4 +20,8 @@
 ////	BUILDING FUCNTIONS
 /////////////////////////////////////////
 
+/**
+ * @brief Function which builds all of the Debug Geometry
+ * @param GameObjectManager* gameObjectManager - Input game object manager
+*/
 void BuildDebugGeo(GameObjectManager* gameObjectManager); //In charge of building the Geometry for the Debug Level
