@@ -39,24 +39,31 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	if (igCollapsingHeader_TreeNodeFlags("Player Settings", ImGuiTreeNodeFlags_CollapsingHeader)) 
 	{
+		igCheckbox("Toggle Freecam", &FREE_CAM);
+
+		igInputFloat("Mouse Sensitivty", &MOUSE_SENS, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
+
+		igInputFloat("Walk Speed", &WALK_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
+		igInputFloat("Freecam Speed", &FLY_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat("Freecam Up Speed", &UP_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
 	}
 
 	if (igCollapsingHeader_TreeNodeFlags("Physics Settings", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-		const float MOUSE_SENS = 0.001f;
-		const float WALK_SPEED = 35.0f;
-		const float FLY_SPEED = 15.0f;
-		const float UP_SPEED = 10.0f;
-		float AIR_DENSITY = 1.225f;
+		//igCheckbox("Toggle Physics", &FREE_CAM);
+		//igCheckbox("Show all Colliders");
 
-		const float G_ACCELERATION = 9.81f;
-		const float PHYSICS_TIME_STEP = 20; // in ms
+		igInputFloat("Physics Time Step (ms)", &PHYSICS_TIME_STEP, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
+		igSeparator();
+
+		igSliderFloat("Air Density", &AIR_DENSITY, 0, 100, "%.02f", ImGuiSliderFlags_None);
+		igInputFloat("Gravitional Acceleration", &G_ACCELERATION, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+
 	}
-
-	igCheckbox("Toggle Freecam", &FREE_CAM);
-
-	igInputFloat("Air Density", &AIR_DENSITY, 1, 5, "%.02f", ImGuiInputTextFlags_None);
-
 
 	if (igCollapsingHeader_TreeNodeFlags("GameObject List", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
