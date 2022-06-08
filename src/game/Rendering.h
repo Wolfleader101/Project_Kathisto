@@ -5,7 +5,6 @@
 #include "game/GameConstants.h"
 #include "loader/model/objStructure.h"
 
-
 /**
  * @brief initialise a mesh component
  * @param mesh to initialise
@@ -18,7 +17,6 @@ void InitMesh(Mesh* mesh);
  * @param mesh to load data in to
 */
 void objToMesh(ObjModel model, Mesh* mesh);
-
 
 /**
  * @brief draw a mesh in openGL

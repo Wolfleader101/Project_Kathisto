@@ -29,6 +29,10 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
+GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat diffuse0[] = { 0.89020f, 0.98039f, 0.97647f, 1.0f };
+GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat ambient0[] = { 0.70392f, 0.723f, 0.71961f, 1.0f };
 
 GameObjectManager gameObjectManager;
 
@@ -41,8 +45,6 @@ void InitialiseGameObjects()
 	GameObject* jumpPad = malloc(sizeof(GameObject));
 	GameObject* Teleporter1 = malloc(sizeof(GameObject));
 	GameObject* Teleporter2 = malloc(sizeof(GameObject));
-
-
 
 	InitGameObject(cube);
 	InitGameObject(cubeG);
@@ -58,7 +60,6 @@ void InitialiseGameObjects()
 	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
 	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
 	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
-
 
 	// add them to the game object manager where start will be called
 	GameObjectManagerAdd(&gameObjectManager, cube);
@@ -94,8 +95,8 @@ void InitialiseGameObjects()
 			strcat(go->name, buffer);
 		}
 
-
 		objToMesh(objFile.modelGroups[i], &go->mesh);
+
 		float r, g, b;
 		if ((i / 3) % 2 == 0)
 		{
@@ -110,7 +111,6 @@ void InitialiseGameObjects()
 		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
 		go->mesh.isUniformColor = true;
 		go->rigidBody.isStatic = true;
-
 
 		GameObjectManagerAdd(&gameObjectManager, go);
 	}
@@ -164,6 +164,20 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// hide the cursor
 	glutSetCursor(GLUT_CURSOR_NONE);
+  
+  /////////////////////////////////////////////////
+	//  INITIALISE LIGHTING TO DEFAULT VALUES
+	/////////////////////////////////////////////////
+
+	glEnable(GL_LIGHTING); //Enable Lighting
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
+
+	glEnable(GL_LIGHT0); //Enable light 0
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
@@ -194,6 +208,8 @@ void WindowRender(void)
 	CalculateTime();
 
 	GuiUpdate(&gameObjectManager);
+
+	glClearColor(0.52941f, 0.80784f, 0.92157f, 1.0f);
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
