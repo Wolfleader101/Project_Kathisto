@@ -278,6 +278,7 @@ void DisplayGroupPhoto(const char* imgName, int imgWidth, int imgHeight, int cha
 		{
 			printf("SUCCESS: Raster position is valid!\n");
 
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			glDrawPixels(imgWidth, imgHeight - 1, GL_RGB, GL_UNSIGNED_BYTE, groupPhoto); //Draws the image to the screen (-1 to get the image into the bottom left corner)

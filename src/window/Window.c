@@ -29,11 +29,10 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
-GLfloat position0[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-GLfloat diffuse0[] = { 0.2f, 0.2f, 0.2f, 0.2f };
+GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat diffuse0[] = { 0.89020f, 0.98039f, 0.97647f, 1.0f };
 GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat ambient0[] = { 0.00392f, 0.0f, 0.01961f, 1.0f };
-GLfloat shininess0[] = { 1.0f, 10.0f, 1.0f, 1.0f };;
+GLfloat ambient0[] = { 0.70392f, 0.723f, 0.71961f, 1.0f };
 
 GameObjectManager gameObjectManager;
 
@@ -97,7 +96,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
-	glLightfv(GL_LIGHT0, GL_SHININESS, shininess0); //Set the shininess colour for light 0
 
 	glEnable(GL_LIGHT0); //Enable light 0
 
@@ -208,6 +206,8 @@ void WindowRender(void)
 	CalculateTime();
 
 	GuiUpdate(&gameObjectManager);
+
+	glClearColor(0.52941f, 0.80784f, 0.92157f, 1.0f);
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
