@@ -68,7 +68,7 @@ void DrawMesh(Time time, Mesh* mesh)
 
 	if(!mesh->hasMaterial)
 	{
-		glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+		glColorMaterial(GL_FRONT, GL_EMISSION);
 		glEnable(GL_COLOR_MATERIAL);
 	}
 	else

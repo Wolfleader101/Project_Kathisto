@@ -29,8 +29,8 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
-GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat diffuse0[] = { 0.99608f, 1.0f, 0.98039f, 1.0f };
+GLfloat position0[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+GLfloat diffuse0[] = { 0.2f, 0.2f, 0.2f, 0.2f };
 GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat ambient0[] = { 0.00392f, 0.0f, 0.01961f, 1.0f };
 GLfloat shininess0[] = { 1.0f, 10.0f, 1.0f, 1.0f };;
@@ -91,14 +91,15 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	/////////////////////////////////////////////////
 
 	glEnable(GL_LIGHTING); //Enable Lighting
-	glEnable(GL_LIGHT0); //Enable light 0
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
 	glLightfv(GL_LIGHT0, GL_SHININESS, shininess0); //Set the shininess colour for light 0
 
-	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+	glEnable(GL_LIGHT0); //Enable light 0
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST); //Enable Depth Testing
