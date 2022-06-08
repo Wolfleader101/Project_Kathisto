@@ -25,7 +25,6 @@ ObjFile InitialiseObjFile();
 */
 ObjFile AllocateModelMemory(FILE* inputPointer);
 
-
 /**
  * @brief Loads Data from an OBJ File
  * @param const char* filePath - The filepath of the model

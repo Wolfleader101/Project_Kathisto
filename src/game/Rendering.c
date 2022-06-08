@@ -3,11 +3,21 @@
 void InitMesh(Mesh* mesh)
 {
 	mesh->points = NULL;
-	mesh->pointSize = 0;
-	mesh->indices = NULL;
+	mesh->vertexAmount = 0;
+	mesh->uvs = NULL;
+	mesh->uvAmount = 0;
+	mesh->normals = NULL;
+	mesh->normalAmount = 0;
+
+	mesh->vertexIndices = NULL;
+	mesh->uvIndices = NULL;
+	mesh->normalIndices = NULL;
+
 	mesh->indexCount = 0;
+
 	mesh->colors = NULL;
 	mesh->isUniformColor = false;
+
 	mesh->debug = false;
 	mesh->disableMesh = false;
 }
@@ -15,17 +25,23 @@ void InitMesh(Mesh* mesh)
 void objToMesh(ObjModel model, Mesh* mesh)
 {
 	mesh->points = model.vertPosition;
-	mesh->indices = model.vertexPosIndicies;
-	mesh->pointSize = model.nVerts;
+	mesh->vertexAmount = model.nVerts;
+	mesh->uvs = model.textureCoord;
+	mesh->uvAmount = model.nUVs;
+	mesh->normals = model.normalData;
+	mesh->normalAmount = model.nNormals;
+
+	mesh->vertexIndices = model.vertexPosIndicies;
+	mesh->uvIndices = model.textureCoordIndicies;
+	mesh->normalIndices = model.vertexPosIndicies;
+
 	mesh->indexCount = (size_t)model.nFaces * 3;
 
 	return mesh;
 }
 
-
 void DrawMesh(Time time, Mesh* mesh)
 {
-
 	if (!mesh->isUniformColor && mesh->colors != NULL) glEnableClientState(GL_COLOR_ARRAY);
 
 	if (mesh->colors != NULL && mesh->isUniformColor)
@@ -37,14 +53,27 @@ void DrawMesh(Time time, Mesh* mesh)
 		glColor4f(0.5f, 0.75f, 0.5f, 1.0f);
 	}
 
+	if (mesh->normalAmount > 0) glEnableClientState(GL_NORMAL_ARRAY); //If there are normals present
+
+	if (mesh->normalAmount > 0) //If there are normals present, set the normal pointer
+	{
+		glNormalPointer(GL_FLOAT, sizeof(Vector3), mesh->normals);
+	}
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat[]) { 0.45882f, 0.45882f, 0.45882f, 1.0f });
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat[]) { 0.00392f, 0.0f, 0.01961f, 1.0f });
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat[]) { 0.4f, 0.6f, 1.0f, 1.0f });
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, (GLfloat[]) { 0.0f, 0.3f, 1.0f, 1.0f });
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glVertexPointer(3, GL_FLOAT, sizeof(Vector3), mesh->points);
 
-	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
+	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->vertexIndices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	if (!mesh->isUniformColor && mesh->colors != NULL) glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 void DrawGizmos(Time time, Vector3 maxSize)

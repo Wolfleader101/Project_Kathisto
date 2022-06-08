@@ -85,8 +85,8 @@ const Vector3Int cubeIndexBuffer[] = {
 //Plane Mesh
 const Mesh planeMesh = {
 	.points = planeVertexBuffer,
-	.indices = planeIndexBuffer,
-	.pointSize = 4,
+	.vertexIndices = planeIndexBuffer,
+	.vertexAmount = 4,
 	.indexCount = 6,
 	.colors = NULL,
 	.isUniformColor = true };
@@ -94,8 +94,8 @@ const Mesh planeMesh = {
 //Cube Mesh (Custom Vertex Colours)
 const Mesh cubeMeshCustColours = {
 	.points = cubeVertexBuffer,
-	.indices = cubeIndexBuffer,
-	.pointSize = 8,
+	.vertexIndices = cubeIndexBuffer,
+	.vertexAmount = 8,
 	.indexCount = 36,
 	.isUniformColor = false,
 	.debug = false

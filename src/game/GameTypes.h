@@ -59,14 +59,44 @@ typedef struct Mesh
 	Vector3 *points;
 
 	/**
-	 * @brief the size of the vertex points
+	 * @brief the number of the vertex points
 	 */
-	size_t pointSize;
+	size_t vertexAmount;
 
 	/**
-	 * @brief the indices buffer for the mesh
+	 * @brief the uvs for the mesh
 	 */
-	Vector3Int *indices;
+	Vector2* uvs;
+
+	/**
+	 * @brief the number of the vertex uvs
+	 */
+	size_t uvAmount;
+
+	/**
+	 * @brief the vertex normals for the mesh
+	 */
+	Vector3* normals;
+
+	/**
+	 * @brief the number of the vertex normals
+	 */
+	size_t normalAmount;
+
+	/**
+	 * @brief the vertex indices buffer for the mesh
+	 */
+	Vector3Int *vertexIndices;
+
+	/**
+	 * @brief the vertex uv indices buffer for the mesh
+	 */
+	Vector3Int* uvIndices;
+
+	/**
+	 * @brief the vertex normal indices buffer for the mesh
+	 */
+	Vector3Int* normalIndices;
 
 	/**
 	 * @brief the number of indices
