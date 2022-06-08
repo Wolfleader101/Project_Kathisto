@@ -21,10 +21,6 @@ extern int timebase;
 extern int fps;
 
 extern GLfloat position0[];
-extern GLfloat diffuse0[];
-extern GLfloat specular0[];
-extern GLfloat ambient0[];
-extern GLfloat shininess0[];
 
 extern Time time;
 extern Time deltaTime;

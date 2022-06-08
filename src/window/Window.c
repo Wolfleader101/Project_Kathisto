@@ -29,9 +29,9 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
-GLfloat position0[] = { 1.0f, 10.0f, 1.0f, 1.0f };
+GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat diffuse0[] = { 0.99608f, 1.0f, 0.98039f, 1.0f };
-GLfloat specular0[] = { 0.5f, 0.2f, 1.0f, 1.0f };
+GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat ambient0[] = { 0.00392f, 0.0f, 0.01961f, 1.0f };
 GLfloat shininess0[] = { 1.0f, 10.0f, 1.0f, 1.0f };;
 
