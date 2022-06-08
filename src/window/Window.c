@@ -230,7 +230,7 @@ void FixedUpdate(int val)
 
 	CalculateFixedTime();
 
-	FixedUpdateGameObjects(fixedTime, &gameObjectManager);
+	if(!PAUSE_PHYSICS) FixedUpdateGameObjects(fixedTime, &gameObjectManager);
 }
 
 void CalculateTime()

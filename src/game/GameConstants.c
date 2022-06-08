@@ -9,6 +9,9 @@ float AIR_DENSITY = 1.225f;
 float G_ACCELERATION = 9.81f;
 float PHYSICS_TIME_STEP = 20; // in ms
 
+bool PAUSE_PHYSICS = false;
+bool SHOW_COLLIDERS =  false;
+
 const int VECTOR_DIRECTIONS_LENGTH = 6;
 const Vector3 VECTOR_DIRECTIONS[] =
 {

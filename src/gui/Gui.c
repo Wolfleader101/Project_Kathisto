@@ -2,7 +2,9 @@
 
 struct ImGuiContext* ctx;
 struct ImGuiIO* io;
-float test = 1.0f;
+bool collidersActivatedOnce = false;
+bool collidersDeActivatedOnce = false;
+
 
 void GuiInit()
 {
@@ -29,6 +31,31 @@ void GuiFree()
 	igDestroyContext(ctx); // destroy context
 }
 
+void ToggleColliderView()
+{
+	if (SHOW_COLLIDERS)
+	{
+		for (size_t i = 0; i < gameObjectManager.lastIndex; i++)
+		{
+			GameObject* gameObject = gameObjectManager.gameObjects[i];
+
+			gameObject->mesh.disableMesh = true;
+			gameObject->rigidBody.debug = true;
+		}
+
+	}
+	else {
+		for (size_t i = 0; i < gameObjectManager.lastIndex; i++)
+		{
+			GameObject* gameObject = gameObjectManager.gameObjects[i];
+
+			gameObject->mesh.disableMesh = false;
+			gameObject->rigidBody.debug = false;
+		}
+	}
+
+}
+
 void DebugMenu(GameObjectManager* gameObjectManager)
 {
 	igBegin("Debug Menu", NULL, 0);
@@ -41,29 +68,33 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	{
 		igCheckbox("Toggle Freecam", &FREE_CAM);
 
-		igInputFloat("Mouse Sensitivty", &MOUSE_SENS, 1, 5, "%.02f", ImGuiInputTextFlags_None);
+		igSliderFloat("Mouse Sensitivty", &MOUSE_SENS, 0, 0.1, "%.02f", ImGuiSliderFlags_None);
 
 
-		igInputFloat("Walk Speed", &WALK_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
-
-		igInputFloat("Freecam Speed", &FLY_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
-		igInputFloat("Freecam Up Speed", &UP_SPEED, 1, 5, "%.02f", ImGuiInputTextFlags_None);
-
+		igSliderFloat("Walk Speed", &WALK_SPEED, 0, 100, "%.02f", ImGuiSliderFlags_None);
+		igSliderFloat("Freecam Speed", &FLY_SPEED, 0, 100, "%.02f", ImGuiSliderFlags_None);
+		igSliderFloat("Freecam Up Speed", &UP_SPEED, 0, 100, "%.02f", ImGuiSliderFlags_None);
 	}
 
 	if (igCollapsingHeader_TreeNodeFlags("Physics Settings", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-		//igCheckbox("Toggle Physics", &FREE_CAM);
-		//igCheckbox("Show all Colliders");
+		igCheckbox("Toggle Physics", &PAUSE_PHYSICS);
+		igCheckbox("Show all Colliders", &SHOW_COLLIDERS);
+		
+		collidersDeActivatedOnce = !SHOW_COLLIDERS && collidersActivatedOnce ? true : false;
+
+		collidersActivatedOnce = SHOW_COLLIDERS ? true : false;
+
+		if (collidersActivatedOnce || collidersDeActivatedOnce) ToggleColliderView();
+
 
 		igInputFloat("Physics Time Step (ms)", &PHYSICS_TIME_STEP, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 
-		igSeparator();
-
-		igSliderFloat("Air Density", &AIR_DENSITY, 0, 100, "%.02f", ImGuiSliderFlags_None);
-		igInputFloat("Gravitional Acceleration", &G_ACCELERATION, 1, 5, "%.02f", ImGuiInputTextFlags_None);
-
+		igSliderFloat("Air Density", &AIR_DENSITY, 0, 100, "%.02f", ImGuiSliderFlags_None); 
+		igSliderFloat("Gravitional Acceleration", &G_ACCELERATION, 0, 100, "%.02f", ImGuiSliderFlags_None);
 	}
+
+
 
 	if (igCollapsingHeader_TreeNodeFlags("GameObject List", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
@@ -89,7 +120,6 @@ void GuiUpdate(GameObjectManager* gameObjectManager)
 
 	if (TOGGLE_MENU) DebugMenu(gameObjectManager); // draw debug menu
 	bool* isOpen = NULL;
-	igShowDemoWindow(isOpen);
 }
 
 void GuiRender()
