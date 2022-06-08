@@ -67,6 +67,53 @@ void InitialiseGameObjects()
 	GameObjectManagerAdd(&gameObjectManager, jumpPad);
 	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
 	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
+
+	//Sets the objects needed for the camera
+	SetCamAttributes(&gameObjectManager);
+
+	ObjFile objFile;
+
+	objFile = InitialiseObjFile();
+	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+
+	for (size_t i = 0; i < objFile.nGroups; i++)
+	{
+		GameObject* go = calloc(1, sizeof(GameObject));
+
+		if (go == NULL) return;
+
+		InitGameObject(go);
+
+		go->name = calloc(25, sizeof(char));
+		if (go->name != NULL)
+		{
+			strcpy(go->name, "Obj Object");
+
+			char buffer[5] = "";
+			itoa(i, buffer, 10);
+			strcat(go->name, buffer);
+		}
+
+
+		objToMesh(objFile.modelGroups[i], &go->mesh);
+		float r, g, b;
+		if ((i / 3) % 2 == 0)
+		{
+			r = g = b = 0.611;
+		}
+		else {
+			r = g = b = 0.360;
+		}
+
+		go->mesh.colors = calloc(1, sizeof(RGBA));
+
+		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
+		go->mesh.isUniformColor = true;
+		go->rigidBody.isStatic = true;
+
+
+		GameObjectManagerAdd(&gameObjectManager, go);
+	}
 }
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
@@ -127,58 +174,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	InitGameObjectManager(&gameObjectManager);
 
 
-	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
-
 	InitialiseGameObjects();
-
-	//Sets the objects needed for the camera
-	SetCamAttributes(&gameObjectManager);
-
-	ObjFile objFile;
-
-	objFile = InitialiseObjFile();
-	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
-
-	for (size_t i = 0; i < objFile.nGroups; i++)
-	{
-		GameObject* go = calloc(1, sizeof(GameObject));
-
-		if (go == NULL) return;
-
-		InitGameObject(go);
-
-		go->name = calloc(25, sizeof(char));
-		if (go->name != NULL)
-		{
-			strcpy(go->name, "Obj Object");
-
-			char buffer[5] = "";
-			itoa(i, buffer, 10);
-			strcat(go->name, buffer);
-		}
-
-
-		objToMesh(objFile.modelGroups[i], &go->mesh);
-		float r, g, b;
-		if ((i / 3) % 2 == 0)
-		{
-			r = g = b = 0.611;
-		}
-		else {
-			r = g = b = 0.360;
-		}
-
-		go->mesh.colors = calloc(1, sizeof(RGBA));
-
-		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){r, g, b, 1.0f};
-		go->mesh.isUniformColor = true;
-		go->rigidBody.isStatic = true;
-
-
-		GameObjectManagerAdd(&gameObjectManager, go);
-	}
-
-	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
