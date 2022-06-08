@@ -16,7 +16,7 @@ float camFocusRadius = 1.0f; //Relaxes the view of the focus point by a set amou
 
 float camDistance = 8.0f; //The distance of the camera from the focal point
 float camRotationSpeed = 15.0f; //The speed at which the camera rotates around the player object (In degrees per-second)
-float camMinVertAngle = -4.0f; //The minimum value that the camera can rotate vertically
+float camMinVertAngle = -2.0f; //The minimum value that the camera can rotate vertically
 float camMaxVertAngle = 50.0f; //The maximum value that the camera can rotate vertically
 
 Vector3 camOrbitAngles = {0.0f, 360.0f, 0.0f}; //Vertical (Pitch) angle, Horizontal (Yaw) angle (EULER)

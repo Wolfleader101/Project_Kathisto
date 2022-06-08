@@ -20,6 +20,8 @@ extern int frame;
 extern int timebase;
 extern int fps;
 
+extern GLfloat position0[];
+
 extern Time time;
 extern Time deltaTime;
 

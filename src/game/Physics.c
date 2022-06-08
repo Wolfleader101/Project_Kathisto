@@ -173,7 +173,7 @@ void PhysicsTransform(Time fixedTime, GameObject* gameObject, CollisionData coll
 
 void CalculateBoundingBox(GameObject* gameObject)
 {
-	if (gameObject->mesh.points == NULL || gameObject->mesh.pointSize == 0) return;
+	if (gameObject->mesh.points == NULL || gameObject->mesh.vertexAmount == 0) return;
 
 	Transform* transform = &gameObject->transform;
 	Mesh* mesh = &gameObject->mesh;
@@ -181,7 +181,7 @@ void CalculateBoundingBox(GameObject* gameObject)
 	Vector3 min;
 	Vector3 max;
 
-	for (size_t i = 0; i < mesh->pointSize; i++)
+	for (size_t i = 0; i < mesh->vertexAmount; i++)
 	{
 		Vector3 pos = Vec3Multiply(transform->scale, mesh->points[i]);
 		pos = Vec3RotateZ(pos, transform->rotation.z * M_PI / 180);

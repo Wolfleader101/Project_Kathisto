@@ -47,6 +47,26 @@ typedef struct Transform
 
 } Transform;
 
+typedef struct GLColour
+{
+	/**
+	 * @brief Red Value
+	 */
+	GLfloat r;
+	/**
+	 * @brief Green Value
+	 */
+	GLfloat g;
+	/**
+	 * @brief Blue Value
+	 */
+	GLfloat b;
+	/**
+	 * @brief Alpha Value
+	 */
+	GLfloat a;
+} GLColour;
+
 /**
  * @struct Mesh
  * @brief the mesh component used for drawing a gameobject
@@ -59,14 +79,44 @@ typedef struct Mesh
 	Vector3 *points;
 
 	/**
-	 * @brief the size of the vertex points
+	 * @brief the number of the vertex points
 	 */
-	size_t pointSize;
+	size_t vertexAmount;
 
 	/**
-	 * @brief the indices buffer for the mesh
+	 * @brief the uvs for the mesh
 	 */
-	Vector3Int *indices;
+	Vector2* uvs;
+
+	/**
+	 * @brief the number of the vertex uvs
+	 */
+	size_t uvAmount;
+
+	/**
+	 * @brief the vertex normals for the mesh
+	 */
+	Vector3* normals;
+
+	/**
+	 * @brief the number of the vertex normals
+	 */
+	size_t normalAmount;
+
+	/**
+	 * @brief the vertex indices buffer for the mesh
+	 */
+	Vector3Int *vertexIndices;
+
+	/**
+	 * @brief the vertex uv indices buffer for the mesh
+	 */
+	Vector3Int* uvIndices;
+
+	/**
+	 * @brief the vertex normal indices buffer for the mesh
+	 */
+	Vector3Int* normalIndices;
 
 	/**
 	 * @brief the number of indices
@@ -82,6 +132,31 @@ typedef struct Mesh
 	 * @brief if its a uniform (single) color
 	 */
 	bool isUniformColor;
+
+	/**
+	 * @brief If the mesh has a material
+	 */
+	bool hasMaterial;
+
+	/**
+	 * @brief The diffuse values of the mesh
+	 */
+
+	GLColour meshDiffuse;
+	/**
+	 * @brief The ambient values of the mesh
+	 */
+
+	GLColour meshAmbient;
+	/**
+	 * @brief The specular values of the mesh
+	 */
+
+	GLColour meshSpecular;
+	/**
+	 * @brief The shininess values of the mesh
+	 */
+	GLColour meshShininess;
 
 	/**
 	 * @brief debug mesh to draw with lines

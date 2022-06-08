@@ -29,9 +29,92 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
+GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat diffuse0[] = { 0.89020f, 0.98039f, 0.97647f, 1.0f };
+GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat ambient0[] = { 0.70392f, 0.723f, 0.71961f, 1.0f };
 
 GameObjectManager gameObjectManager;
 
+void InitialiseGameObjects()
+{
+	// first you must initialise your gameobjects
+	GameObject* cube = malloc(sizeof(GameObject));
+	GameObject* cubeG = malloc(sizeof(GameObject));
+	GameObject* playerObject = malloc(sizeof(GameObject));
+	GameObject* jumpPad = malloc(sizeof(GameObject));
+	GameObject* Teleporter1 = malloc(sizeof(GameObject));
+	GameObject* Teleporter2 = malloc(sizeof(GameObject));
+
+	InitGameObject(cube);
+	InitGameObject(cubeG);
+	InitGameObject(playerObject);
+	InitGameObject(jumpPad);
+	InitGameObject(Teleporter1);
+	InitGameObject(Teleporter2);
+
+	// setup their callbacks, start should never be NULL, however the others can be
+	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
+	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
+	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
+	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
+	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
+	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
+
+	// add them to the game object manager where start will be called
+	GameObjectManagerAdd(&gameObjectManager, cube);
+	GameObjectManagerAdd(&gameObjectManager, cubeG);
+	GameObjectManagerAdd(&gameObjectManager, playerObject);
+	GameObjectManagerAdd(&gameObjectManager, jumpPad);
+	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
+	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
+
+	//Sets the objects needed for the camera
+	SetCamAttributes(&gameObjectManager);
+
+	ObjFile objFile;
+
+	objFile = InitialiseObjFile();
+	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+
+	for (size_t i = 0; i < objFile.nGroups; i++)
+	{
+		GameObject* go = calloc(1, sizeof(GameObject));
+
+		if (go == NULL) return;
+
+		InitGameObject(go);
+
+		go->name = calloc(25, sizeof(char));
+		if (go->name != NULL)
+		{
+			strcpy(go->name, "Obj Object");
+
+			char buffer[5] = "";
+			itoa(i, buffer, 10);
+			strcat(go->name, buffer);
+		}
+
+		objToMesh(objFile.modelGroups[i], &go->mesh);
+
+		float r, g, b;
+		if ((i / 3) % 2 == 0)
+		{
+			r = g = b = 0.611;
+		}
+		else {
+			r = g = b = 0.360;
+		}
+
+		go->mesh.colors = calloc(1, sizeof(RGBA));
+
+		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
+		go->mesh.isUniformColor = true;
+		go->rigidBody.isStatic = true;
+
+		GameObjectManagerAdd(&gameObjectManager, go);
+	}
+}
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
@@ -81,6 +164,20 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// hide the cursor
 	glutSetCursor(GLUT_CURSOR_NONE);
+  
+  /////////////////////////////////////////////////
+	//  INITIALISE LIGHTING TO DEFAULT VALUES
+	/////////////////////////////////////////////////
+
+	glEnable(GL_LIGHTING); //Enable Lighting
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
+
+	glEnable(GL_LIGHT0); //Enable light 0
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
@@ -91,90 +188,7 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	InitGameObjectManager(&gameObjectManager);
 
 
-	BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
-
-	// first you must initialise your gameobjects
-	GameObject* cube = malloc(sizeof(GameObject));
-	GameObject* cubeG = malloc(sizeof(GameObject));
-	GameObject* playerObject = malloc(sizeof(GameObject));
-	GameObject* jumpPad = malloc(sizeof(GameObject));
-	GameObject* Teleporter1 = malloc(sizeof(GameObject));
-	GameObject* Teleporter2 = malloc(sizeof(GameObject));
-
-
-
-	InitGameObject(cube);
-	InitGameObject(cubeG);
-	InitGameObject(playerObject);
-	InitGameObject(jumpPad);
-	InitGameObject(Teleporter1);
-	InitGameObject(Teleporter2);
-
-	// setup their callbacks, start should never be NULL, however the others can be
-	SetupCallbacks(cube, OnCubeStart, OnCubeUpdate, NULL, OnCubeFixedUpdate, OnCubeCollision);
-	SetupCallbacks(cubeG, OnCubeGStart, NULL, NULL, NULL, NULL);
-	SetupCallbacks(playerObject, OnPlayerStart, NULL, NULL, OnPlayerFixedUpdate, OnPlayerCollision);
-	SetupCallbacks(jumpPad, OnJumpPadStart, OnJumpPadUpdate, NULL, OnJumpPadFixedUpdate, OnJumpPadCollision);
-	SetupCallbacks(Teleporter1, OnTeleporter1Start, OnTeleporter1Update, NULL, NULL, OnTeleporter1Collision);
-	SetupCallbacks(Teleporter2, OnTeleporter2Start, NULL, NULL, NULL, OnTeleporter2Collision);
-
-
-	// add them to the game object manager where start will be called
-	GameObjectManagerAdd(&gameObjectManager, cube);
-	GameObjectManagerAdd(&gameObjectManager, cubeG);
-	GameObjectManagerAdd(&gameObjectManager, playerObject);
-	GameObjectManagerAdd(&gameObjectManager, jumpPad);
-	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
-	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
-
-	//Sets the objects needed for the camera
-	SetCamAttributes(&gameObjectManager);
-
-	ObjFile objFile;
-
-	objFile = InitialiseObjFile();
-	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
-
-	for (size_t i = 0; i < objFile.nGroups; i++)
-	{
-		GameObject* go = calloc(1, sizeof(GameObject));
-
-		if (go == NULL) return;
-
-		InitGameObject(go);
-
-		go->name = calloc(25, sizeof(char));
-		if (go->name != NULL)
-		{
-			strcpy(go->name, "Obj Object");
-
-			char buffer[5] = "";
-			itoa(i, buffer, 10);
-			strcat(go->name, buffer);
-		}
-
-
-		objToMesh(objFile.modelGroups[i], &go->mesh);
-		float r, g, b;
-		if ((i / 3) % 2 == 0)
-		{
-			r = g = b = 0.611;
-		}
-		else {
-			r = g = b = 0.360;
-		}
-
-		go->mesh.colors = calloc(1, sizeof(RGBA));
-
-		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){r, g, b, 1.0f};
-		go->mesh.isUniformColor = true;
-		go->rigidBody.isStatic = true;
-
-
-		GameObjectManagerAdd(&gameObjectManager, go);
-	}
-
-	//BuildDebugGeo(&gameObjectManager); //Builds Debug Geometry
+	InitialiseGameObjects();
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
@@ -194,6 +208,8 @@ void WindowRender(void)
 	CalculateTime();
 
 	GuiUpdate(&gameObjectManager);
+
+	glClearColor(0.52941f, 0.80784f, 0.92157f, 1.0f);
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

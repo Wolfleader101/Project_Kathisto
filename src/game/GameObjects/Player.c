@@ -70,8 +70,8 @@ const RGBA playerColorBuffer[] = {
 //Sets the mesh attributes for the player object
 Mesh playerMesh = {
 	.points = playerVertexBuffer,
-	.indices = playerIndexBuffer,
-	.pointSize = 8,
+	.vertexIndices = playerIndexBuffer,
+	.vertexAmount = 8,
 	.indexCount = 36,
 	.colors = playerColorBuffer,
 	.isUniformColor = false,
