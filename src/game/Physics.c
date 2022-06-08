@@ -23,7 +23,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	glPushMatrix();
 
 	//Check for gravity enabled
-	if (gameObject->rigidBody.useGravity)
+	if (gameObject->rigidBody.useGravity && !gameObject->rigidBody.onGround)
 	{
 		//Apply gravity transformation
 		GravityTransform(fixedTime, gameObject);
@@ -43,6 +43,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 
 	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
+
 	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
 
 	// calculate the bounding box after transformations have been done so it doesn't sink into the ground
@@ -306,7 +307,7 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	if (collisionData.collidingFace.y == 1.0f && collisionData.collidingGameObject->rigidBody.isFloor)
+	if (collisionData.collidingFace.y == 1.0f)
 		gameObject->rigidBody.onGround = true;
 	else
 		gameObject->rigidBody.onGround = false;
@@ -328,9 +329,11 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
 	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
 
-
 	if (normal.y == 1.0f)
-		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+		{
+			gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+			gameObject->rigidBody.velocity.y += 0.001;
+		}
 	else if (normal.y == -1.0f)
 		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.y - (upAmount / 2);
 
