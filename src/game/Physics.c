@@ -8,6 +8,7 @@ void InitRigidBody(RigidBody* rigidBody)
 	rigidBody->useGravity = false;
 	rigidBody->debug = false;
 	rigidBody->isTrigger = false;
+	rigidBody->isPassive = false;
 	rigidBody->mass = 50.0f;
 	rigidBody->velocity = EmptyVec3();
 	rigidBody->boundingBox = (BoudingBox){ .gameObjectId = 0, .minPos = EmptyVec3(), .maxPos = EmptyVec3() };
@@ -23,7 +24,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 	glPushMatrix();
 
 	//Check for gravity enabled
-	if (gameObject->rigidBody.useGravity)
+	if (gameObject->rigidBody.useGravity && !gameObject->rigidBody.onGround)
 	{
 		//Apply gravity transformation
 		GravityTransform(fixedTime, gameObject);
@@ -43,6 +44,7 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 
 	gameObject->transform.position.x += gameObject->rigidBody.velocity.x * fixedTime.deltaTime;
 	gameObject->transform.position.y += gameObject->rigidBody.velocity.y * fixedTime.deltaTime;
+
 	gameObject->transform.position.z += gameObject->rigidBody.velocity.z * fixedTime.deltaTime;
 
 	// calculate the bounding box after transformations have been done so it doesn't sink into the ground
@@ -304,9 +306,11 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };
 }
 
+const float FORCEAPART = 0.001;
+
 void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData collisionData)
 {
-	if (collisionData.collidingFace.y == 1.0f && collisionData.collidingGameObject->rigidBody.isFloor)
+	if (collisionData.collidingFace.y == 1.0f)
 		gameObject->rigidBody.onGround = true;
 	else
 		gameObject->rigidBody.onGround = false;
@@ -324,27 +328,48 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-	float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
-	float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
-	float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
+	if (gameObject->rigidBody.isPassive || (!gameObject->rigidBody.isPassive && !collisionData.collidingGameObject->rigidBody.isPassive) )
+	{
+		float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
+		float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
+		float forwardAmount = (gameObject->rigidBody.boundingBox.maxPos.z - gameObject->rigidBody.boundingBox.minPos.z);
+
+		if (normal.y == 1.0f)
+		{
+			gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
+			gameObject->rigidBody.velocity.y += FORCEAPART;
+		}
+		else if (normal.y == -1.0f)
+		{
+			gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.y - (upAmount / 2);
+			gameObject->rigidBody.velocity.y -= FORCEAPART;
+		}
+
+		if (normal.x == 1.0f)
+		{
+			gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.x + (rightAmount / 2);
+			gameObject->rigidBody.velocity.x += FORCEAPART;
+		}
+		else if (normal.x == -1.0f)
+		{
+			gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.x - (rightAmount / 2);
+			gameObject->rigidBody.velocity.x -= FORCEAPART;
+		}
+
+		if (normal.z == 1.0f)
+		{
+			gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
+			gameObject->rigidBody.velocity.z += FORCEAPART;
+		}
+		else if (normal.z == -1.0f)
+		{
+			gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.z - (forwardAmount / 2);
+			gameObject->rigidBody.velocity.z -= FORCEAPART;
+		}
+	}
 
 
-	if (normal.y == 1.0f)
-		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.y + (upAmount / 2);
-	else if (normal.y == -1.0f)
-		gameObject->transform.position.y = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.y - (upAmount / 2);
-
-	if (normal.x == 1.0f)
-		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.x + (rightAmount / 2);
-	else if (normal.x == -1.0f)
-		gameObject->transform.position.x = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.x - (rightAmount / 2);
-
-	if (normal.z == 1.0f)
-		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.maxPos.z + (forwardAmount / 2);
-	else if (normal.z == -1.0f)
-		gameObject->transform.position.z = collisionData.collidingGameObject->rigidBody.boundingBox.minPos.z - (forwardAmount / 2);
-
-	// if colliding game object is static or on ground, do not move it
+	//if colliding game object is static or on ground, do not move it
 	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.onGround)
 	{
 		// transfer a % of the decay to the gameobject

@@ -13,6 +13,7 @@ float rotSmoothSpeed = 4.0f; //The speed at which the player character will rota
 Vector2 playerInput = { 0.0f, 0.0f }; //The player movement inputs from the keyboard (Left/Right Movement, Forward/Back Movement)
 
 float jumpCooldown = 1.0f; //The cooldown before a player can jump again after jumping.
+float jumpBuffer = 10.0f;
 
 const float MAXPVELOCITY = 10.0f; //Maximum speed at which the player can move along the X and Z axes.
 const float SDECAYMULTIPLIER = 0.95f; //Current speed will become this percent of itself every update - slows player when they are not conciously moving in a direction.
@@ -130,10 +131,11 @@ void MovePlayer(Time time, GameObject* gameObject) //Function to move the player
 		gameObject->rigidBody.velocity.z += camRightFlat.z * WALK_SPEED * time.deltaTime * speedMP;
 	}
 
-	if (PLAYERJUMP == true && jumpCooldown <= 0 && gameObject->rigidBody.onGround) //Makes player jump
+	if (PLAYERJUMP == true && jumpCooldown <= 0 && jumpBuffer > 0) //Makes player jump
 	{
 		gameObject->rigidBody.velocity.y += 8.0f; //Adds vertical velocity
-		jumpCooldown = 2.3f; //Resets jump cooldown (this value seems good as it is slightly longer than up and down motion of jump - prevents infinite jump if collision issue)
+		jumpCooldown = 2.0f; //Resets jump cooldown (this value seems good as it is slightly longer than up and down motion of jump - prevents infinite jump if collision issue)
+		jumpBuffer = 0;
 		PLAYERJUMP = false;
 	}
 	else if (PLAYERJUMP == true) //Reset PLAYERJUMP to off despite cooldown state - this is needed as PLAYERJUMP is not a toggle like other movement
@@ -157,6 +159,9 @@ OnFixedUpdate OnPlayerFixedUpdate(Time time, GameObject* gameObject) //Updates e
 	{
 		jumpCooldown -= time.deltaTime;
 	}
+
+	if (gameObject->rigidBody.onGround) jumpBuffer = 5;
+	else jumpBuffer -= 1;
 }
 
 
