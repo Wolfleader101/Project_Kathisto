@@ -68,7 +68,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	{
 		igCheckbox("Toggle Freecam", &FREE_CAM);
 
-		igSliderFloat("Mouse Sensitivty", &MOUSE_SENS, 0, 0.1, "%.02f", ImGuiSliderFlags_None);
+		igSliderFloat("Mouse Sensitivty", &MOUSE_SENS, 0, 0.01, "%.05f", ImGuiSliderFlags_None);
 
 
 		igSliderFloat("Walk Speed", &WALK_SPEED, 0, 100, "%.02f", ImGuiSliderFlags_None);
