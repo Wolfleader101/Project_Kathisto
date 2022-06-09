@@ -9,7 +9,13 @@
 */
 typedef struct Vector2
 {
+	/**
+	 * @brief X element of the Vector
+	 */
 	float x;
+	/**
+	 * @brief Y element of the Vector
+	 */
 	float y;
 } Vector2;
 
@@ -19,8 +25,17 @@ typedef struct Vector2
 */
 typedef struct Vector3
 {
+	/**
+	 * @brief X element of the Vector
+	 */
 	float x;
+	/**
+	 * @brief Y element of the Vector
+	 */
 	float y;
+	/**
+	 * @brief Z element of the Vector
+	 */
 	float z;
 } Vector3;
 
@@ -30,9 +45,21 @@ typedef struct Vector3
 */
 typedef struct RGBA
 {
+	/**
+	 * @brief R element of the RGBA data
+	 */
 	float r;
+	/**
+	 * @brief G element of the RGBA data
+	 */
 	float g;
+	/**
+	 * @brief B element of the RGBA data
+	 */
 	float b;
+	/**
+	 * @brief A element of the RGBA data
+	 */
 	float a;
 } RGBA;
 
@@ -42,7 +69,13 @@ typedef struct RGBA
 */
 typedef struct Vector2Int
 {
+	/**
+	 * @brief X element of the Vector
+	 */
 	int x;
+	/**
+	 * @brief Y element of the Vector
+	 */
 	int y;
 } Vector2Int;
 
@@ -52,8 +85,17 @@ typedef struct Vector2Int
 */
 typedef struct Vector3Int
 {
+	/**
+	 * @brief X element of the Vector
+	 */
 	int x;
+	/**
+	 * @brief Y element of the Vector
+	 */
 	int y;
+	/**
+	 * @brief Z element of the Vector
+	 */
 	int z;
 } Vector3Int;
 
@@ -63,9 +105,21 @@ typedef struct Vector3Int
 */
 typedef struct Quaternion
 {
+	/**
+	 * @brief W element of the Vector
+	 */
 	float w;
+	/**
+	 * @brief X element of the Vector
+	 */
 	float x;
+	/**
+	 * @brief Y element of the Vector
+	 */
 	float y;
+	/**
+	 * @brief Z element of the Vector
+	 */
 	float z;
 } Quaternion;
 

@@ -23,10 +23,23 @@
 //  VECTOR2 LIST
 /////////////////////////////////////////////////
 
+/**
+ * @struct List of Vector 2's
+ * @brief An implementation of Lists in the C language to contain Vector 2's
+*/
 typedef struct listVec2
 {
+    /**
+     * @brief A list of Vector 2 elements
+     */
     Vector2* vec2Items; //The items within the Vector
+    /**
+     * @brief The size of of the vector
+     */
     int vecSize; //The current size of the Vector
+    /**
+     * @brief Total amount of elements in the vector
+     */
     int vecTotalElements; //The total number of elements within the Vector
 } listVec2;
 
@@ -70,10 +83,23 @@ void Vec2_FreeListMemory(listVec2* inputVec); //Frees the memory of the vector
 //  VECTOR3 LIST
 /////////////////////////////////////////////////
 
+/**
+ * @struct List of Vector 3's
+ * @brief An implementation of Lists in the C language to contain Vector 3's
+*/
 typedef struct listVec3 
 {
+    /**
+     * @brief A list of Vector 3 elements
+     */
     Vector3 *vec3Items; //The items within the Vector
+    /**
+     * @brief The size of of the vector
+     */
     int vecSize; //The current size of the Vector
+    /**
+     * @brief Total amount of elements in the vector
+     */
     int vecTotalElements; //The total number of elements within the Vector
 } listVec3;
 
@@ -117,10 +143,23 @@ void Vec3_FreeListMemory(listVec3* inputVec); //Frees the memory of the vector
 //  VECTOR3 INT LIST
 /////////////////////////////////////////////////
 
+/**
+ * @struct List of Vector 3 Ints
+ * @brief An implementation of Lists in the C language to contain Vector 3 Int
+*/
 typedef struct listVec3Int
 {
+    /**
+     * @brief A list of Vector 3 Int elements
+     */
     Vector3Int* vec3IntItems; //The items within the Vector
+    /**
+     * @brief The size of of the vector
+     */
     int vecSize; //The current size of the Vector
+    /**
+     * @brief Total amount of elements in the vector
+     */
     int vecTotalElements; //The total number of elements within the Vector
 } listVec3Int;
 

@@ -54,7 +54,6 @@ void GameObjectPanel(GameObject* gameObject);
 */
 void TransformWidget(Transform* transform);
 
-
 /**
  * @brief the rigidbody widget
  * @param rigidBody component to use
