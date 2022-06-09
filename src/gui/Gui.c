@@ -78,7 +78,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 	if (igCollapsingHeader_TreeNodeFlags("Physics Settings", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
-		igCheckbox("Toggle Physics", &PAUSE_PHYSICS);
+		igCheckbox("Pause Physics", &PAUSE_PHYSICS);
 		igCheckbox("Show all Colliders", &SHOW_COLLIDERS);
 
 		collidersDeActivatedOnce = !SHOW_COLLIDERS && collidersActivatedOnce ? true : false;
