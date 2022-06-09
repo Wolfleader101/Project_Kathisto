@@ -167,6 +167,12 @@ typedef struct RigidBody
 	bool isTrigger;
 
 	/**
+	 * @brief if the rigidbody will repel from colliding objects 
+	 * 
+	 */
+	bool isPassive;
+
+	/**
 	 * @brief mass of the rigidbody (defaults 50)
 	 */
 	float mass;
