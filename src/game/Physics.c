@@ -251,9 +251,29 @@ CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* 
 
 			if (distance < gameObject->rigidBody.sphereBody.radius)
 			{
-				// TODO FIX THIS
-				return (CollisionData) { .collidingFace = 0, .collidingGameObject = gameObjectManager->gameObjects[i] };
-				//return gameObjectManager->gameObjects[i];
+				float max = -2.0f;
+				size_t best_match = 0u;
+
+				if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
+				{
+					return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
+				}
+
+				for (size_t j = 0; !gameObjectManager->gameObjects[i]->rigidBody.isFloor && j < VECTOR_DIRECTIONS_LENGTH; ++j)
+				{
+					float dot = Vec3DotProduct(VECTOR_DIRECTIONS[j], Vec3Normalize(
+						Vec3Subtract(gameObject->transform.position, gameObjectManager->gameObjects[i]->transform.position)));
+
+					if (dot > max)
+					{
+						max = dot;
+						best_match = j;
+					}
+				}
+
+				Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
+
+				return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
 			}
 		}
 	}

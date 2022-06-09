@@ -3,7 +3,7 @@
 void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
-	{
+	{	
 		UpdateGameObject(time, gameObjectManager->gameObjects[i]);
 	}
 }

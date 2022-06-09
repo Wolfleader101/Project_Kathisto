@@ -3,13 +3,15 @@
 #include "game/GameIncludes.h"
 #include "game/GameTypes.h"
 
-extern const float MOUSE_SENS;
-extern const float WALK_SPEED;
-extern const float FLY_SPEED;
-extern const float UP_SPEED;
-extern const float G_ACCELERATION;
-float AIR_DENSITY;
-extern const float PHYSICS_TIME_STEP;
+extern float MOUSE_SENS;
+extern float WALK_SPEED;
+extern float FLY_SPEED;
+extern float UP_SPEED;
+extern float G_ACCELERATION;
+extern float AIR_DENSITY;
+extern float PHYSICS_TIME_STEP;
+extern bool PAUSE_PHYSICS;
+extern bool SHOW_COLLIDERS;
 
 
 extern const int VECTOR_DIRECTIONS_LENGTH;
