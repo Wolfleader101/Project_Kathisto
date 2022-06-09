@@ -187,7 +187,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	// setup game object manager
 	InitGameObjectManager(&gameObjectManager);
 
-
 	InitialiseGameObjects();
 
 	// fixed update
