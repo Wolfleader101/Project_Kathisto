@@ -38,6 +38,7 @@ GameObjectManager gameObjectManager;
 
 void InitialiseGameObjects()
 {
+
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
 	GameObject* cubeG = malloc(sizeof(GameObject));
@@ -69,6 +70,9 @@ void InitialiseGameObjects()
 	GameObjectManagerAdd(&gameObjectManager, Teleporter1);
 	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
 
+	BuildDebugGeo(&gameObjectManager);
+
+
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
 
@@ -77,7 +81,9 @@ void InitialiseGameObjects()
 	objFile = InitialiseObjFile();
 	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
 
-	for (size_t i = 0; i < objFile.nGroups; i++)
+
+
+	/*for (size_t i = 0; i < objFile.nGroups; i++)
 	{
 		GameObject* go = calloc(1, sizeof(GameObject));
 
@@ -113,7 +119,7 @@ void InitialiseGameObjects()
 		go->rigidBody.isStatic = true;
 
 		GameObjectManagerAdd(&gameObjectManager, go);
-	}
+	}*/
 }
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)

@@ -64,7 +64,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	igText("F4 - Toggle debug menu");
 	igText("F5 - Toggle Freecam/Thirdperson");
 
-	if (igCollapsingHeader_TreeNodeFlags("Player Settings", ImGuiTreeNodeFlags_CollapsingHeader)) 
+	if (igCollapsingHeader_TreeNodeFlags("Player Settings", ImGuiTreeNodeFlags_CollapsingHeader))
 	{
 		igCheckbox("Toggle Freecam", &FREE_CAM);
 
@@ -80,7 +80,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 	{
 		igCheckbox("Toggle Physics", &PAUSE_PHYSICS);
 		igCheckbox("Show all Colliders", &SHOW_COLLIDERS);
-		
+
 		collidersDeActivatedOnce = !SHOW_COLLIDERS && collidersActivatedOnce ? true : false;
 
 		collidersActivatedOnce = SHOW_COLLIDERS ? true : false;
@@ -90,7 +90,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 
 		igInputFloat("Physics Time Step (ms)", &PHYSICS_TIME_STEP, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 
-		igSliderFloat("Air Density", &AIR_DENSITY, 0, 100, "%.02f", ImGuiSliderFlags_None); 
+		igSliderFloat("Air Density", &AIR_DENSITY, 0, 100, "%.02f", ImGuiSliderFlags_None);
 		igSliderFloat("Gravitional Acceleration", &G_ACCELERATION, 0, 100, "%.02f", ImGuiSliderFlags_None);
 	}
 
@@ -119,7 +119,6 @@ void GuiUpdate(GameObjectManager* gameObjectManager)
 	ImGui_ImplGLUT_NewFrame(); // call imgui GLUT new frame
 
 	if (TOGGLE_MENU) DebugMenu(gameObjectManager); // draw debug menu
-	bool* isOpen = NULL;
 }
 
 void GuiRender()
@@ -151,7 +150,6 @@ void GameObjectPanel(GameObject* gameObject)
 
 		igTreePop();
 
-		//igSeparator();
 	}
 }
 void TransformWidget(Transform* transform)
@@ -163,32 +161,51 @@ void TransformWidget(Transform* transform)
 		igInputFloat3("Scale", &transform->scale, "%.02f", ImGuiInputTextFlags_None);
 
 		igTreePop();
-		//igSeparator();
 	}
 }
 void RigidBodyWidget(RigidBody* rigidBody)
 {
 	if (igTreeNodeEx_Str("RigidBody", ImGuiTreeNodeFlags_None))
 	{
-		igCheckbox("Bounding Box View", &rigidBody->debug);
+		igCheckbox("Debug View", &rigidBody->debug);
+
+		igCheckbox("Is Static Object", &rigidBody->isStatic);
+		igCheckbox("Is a Floor", &rigidBody->isStatic);
+		igCheckbox("Uses Gravity", &rigidBody->useGravity);
+		igCheckbox("Is a Trigger", &rigidBody->isTrigger);
 		igCheckbox("On Ground", &rigidBody->onGround);
-		igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
-		igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
+
+
 		igInputFloat3("Velocity", &rigidBody->velocity, "%.02f", ImGuiInputTextFlags_None);
 		igInputFloat("Mass", &rigidBody->mass, 1, 5, "%.02f", ImGuiInputTextFlags_None);
 
+		if (igCheckbox("Is a Sphere", &rigidBody->sphereBody.isSphere))
+		{
+			igCheckbox("Sphere Radius", &rigidBody->sphereBody.isSphere);
+
+		}
+		else {
+			igInputFloat3("Bounding Box Min", &rigidBody->boundingBox.minPos, "%.02f", ImGuiInputTextFlags_None);
+			igInputFloat3("Bounding Box Max", &rigidBody->boundingBox.maxPos, "%.02f", ImGuiInputTextFlags_None);
+		}
+
 		igTreePop();
-		//igSeparator();
 	}
 }
 void MeshWidget(Mesh* mesh)
 {
 	if (igTreeNodeEx_Str("Mesh", ImGuiTreeNodeFlags_None))
 	{
-		igCheckbox("Disable Mesh", &mesh->disableMesh);
+		igCheckbox("Single Color", &mesh->isUniformColor);
+
+		igInputFloat4("Diffuse", &mesh->meshDiffuse, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat4("Ambiet", &mesh->meshAmbient, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat4("Specular", &mesh->meshSpecular, "%.02f", ImGuiInputTextFlags_None);
+		igInputFloat4("Shininess", &mesh->meshShininess, "%.02f", ImGuiInputTextFlags_None);
+
 		igCheckbox("Debug Mesh", &mesh->debug);
+		igCheckbox("Disable Mesh", &mesh->disableMesh);
 
 		igTreePop();
-		//igSeparator();
 	}
 }
