@@ -28,6 +28,21 @@ extern Time deltaTime;
 extern GameObjectManager gameObjectManager;
 
 /**
+ * @brief Initialises all Game Objects to be used
+*/
+void InitialiseGameObjects();
+
+/**
+ * @brief Initialises an OBJ without Groups
+*/
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition);
+
+/**
+ * @brief Initialises an OBJ with Groups
+*/
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition);
+
+/**
  * @brief calculate the update time
 */
 void CalculateTime(); 
@@ -56,3 +71,5 @@ void FixedUpdate(int val);
  * @brief initialise the window with a name
 */
 void InitialiseWindow(int* argc, char** argv, char* windowName);
+
+void UpdateSunlight(float sunDir[3], float sunCutoff);

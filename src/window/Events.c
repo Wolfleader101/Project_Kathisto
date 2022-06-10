@@ -89,7 +89,7 @@ void OnKeyDown(unsigned char key, int x, int y)
 		{
 			EXIT_PROGRAM = true;
 
-			DisplayGroupPhoto("assets/images/image.jpg", 640, 622, 3, 3); //Display the group photo before exiting the program
+			DisplayGroupPhoto("assets/images/groupPhoto.jpg", 1000, 667, 3, 3); //Display the group photo before exiting the program
 
 			glutTimerFunc(3000, exit, 0); //Exits program after 3 seconds
 		}

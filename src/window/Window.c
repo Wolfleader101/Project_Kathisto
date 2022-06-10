@@ -29,15 +29,52 @@ Time fixedTime = {
 	.deltaTime = 0.0f,
 };
 
-GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat diffuse0[] = { 0.89020f, 0.98039f, 0.97647f, 1.0f };
-GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat ambient0[] = { 0.70392f, 0.723f, 0.71961f, 1.0f };
+GLfloat position0[] = { 1.0f, 1.0f, 1.0f, 0.0f }; //Light is placed at infinity
+GLfloat diffuse0[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //The diffuse colour of the light
+GLfloat specular0[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //The specualr colour of the light
+
+GLfloat globalAmbient[] = { 0.79020f, 0.78039f, 0.77647f, 1.0f }; //A global ambient colour to be applied across the scene
 
 GameObjectManager gameObjectManager;
 
 void InitialiseGameObjects()
 {
+	/////////////////////////////////////////////////
+	//  INITIALISE MODELS
+	/////////////////////////////////////////////////
+	
+	ObjFile bunny;
+	ObjFile barrel;
+
+	bunny = InitialiseObjFile();
+	bunny = LoadOBJFile("assets/models/objs/tests/stanford-bunny_export.obj");
+
+	if (bunny.nGroups == 1)
+	{
+		InitialiseOBJ(bunny, 1.0, 0.0, 0.0, true, (Vector3) {0.0f, 7.0f, 15.0f});
+	}
+	else
+		if (bunny.nGroups > 1)
+		{
+			InitialiseOBJGroups(bunny, 1.0, 0.0, 0.0, true, (Vector3) {0.0f, 7.0f, 15.0f});
+		}
+
+	barrel = InitialiseObjFile();
+	barrel = LoadOBJFile("assets/models/objs/tests/barrel_export.obj");
+
+	if (barrel.nGroups == 1)
+	{
+		InitialiseOBJ(barrel, 0.0, 1.0, 0.0, true, (Vector3) { 0.0f, 2.0f, -15.0f });
+	}
+	else
+		if (barrel.nGroups > 1)
+		{
+			InitialiseOBJGroups(barrel, 0.0, 1.0, 0.0, true, (Vector3) { 0.0f, 2.0f, -15.0f });
+		}
+
+	/////////////////////////////////////////////////
+	//  INITIALISE BUILT-IN GAME OBJECTS
+	/////////////////////////////////////////////////
 
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
@@ -72,18 +109,47 @@ void InitialiseGameObjects()
 
 	BuildDebugGeo(&gameObjectManager);
 
-
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
+}
 
-	ObjFile objFile;
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition)
+{
+	GameObject* inputObject = calloc(1, sizeof(GameObject));
 
-	objFile = InitialiseObjFile();
-	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+	if (inputObject == NULL) return;
 
+	InitGameObject(inputObject);
 
+	inputObject->name = calloc(25, sizeof(char));
+	if (inputObject->name != NULL)
+	{
+		strcpy(inputObject->name, "Lucy");
+	}
 
-	/*for (size_t i = 0; i < objFile.nGroups; i++)
+	objToMesh(inputOBJ.modelGroups[0], &inputObject->mesh);
+
+	inputObject->mesh.colors = calloc(1, sizeof(RGBA));
+
+	if (inputObject->mesh.colors != NULL) inputObject->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
+	if (uniformColour)
+	{
+		inputObject->mesh.isUniformColor = true;
+	}
+	else
+		inputObject->mesh.isUniformColor = false;
+
+	inputObject->rigidBody.isStatic = true;
+	inputObject->rigidBody.useGravity = false;
+
+	inputObject->transform.position = transformPosition; //Sets initial position (Transform) of mesh
+
+	GameObjectManagerAdd(&gameObjectManager, inputObject);
+}
+
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition)
+{
+	for (size_t i = 0; i < inputOBJ.nGroups; i++)
 	{
 		GameObject* go = calloc(1, sizeof(GameObject));
 
@@ -101,25 +167,25 @@ void InitialiseGameObjects()
 			strcat(go->name, buffer);
 		}
 
-		objToMesh(objFile.modelGroups[i], &go->mesh);
-
-		float r, g, b;
-		if ((i / 3) % 2 == 0)
-		{
-			r = g = b = 0.611;
-		}
-		else {
-			r = g = b = 0.360;
-		}
+		objToMesh(inputOBJ.modelGroups[i], &go->mesh);
 
 		go->mesh.colors = calloc(1, sizeof(RGBA));
 
 		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
-		go->mesh.isUniformColor = true;
+		if (uniformColour)
+		{
+			go->mesh.isUniformColor = true;
+		}
+		else
+			go->mesh.isUniformColor = false;
+
 		go->rigidBody.isStatic = true;
+		go->rigidBody.useGravity = false;
+
+		go->transform.position = transformPosition; //Sets initial position (Transform) of mesh
 
 		GameObjectManagerAdd(&gameObjectManager, go);
-	}*/
+	}
 }
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)
@@ -127,6 +193,13 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
 	/////////////////////////////////////////////////
+
+	// SETUP GAME OBJECT MANAGER \\
+	// 
+	// setup game object manager
+	InitGameObjectManager(&gameObjectManager);
+
+	InitialiseGameObjects();
 
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
@@ -177,23 +250,21 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	glEnable(GL_LIGHTING); //Enable Lighting
 
-	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient); //Applies a global ambient colour
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE); //Changes the lighting mode to a local viewport
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0); //Set the ambient colour for light 0
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0); //Set the diffuse colour for light 0
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0); //Set the specular colour for light 0
+	glLightfv(GL_LIGHT0, GL_POSITION, position0); //Set the position of light 0
+
+	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 5.0f); //How concentrated the light is (Default is 0)
+
+	UpdateSunlight((float[]) { -1.0f, -1.0f, 0.0f }, 90.0f);
 
 	glEnable(GL_LIGHT0); //Enable light 0
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
-
-	// SETUP GAME OBJECT MANAGER \\
-	// 
-	// setup game object manager
-	InitGameObjectManager(&gameObjectManager);
-
-	InitialiseGameObjects();
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);
@@ -203,6 +274,14 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// on program close
 	GuiFree();
+}
+
+void UpdateSunlight(float sunDir[3], float sunCutoff)
+{
+	//Sun direction
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, sunDir); //Updates the direction of the spotlight which represents the sun
+
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, sunCutoff); //Updates the cone of the spotlight which represents the sun
 }
 
 void WindowRender(void)

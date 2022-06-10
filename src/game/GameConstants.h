@@ -24,4 +24,5 @@ extern const Vector3Int planeIndexBuffer[]; //Plane Face Order
 extern const Vector3Int cubeIndexBuffer[]; //Cube Face Order
 
 extern const Mesh planeMesh; //Plane Mesh
+extern const Mesh cubeMesh; //Plane Mesh
 extern const Mesh cubeMeshCustColours; //Cube Mesh (Custom Vertex Colours)
