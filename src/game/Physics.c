@@ -348,7 +348,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-	if (gameObject->rigidBody.isPassive || (!gameObject->rigidBody.isPassive && !collisionData.collidingGameObject->rigidBody.isPassive) )
+	if (gameObject->rigidBody.isPassive || (!gameObject->rigidBody.isPassive && !collisionData.collidingGameObject->rigidBody.isPassive) || !gameObject->rigidBody.isPassive )
 	{
 		float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
 		float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
@@ -387,7 +387,6 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 			gameObject->rigidBody.velocity.z -= FORCEAPART;
 		}
 	}
-
 
 	//if colliding game object is static or on ground, do not move it
 	if (!collisionData.collidingGameObject->rigidBody.isStatic && !collisionData.collidingGameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.onGround)
