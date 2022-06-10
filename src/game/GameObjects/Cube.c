@@ -33,6 +33,7 @@ OnStart OnCubeStart(GameObject* gameObject)
 
 OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 {
+	// un comment me for a rotating, hovering cube (also set the rigidbody to static)
 	//Vector3* pos = &gameObject->transform.position;
 
 	//float amplitude = 2.0f;
