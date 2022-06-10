@@ -94,6 +94,16 @@ const Mesh planeMesh = {
 	.colors = NULL,
 	.isUniformColor = true };
 
+const Mesh cubeMesh = {
+	.points = cubeVertexBuffer,
+	.vertexIndices = cubeIndexBuffer,
+	.vertexAmount = 8,
+	.indexCount = 36,
+	.colors = NULL,
+	.isUniformColor = true,
+	.debug = false
+};
+
 //Cube Mesh (Custom Vertex Colours)
 const Mesh cubeMeshCustColours = {
 	.points = cubeVertexBuffer,
