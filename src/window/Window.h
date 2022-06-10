@@ -35,12 +35,12 @@ void InitialiseGameObjects();
 /**
  * @brief Initialises an OBJ without Groups
 */
-void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b);
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition);
 
 /**
  * @brief Initialises an OBJ with Groups
 */
-void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b);
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition);
 
 /**
  * @brief calculate the update time

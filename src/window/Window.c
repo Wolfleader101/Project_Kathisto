@@ -49,12 +49,12 @@ void InitialiseGameObjects()
 
 	if (bunnyOBJ.nGroups == 1)
 	{
-		InitialiseOBJ(bunnyOBJ, 0.243, 0.175, 0.834);
+		InitialiseOBJ(bunnyOBJ, 1.0, 0.0, 0.0, true, (Vector3) {0.0f, 7.0f, 15.0f});
 	}
 	else
 		if (bunnyOBJ.nGroups > 1)
 		{
-			InitialiseOBJGroups(bunnyOBJ, 0.611, 0.611, 0.611);
+			InitialiseOBJGroups(bunnyOBJ, 1.0, 0.0, 0.0, true, (Vector3) {0.0f, 7.0f, 15.0f});
 		}
 
 	/////////////////////////////////////////////////
@@ -94,12 +94,11 @@ void InitialiseGameObjects()
 
 	BuildDebugGeo(&gameObjectManager);
 
-
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
 }
 
-void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b)
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition)
 {
 	GameObject* inputObject = calloc(1, sizeof(GameObject));
 
@@ -118,7 +117,7 @@ void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b)
 	inputObject->mesh.colors = calloc(1, sizeof(RGBA));
 
 	if (inputObject->mesh.colors != NULL) inputObject->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
-	if (r == g == b)
+	if (uniformColour)
 	{
 		inputObject->mesh.isUniformColor = true;
 	}
@@ -126,11 +125,14 @@ void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b)
 		inputObject->mesh.isUniformColor = false;
 
 	inputObject->rigidBody.isStatic = true;
+	inputObject->rigidBody.useGravity = false;
+
+	inputObject->transform.position = transformPosition; //Sets initial position (Transform) of mesh
 
 	GameObjectManagerAdd(&gameObjectManager, inputObject);
 }
 
-void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b)
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b, bool uniformColour, Vector3 transformPosition)
 {
 	for (size_t i = 0; i < inputOBJ.nGroups; i++)
 	{
@@ -155,7 +157,7 @@ void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b)
 		go->mesh.colors = calloc(1, sizeof(RGBA));
 
 		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
-		if (r == g == b)
+		if (uniformColour)
 		{
 			go->mesh.isUniformColor = true;
 		}
@@ -163,6 +165,9 @@ void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b)
 			go->mesh.isUniformColor = false;
 
 		go->rigidBody.isStatic = true;
+		go->rigidBody.useGravity = false;
+
+		go->transform.position = transformPosition; //Sets initial position (Transform) of mesh
 
 		GameObjectManagerAdd(&gameObjectManager, go);
 	}
@@ -173,6 +178,13 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 	/////////////////////////////////////////////////
 	//  INITIALISE GAME FUNCTIONS & VARIABLES
 	/////////////////////////////////////////////////
+
+	// SETUP GAME OBJECT MANAGER \\
+	// 
+	// setup game object manager
+	InitGameObjectManager(&gameObjectManager);
+
+	InitialiseGameObjects();
 
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
@@ -233,13 +245,6 @@ void InitialiseWindow(int* argc, char** argv, char* windowName)
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
-
-	// SETUP GAME OBJECT MANAGER \\
-	// 
-	// setup game object manager
-	InitGameObjectManager(&gameObjectManager);
-
-	InitialiseGameObjects();
 
 	// fixed update
 	glutTimerFunc(PHYSICS_TIME_STEP, FixedUpdate, 0);

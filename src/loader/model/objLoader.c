@@ -124,7 +124,9 @@ ObjFile AllocateModelMemory(FILE* inputPointer)
 
 ObjFile LoadOBJFile(const char* filePath) //Load and return the data for an OBJ File
 {
-	printf("Loading OBJ File from %s! Please wait...", filePath);
+	printf("----------------------------------------------------------------------------------\n");
+	printf("Loading OBJ File from %s, please wait...\n", filePath);
+	printf("----------------------------------------------------------------------------------\n");
 	
 	FILE* filePointer = NULL; //File pointer to OBJ File
 	int lineResult; //Checks the results of an fscanf of a line
