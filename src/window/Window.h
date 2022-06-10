@@ -71,3 +71,5 @@ void FixedUpdate(int val);
  * @brief initialise the window with a name
 */
 void InitialiseWindow(int* argc, char** argv, char* windowName);
+
+void UpdateSunlight(float sunDir[3], float sunCutoff);
