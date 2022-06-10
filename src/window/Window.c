@@ -38,6 +38,28 @@ GameObjectManager gameObjectManager;
 
 void InitialiseGameObjects()
 {
+	/////////////////////////////////////////////////
+	//  INITIALISE MODELS
+	/////////////////////////////////////////////////
+	
+	ObjFile bunnyOBJ;
+
+	bunnyOBJ = InitialiseObjFile();
+	bunnyOBJ = LoadOBJFile("assets/models/objs/tests/stanford-bunny_export.obj");
+
+	if (bunnyOBJ.nGroups == 1)
+	{
+		InitialiseOBJ(bunnyOBJ, 0.243, 0.175, 0.834);
+	}
+	else
+		if (bunnyOBJ.nGroups > 1)
+		{
+			InitialiseOBJGroups(bunnyOBJ, 0.611, 0.611, 0.611);
+		}
+
+	/////////////////////////////////////////////////
+	//  INITIALISE BUILT-IN GAME OBJECTS
+	/////////////////////////////////////////////////
 
 	// first you must initialise your gameobjects
 	GameObject* cube = malloc(sizeof(GameObject));
@@ -75,21 +97,6 @@ void InitialiseGameObjects()
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
-
-	ObjFile bunnyOBJ;
-
-	bunnyOBJ = InitialiseObjFile();
-	bunnyOBJ = LoadOBJFile("assets/models/objs/tests/stanford-bunny_export.obj");
-
-	if (bunnyOBJ.nGroups == 1)
-	{
-		InitialiseOBJ(bunnyOBJ, 0.243, 0.175, 0.834);
-	}
-	else
-		if (bunnyOBJ.nGroups > 1)
-		{
-			InitialiseOBJGroups(bunnyOBJ, 0.611, 0.611, 0.611);
-		}
 }
 
 void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b)
