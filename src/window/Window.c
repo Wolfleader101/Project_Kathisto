@@ -76,14 +76,56 @@ void InitialiseGameObjects()
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
 
-	ObjFile objFile;
+	ObjFile bunnyOBJ;
 
-	objFile = InitialiseObjFile();
-	objFile = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
+	bunnyOBJ = InitialiseObjFile();
+	bunnyOBJ = LoadOBJFile("assets/models/objs/tests/stanford-bunny_export.obj");
 
+	if (bunnyOBJ.nGroups == 1)
+	{
+		InitialiseOBJ(bunnyOBJ, 0.243, 0.175, 0.834);
+	}
+	else
+		if (bunnyOBJ.nGroups > 1)
+		{
+			InitialiseOBJGroups(bunnyOBJ, 0.611, 0.611, 0.611);
+		}
+}
 
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b)
+{
+	GameObject* inputObject = calloc(1, sizeof(GameObject));
 
-	/*for (size_t i = 0; i < objFile.nGroups; i++)
+	if (inputObject == NULL) return;
+
+	InitGameObject(inputObject);
+
+	inputObject->name = calloc(25, sizeof(char));
+	if (inputObject->name != NULL)
+	{
+		strcpy(inputObject->name, "Lucy");
+	}
+
+	objToMesh(inputOBJ.modelGroups[0], &inputObject->mesh);
+
+	inputObject->mesh.colors = calloc(1, sizeof(RGBA));
+
+	if (inputObject->mesh.colors != NULL) inputObject->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
+	if (r == g == b)
+	{
+		inputObject->mesh.isUniformColor = true;
+	}
+	else
+		inputObject->mesh.isUniformColor = false;
+
+	inputObject->rigidBody.isStatic = true;
+
+	GameObjectManagerAdd(&gameObjectManager, inputObject);
+}
+
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b)
+{
+	for (size_t i = 0; i < inputOBJ.nGroups; i++)
 	{
 		GameObject* go = calloc(1, sizeof(GameObject));
 
@@ -101,25 +143,22 @@ void InitialiseGameObjects()
 			strcat(go->name, buffer);
 		}
 
-		objToMesh(objFile.modelGroups[i], &go->mesh);
-
-		float r, g, b;
-		if ((i / 3) % 2 == 0)
-		{
-			r = g = b = 0.611;
-		}
-		else {
-			r = g = b = 0.360;
-		}
+		objToMesh(inputOBJ.modelGroups[i], &go->mesh);
 
 		go->mesh.colors = calloc(1, sizeof(RGBA));
 
 		if (go->mesh.colors != NULL) go->mesh.colors[0] = (RGBA){ r, g, b, 1.0f };
-		go->mesh.isUniformColor = true;
+		if (r == g == b)
+		{
+			go->mesh.isUniformColor = true;
+		}
+		else
+			go->mesh.isUniformColor = false;
+
 		go->rigidBody.isStatic = true;
 
 		GameObjectManagerAdd(&gameObjectManager, go);
-	}*/
+	}
 }
 
 void InitialiseWindow(int* argc, char** argv, char* windowName)

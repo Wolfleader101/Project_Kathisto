@@ -28,6 +28,21 @@ extern Time deltaTime;
 extern GameObjectManager gameObjectManager;
 
 /**
+ * @brief Initialises all Game Objects to be used
+*/
+void InitialiseGameObjects();
+
+/**
+ * @brief Initialises an OBJ without Groups
+*/
+void InitialiseOBJ(ObjFile inputOBJ, float r, float g, float b);
+
+/**
+ * @brief Initialises an OBJ with Groups
+*/
+void InitialiseOBJGroups(ObjFile inputOBJ, float r, float g, float b);
+
+/**
  * @brief calculate the update time
 */
 void CalculateTime(); 
