@@ -10,6 +10,21 @@ Vector3 EmptyVec3(){
 	return (Vector3){0.0f, 0.0f, 0.0f};
 }
 
+bool isVec2Empty(Vector2 vec)
+{
+	return vec.x == 0 && vec.y == 0;
+}
+
+bool isVec3Empty(Vector3 vec)
+{
+	return vec.x == 0 && vec.y == 0 && vec.z == 0;
+}
+
+Quaternion EmptyQuaternion() 
+{
+	return (Quaternion) { 0.0f, 0.0f, 0.0f, 0.0f };
+}
+
 Vector2 ArrayToVec2(const float arr[2])
 {
 	return (Vector2) { arr[0], arr[1] };
@@ -124,6 +139,16 @@ Vector3 Vec3ScalarAdd(Vector3 vec, float scalar)
 	return (Vector3) { vec.x + scalar, vec.y + scalar, vec.z + scalar };
 }
 
+Vector2 Vec2ScalarSubtract(Vector2 vec, float scalar)
+{
+	return (Vector2) {vec.x - scalar, vec.y - scalar};
+}
+
+Vector3 Vec3ScalarSubtract(Vector3 vec, float scalar)
+{
+	return (Vector3) { vec.x - scalar, vec.y - scalar, vec.z - scalar};
+}
+
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2)
 {
 	return (Vector2) { vec1.x * vec2.x, vec1.y * vec2.y };
@@ -132,6 +157,57 @@ Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2)
 Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2)
 {
 	return (Vector3) { vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z };
+}
+
+Vector2 Vec2Add(Vector2 vec1, Vector2 vec2)
+{
+	return (Vector2) { vec1.x + vec2.x, vec1.y + vec2.y };
+}
+Vector3 Vec3Add(Vector3 vec1, Vector3 vec2)
+{
+	return (Vector3) { vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z };
+}
+
+Vector2 Vec2Subtract(Vector2 vec1, Vector2 vec2)
+{
+	return (Vector2) { vec1.x - vec2.x, vec1.y - vec2.y };
+}
+
+Vector3 Vec3Subtract(Vector3 vec1, Vector3 vec2)
+{
+	return (Vector3) { vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z };
+}
+
+Vector2 Vec2Rotate(Vector2 vec, float angle)
+{
+	return (Vector2) { cos(angle * vec.x) - sin(angle * vec.y), sin(angle * vec.x) + cos(angle * vec.y) };
+}
+
+Vector3 Vec3RotateX(Vector3 vec, float angle)
+{
+	return (Vector3) { 
+		vec.x, 
+		vec.y * cos(angle) - vec.z * sin(angle), 
+		vec.z * cos(angle) + vec.y * sin(angle) 
+	};
+}
+
+Vector3 Vec3RotateY(Vector3 vec, float angle)
+{
+	return (Vector3) { 
+		vec.x * cos(angle) + vec.z * sin(angle), 
+		vec.y, 
+		vec.z * cos(angle) - vec.x * sin(angle) 
+	};
+}
+
+Vector3 Vec3RotateZ(Vector3 vec, float angle)
+{
+	return (Vector3) { 
+		vec.x * cos(angle) - vec.y * sin(angle), 
+		vec.y * cos(angle) + vec.x * sin(angle), 
+		vec.z 
+	};
 }
 
 Vector3 Vec3CrossProduct(Vector3 vec1, Vector3 vec2)
@@ -147,4 +223,23 @@ float Vec2DotProduct(Vector2 vec1, Vector2 vec2)
 float Vec3DotProduct(Vector3 vec1, Vector3 vec2)
 {
 	return ((vec1.x * vec2.x) + (vec1.y * vec2.y) + (vec1.z * vec2.z));
+}
+
+Quaternion EulerToQuaternion(Vector3 eulerAngles) //Converts a set of Euler Angles to a Quaternion (Eruler == Yaw, Pitch, Roll)
+{
+	Quaternion tmpQuaternion = { 0, 0, 0, 0 }; //Temporary vector for Quaternion, returned
+
+	float c1 = cos(eulerAngles.x / 2);
+	float c2 = cos(eulerAngles.y / 2);
+	float c3 = cos(eulerAngles.z / 2);
+	float s1 = sin(eulerAngles.x / 2);
+	float s2 = sin(eulerAngles.y / 2);
+	float s3 = sin(eulerAngles.z / 2);
+
+	tmpQuaternion.w = (c1 * c2 * c3) - (s1 * s2 * s3); //Conversion for the W-Variable of a Quaternion
+	tmpQuaternion.x = (s1 * s2 * c3) + (c1 * c2 * s3); //Conversion for the X-Variable of a Quaternion
+	tmpQuaternion.y = (s1 * c2 * c3) + (c1 * s2 * s3); //Conversion for the Y-Variable of a Quaternion
+	tmpQuaternion.z = (c1 * s2 * c3) - (s1 * c2 * s3); //Conversion for the Z-Variable of a Quaternion
+	
+	return(tmpQuaternion);
 }

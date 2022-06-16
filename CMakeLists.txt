@@ -1,11 +1,13 @@
 ﻿# CMakeList.txt : CMake project for Project_Kathisto, include source and define
 # project specific logic here.
-#
 cmake_minimum_required (VERSION 3.8)
 
 
 set(PROJECT_NAME Project_Kathisto)
-project(${PROJECT_NAME} LANGUAGES C CXX)
+project(${PROJECT_NAME} LANGUAGES C)
+
+option(FREEGLUT_BUILD_DEMOS OFF)
+option(FREEGLUT_BUILD_SHARED_LIBS OFF)
 
 # find openGL
 find_package(OpenGL REQUIRED)
@@ -19,16 +21,14 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # include lib
 add_subdirectory(lib)
 
-
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLUT)
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=extern\ \"C\")
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} freeglut_static imgui_impl)
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
+target_link_libraries(${PROJECT_NAME}  
+freeglut_static
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/freeglut.lib
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/cimgui.lib
+${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/lib/imgui_impl.lib
+)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory

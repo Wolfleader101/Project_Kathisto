@@ -8,14 +8,13 @@ Vector3 cameraMoveDir = { 0.0f, 0.0f, 0.0f };
 Vector2 mousePos = { 0.0f, 0.0f };
 Vector2 mouseDeltaPos = { 0.0f, 0.0f };
 
-
 void ComputeCameraPos(float deltaTime)
 {
 	// REMEMBER: multiplying by delta time helps create smooth movement
 
 	// calculate the forward/back position
 	// new pos = the cams forward dir * (the forward move direction * walk speed)
-	Vector3 newPos = Vec3ScalarMultiply(cameraForwardDir, cameraMoveDir.z * (WALK_SPEED * deltaTime));
+	Vector3 newPos = Vec3ScalarMultiply(cameraForwardDir, cameraMoveDir.z * (FLY_SPEED * deltaTime));
 	// change camera's position
 	cameraPos.x += newPos.x;
 	cameraPos.y += newPos.y;
@@ -25,7 +24,7 @@ void ComputeCameraPos(float deltaTime)
 	// a normalised vectors values are between 0 and 1.
 	// a cross product of 2 vectors is a perpendicular vector
 	// new pos = normalised (cross product of cameraForward pos and Camera Up) * the move left move direction * walk speed)
-	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(cameraForwardDir, cameraUp)), cameraMoveDir.x * (WALK_SPEED * deltaTime));
+	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(cameraForwardDir, cameraUp)), cameraMoveDir.x * (FLY_SPEED * deltaTime));
 	cameraPos.x += newPos.x;
 	cameraPos.y += newPos.y;
 	cameraPos.z += newPos.z;

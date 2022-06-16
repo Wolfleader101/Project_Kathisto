@@ -5,19 +5,63 @@
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 
+
+#include <window/Events.h>
+#include <math/Vector.h>
 #include <game/Game.h>
+#include "game/GameConstants.h"
 
 
 extern struct ImGuiContext* ctx; // IMGUI Context
 extern struct ImGuiIO* io; // IMGUI IO
 
-void GuiInit(); // initialise the GUI
+/**
+ * @brief initialise the GUI
+*/
+void GuiInit();
 
-void GuiFree(); // Free the GUI on game end
+/**
+ * @brief Free the GUI on game end
+*/
+void GuiFree();
 
-void GuiUpdate(GameObjectManager* gameObjectManager); // called on Update
+/**
+ * @brief called every update to loop over game objects
+ * @param gameObjectManager 
+*/
+void GuiUpdate(GameObjectManager* gameObjectManager);
 
-void GuiRender(); // called to render the GUI
+/**
+ * @brief called to render the GUI
+*/
+void GuiRender();
 
-void DebugMenu(GameObjectManager* gameObjectManager); // the Debug Menu
+/**
+ * @brief draw the debug menu
+ * @param gameObjectManager to loop over all gameobjects
+*/
+void DebugMenu(GameObjectManager* gameObjectManager); 
 
+/**
+ * @brief the panel for a gameobject
+ * @param gameObject pointer to use
+*/
+void GameObjectPanel(GameObject* gameObject);
+
+/**
+ * @brief the widget for a transform comp
+ * @param transform component to use
+*/
+void TransformWidget(Transform* transform);
+
+/**
+ * @brief the rigidbody widget
+ * @param rigidBody component to use
+*/
+void RigidBodyWidget(RigidBody* rigidBody);
+
+/**
+ * @brief the mesh widget
+ * @param mesh component to use
+*/
+void MeshWidget(Mesh* mesh);

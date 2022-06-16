@@ -10,7 +10,6 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "addressSanitizerEnabled": true,
       "variables": [
         {
           "name": "INSTALL_PDB",
@@ -26,6 +25,44 @@
           "name": "IMGUI_STATIC",
           "value": "yes",
           "type": "STRING"
+        },
+        {
+          "name": "FREEGLUT_BUILD_SHARED_LIBS",
+          "value": "False",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "INSTALL_PDB",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "FREEGLUT_BUILD_DEMOS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "IMGUI_STATIC",
+          "value": "yes",
+          "type": "STRING"
+        },
+        {
+          "name": "FREEGLUT_BUILD_SHARED_LIBS",
+          "value": "False",
+          "type": "BOOL"
         }
       ]
     }

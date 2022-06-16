@@ -4,7 +4,6 @@
 # Object files
 *.o
 *.ko
-*.obj
 *.elf
 
 # Linker output
@@ -17,7 +16,6 @@
 *.pch
 
 # Libraries
-*.lib
 *.a
 *.la
 *.lo
@@ -72,7 +70,6 @@ _deps
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -91,7 +88,6 @@ _deps
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -176,7 +172,6 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
 *.iobj
 *.pch
 *.pdb
@@ -504,3 +499,4 @@ out/
 build/
 .vs/
 CodeBlocks/
+html/

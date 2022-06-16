@@ -1136,12 +1136,12 @@ static void fghCircleTable(GLfloat **sint, GLfloat **cost, const int n, const GL
     
     if (halfCircle)
     {
-        (*sint)[size] =  0.0f;  /* sin PI */
-        (*cost)[size] = -1.0f;  /* cos PI */
+        (*sint)[size] =  0.0f;  /* sin M_PI */
+        (*cost)[size] = -1.0f;  /* cos M_PI */
     }
     else
     {
-        /* Last sample is duplicate of the first (sin or cos of 2 PI) */
+        /* Last sample is duplicate of the first (sin or cos of 2 M_PI) */
         (*sint)[size] = (*sint)[0];
         (*cost)[size] = (*cost)[0];
     }
