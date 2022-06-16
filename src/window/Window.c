@@ -44,7 +44,7 @@ void InitialiseGameObjects()
 	/////////////////////////////////////////////////
 	
 	ObjFile bunny, barrel, level1;
-	/*
+	
 	bunny = InitialiseObjFile();
 	bunny = LoadOBJFile("assets/models/objs/tests/stanford-bunny_export.obj");
 
@@ -69,8 +69,8 @@ void InitialiseGameObjects()
 		if (barrel.nGroups > 1)
 		{
 			InitialiseOBJGroups(barrel, 0.0, 1.0, 0.0, true, (Vector3) { 0.0f, 2.0f, -15.0f });
-		}*/
-
+		}
+	/*
 	level1 = InitialiseObjFile();
 	level1 = LoadOBJFile("assets/models/objs/finalGeo_GRP.obj");
 
@@ -82,7 +82,7 @@ void InitialiseGameObjects()
 		if (level1.nGroups > 1)
 		{
 			InitialiseOBJGroups(level1, 0.0, 1.0, 0.0, true, (Vector3) { 0.0f, 2.0f, -15.0f });
-		}
+		}*/
 
 	/////////////////////////////////////////////////
 	//  INITIALISE BUILT-IN GAME OBJECTS
@@ -120,7 +120,7 @@ void InitialiseGameObjects()
 	GameObjectManagerAdd(&gameObjectManager, Teleporter2);
 
 	//Builds the default Debug Geometry
-	//BuildDebugGeo(&gameObjectManager);
+	BuildDebugGeo(&gameObjectManager);
 
 	//Sets the objects needed for the camera
 	SetCamAttributes(&gameObjectManager);
