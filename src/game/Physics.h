@@ -45,7 +45,7 @@ void CalculateBoundingBox(GameObject* gameObject);
  * @param gameObject to check against
  * @return collision data containing information for collision resolution
 */
-CollisionData IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject);
+void IsColliding(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);
 
 /**
  * @brief check for collision using sphere collision detection, if gameobject is sphere
@@ -53,7 +53,7 @@ CollisionData IsColliding(GameObjectManager* gameObjectManager, GameObject* game
  * @param gameObject to check against
  * @return collision data containing information for collision resolution
 */
-CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* gameObject);
+void SphereCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);
 
 /**
  * @brief check for collision using AABB detection
@@ -61,7 +61,7 @@ CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* 
  * @param gameObject to check against
  * @return collision data containing information for collision resolution
 */
-CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameObject);
+void BoxCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject);
 
 /**
  * @brief resolve the resolution by correctly adjusting the gameobject on collision
