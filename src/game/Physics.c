@@ -30,15 +30,11 @@ void FixedUpdateGameObject(Time fixedTime, GameObjectManager* gameObjectManager,
 		GravityTransform(fixedTime, gameObject);
 	}
 
-	CollisionData collisionData = IsColliding(gameObjectManager, gameObject);
+	IsColliding(fixedTime, gameObjectManager, gameObject);
 
 
-	if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
-	if (collisionData.collidingGameObject != NULL && gameObject->OnCollision && collisionData.collidingGameObject->OnCollision) gameObject->OnCollision(fixedTime, gameObject, collisionData.collidingGameObject);
-	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
-
+	//if (collisionData.collidingGameObject != NULL && !gameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.isTrigger) CollisionResolution(fixedTime, gameObject, collisionData);
 	// apply friction and drag
-	PhysicsTransform(fixedTime, gameObject, collisionData);
 
 	if (gameObject->OnFixedUpdate != NULL) gameObject->OnFixedUpdate(fixedTime, gameObject);
 
@@ -206,17 +202,17 @@ void CalculateBoundingBox(GameObject* gameObject)
 	gameObject->rigidBody.boundingBox.maxPos = max;
 }
 
-CollisionData IsColliding(GameObjectManager* gameObjectManager, GameObject* gameObject)
+void IsColliding(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	if (gameObject->rigidBody.sphereBody.isSphere)
 	{
-		return SphereCollision(gameObjectManager, gameObject);
+		SphereCollision(fixedTime, gameObjectManager, gameObject);
 	}
 
-	return BoxCollision(gameObjectManager, gameObject);
+	BoxCollision(fixedTime, gameObjectManager, gameObject);
 }
 
-CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+void SphereCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	float radius = gameObject->rigidBody.sphereBody.radius;
 
@@ -233,7 +229,7 @@ CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* 
 			if (distance <= radii)
 			{
 				// TODO FIX THIS
-				return (CollisionData) { .collidingFace = 0, .collidingGameObject = gameObjectManager->gameObjects[i] };
+				//return (CollisionData) { .collidingFace = 0, .collidingGameObject = gameObjectManager->gameObjects[i] };
 			}
 		}
 		// do plane collision detection
@@ -256,7 +252,7 @@ CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* 
 
 				if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
 				{
-					return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
+					//	return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
 				}
 
 				for (size_t j = 0; !gameObjectManager->gameObjects[i]->rigidBody.isFloor && j < VECTOR_DIRECTIONS_LENGTH; ++j)
@@ -273,17 +269,18 @@ CollisionData SphereCollision(GameObjectManager* gameObjectManager, GameObject* 
 
 				Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
 
-				return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
+				//				return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
 			}
 		}
 	}
 
-	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };;
+	//	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };;
 }
 
-CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gameObject)
+void BoxCollision(Time fixedTime, GameObjectManager* gameObjectManager, GameObject* gameObject)
 {
 	BoudingBox* objBox = &gameObject->rigidBody.boundingBox;
+	CollisionData collisionData = { .collidingGameObject = NULL };
 	for (size_t i = 0; i < gameObjectManager->lastIndex; ++i)
 	{
 		if (gameObjectManager->boundingBoxes[i] == NULL)
@@ -296,15 +293,14 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 		bool xCollision = objBox->minPos.x <= checkgBox->maxPos.x && objBox->maxPos.x >= checkgBox->minPos.x;
 		bool yCollision = objBox->minPos.y <= checkgBox->maxPos.y && objBox->maxPos.y >= checkgBox->minPos.y;
 		bool zCollision = objBox->minPos.z <= checkgBox->maxPos.z && objBox->maxPos.z >= checkgBox->minPos.z;
+
+
 		if (xCollision && yCollision && zCollision)
 		{
 			float max = -2.0f;
 			size_t best_match = 0u;
 
-			if (gameObjectManager->gameObjects[i]->rigidBody.isFloor)
-			{
-				return (CollisionData) { .collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f }, .collidingGameObject = gameObjectManager->gameObjects[i] };
-			}
+
 			for (size_t j = 0; !gameObjectManager->gameObjects[i]->rigidBody.isFloor && j < VECTOR_DIRECTIONS_LENGTH; ++j)
 			{
 				float dot = Vec3DotProduct(VECTOR_DIRECTIONS[j], Vec3Normalize(
@@ -317,13 +313,25 @@ CollisionData BoxCollision(GameObjectManager* gameObjectManager, GameObject* gam
 				}
 			}
 
-			Vector3 collidingFace = VECTOR_DIRECTIONS[best_match];
+			Vector3 collidingFace = gameObjectManager->gameObjects[i]->rigidBody.isFloor ? collisionData.collidingFace = (Vector3){ 0.0f, 1.0f, 0.0f } : VECTOR_DIRECTIONS[best_match];
 
-			return (CollisionData) { .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
+			collisionData = (CollisionData){ .collidingFace = collidingFace, .collidingGameObject = gameObjectManager->gameObjects[i] };
+
+			if (!gameObject->rigidBody.isTrigger && !collisionData.collidingGameObject->rigidBody.isTrigger)
+			{
+				CollisionResolution(fixedTime, gameObject, collisionData);
+				PhysicsTransform(fixedTime, gameObject, collisionData);
+			}
+			if (gameObject->OnCollision && collisionData.collidingGameObject->OnCollision)
+			{
+				gameObject->OnCollision(fixedTime, gameObject, collisionData.collidingGameObject);
+			}
 		}
-	}
 
-	return (CollisionData) { .collidingFace = 0, .collidingGameObject = NULL };
+	}
+	if (collisionData.collidingGameObject == NULL && gameObject->rigidBody.onGround) gameObject->rigidBody.onGround = false;
+
+
 }
 
 const float FORCEAPART = 0.001;
@@ -348,7 +356,7 @@ void CollisionResolution(Time fixedTime, GameObject* gameObject, CollisionData c
 	// decay = max of 75% decay or (multiplying velocity by .25), (mass * 1.5) / 100
 	float decay = 1 - fminf((gameObject->rigidBody.mass * 1.5f) / 100, 0.75);
 
-	if (gameObject->rigidBody.isPassive || (!gameObject->rigidBody.isPassive && !collisionData.collidingGameObject->rigidBody.isPassive) || !gameObject->rigidBody.isPassive )
+	if (gameObject->rigidBody.isPassive || (!gameObject->rigidBody.isPassive && !collisionData.collidingGameObject->rigidBody.isPassive) || !gameObject->rigidBody.isPassive)
 	{
 		float upAmount = (gameObject->rigidBody.boundingBox.maxPos.y - gameObject->rigidBody.boundingBox.minPos.y);
 		float rightAmount = (gameObject->rigidBody.boundingBox.maxPos.x - gameObject->rigidBody.boundingBox.minPos.x);
